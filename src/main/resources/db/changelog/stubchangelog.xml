@@ -1,0 +1,24 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+   <changeSet id="purchase-delete-place" author="mdergalev">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="purchase"/>
+            <columnExists tableName="purchase" columnName="place"/>
+        </preConditions>
+        <dropColumn tableName="purchase" columnName="place"/>
+    </changeSet>
+
+   <changeSet id="sale-delete-port" author="mdergalev">
+      <preConditions onFail="MARK_RAN">
+         <tableExists tableName="sale"/>
+         <columnExists tableName="sale" columnName="port"/>
+      </preConditions>
+      <dropColumn tableName="sale" columnName="port"/>
+   </changeSet>
+
+</databaseChangeLog>
