@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>splashcourse.ru</groupId>
-	<artifactId>liuback</artifactId>
+	<artifactId>liubachka</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>liuback</name>
+	<name>liubachka</name>
 	<description>Splashcourse backend</description>
 
 	<parent>
