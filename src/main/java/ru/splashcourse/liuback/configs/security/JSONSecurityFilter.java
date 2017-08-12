@@ -1,4 +1,4 @@
-package ru.splashcourse.liuback.security;
+package ru.splashcourse.liuback.configs.security;
 
 import java.io.IOException;
 
@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.splashcourse.liuback.security.users.User;
+import ru.splashcourse.liuback.configs.security.users.User;
 
 public class JSONSecurityFilter extends AbstractAuthenticationProcessingFilter {
 

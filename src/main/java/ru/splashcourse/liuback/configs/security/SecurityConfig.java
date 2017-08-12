@@ -1,4 +1,4 @@
-package ru.splashcourse.liuback.security;
+package ru.splashcourse.liuback.configs.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import ru.splashcourse.liuback.role.RoleName;
+import ru.splashcourse.liuback.configs.role.RoleName;
 
 @EnableWebSecurity
 @Import({ SecurityAutoConfiguration.class })

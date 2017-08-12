@@ -1,4 +1,4 @@
-package ru.splashcourse.liuback.role;
+package ru.splashcourse.liuback.configs.role;
 
 /**
  * RoleName

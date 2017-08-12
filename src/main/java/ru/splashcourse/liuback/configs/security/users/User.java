@@ -1,4 +1,4 @@
-package ru.splashcourse.liuback.security.users;
+package ru.splashcourse.liuback.configs.security.users;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -26,7 +26,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import ru.splashcourse.liuback.ObjectWithId;
-import ru.splashcourse.liuback.role.RoleName;
+import ru.splashcourse.liuback.configs.role.RoleName;
+import ru.splashcourse.liuback.configs.security.CustomUserDetails;
 
 /**
  * User
@@ -68,8 +69,6 @@ public class User implements ObjectWithId {
 	@Getter(lombok.AccessLevel.NONE)
 	@Setter(lombok.AccessLevel.NONE)
 	private String roles = "";
-
-	private String externalId;
 
 	/**
 	 * User
