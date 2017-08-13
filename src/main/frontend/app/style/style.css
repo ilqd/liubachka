@@ -1,0 +1,181 @@
+html{
+  overflow-y: scroll;
+}
+.navbar{
+  border-radius: 0 !important;
+  border-bottom: none;
+}
+.navbar .nav-tabs li>a{
+  padding: 11px;
+  border-bottom: 0;
+  border-radius: 0;
+  color:white;
+  margin: 0;
+  border: 0;
+}
+.second-navbar{
+  background-color: #00535f;
+  display: flex;
+  flex-direction: row-reverse;
+  min-width: 100%;
+  margin: 0;
+}
+.second-navbar .navbar-collapse {
+  border: 0;
+  width: 100%
+}
+.navbar-default .navbar-toggle .icon-bar{
+  background-color:white;
+}
+.navbar-default {
+  background: white;
+  box-shadow: none;
+}
+.navbar-default .navbar-toggle{
+  padding: 8px;
+  margin: 5px;
+  height: 32px;
+  width: 40px;
+}
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>li>a:focus,
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.active>a:hover{
+  background: cadetblue;
+  color:white;
+  border: 0;
+}
+.brand-text{
+  margin-left: 5px;
+  text-align: left;
+  color: orange;
+}
+.navbar-text{
+  font-size: 18px;
+  line-height: 20px;
+  float:right
+}
+.title-bar{
+  margin-top: 5px;
+  box-shadow: none;
+  border: none;
+  height: 45px;
+}
+
+.carousel .item img {
+    width: 100%;
+}
+.carouseltitle {
+  background: #f26524;
+  position: absolute;
+  color:white;
+  bottom: 15%;
+  z-index: 2;
+  padding: 3% 6% 3% 10px
+}
+.blocks {
+  min-height: 150px;
+  margin-top:5px;
+  margin-bottom: 5px;
+}
+.blocks,
+.blocks div,
+.blocks a {
+  min-height: 150px;
+}
+.blocks > div {
+  margin-bottom: 2px;
+}
+
+.blocks a {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.block{
+  border: 1px solid orange;
+  background: orange;
+  width: 100%;
+  color:white;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+.block:hover,
+.block:focus{
+  text-decoration: none;
+  color: white;
+}
+
+.block.red{
+  border: 1px solid #f26524;
+  background: #f26524;
+}
+.block.cyan{
+  border: 1px solid #37bdbf;
+  background: #37bdbf;
+}
+.block.green{
+  border: 1px solid #006c6d;
+  background: #006c6d;
+}
+.block.lightbrown{
+  border: 1px solid #dbb89a;
+  background: #dbb89a;
+  color:#00535f;
+}
+.block.lightbrown:focus,
+.block.lightbrown:hover{
+  color:#00535f;
+}
+.leaf1 {
+  border-top-left-radius: 50px !important;
+  border-bottom-right-radius: 50px !important;
+ }
+
+.leafbookmark {
+  top: 0 !important;
+  position: absolute !important;
+  font-size: 40px;
+}
+.green .leafbookmark{
+  color:#37bdbf;
+}
+
+.leaf1 .leafbookmark {
+  right: 50px !important;
+}
+
+.leaf2 {
+  border-top-right-radius: 50px !important;
+  border-bottom-left-radius: 50px !important;
+}
+
+.leaf2 .leafbookmark {
+  left: 50px !important;
+}
+.footer {
+  background-color: #37bdbf;
+  color: white;
+  width: 100vw;
+  margin-top: 5px;
+}
+.btn{
+  border-radius: 0;
+}
+.border-bottom{
+  border-bottom: 1px solid #37bdbf;
+  margin-bottom: 2px;
+  padding-bottom: 2px;
+}
+.border-top{
+  border-top: 1px solid #37bdbf;
+  margin-top: 2px;
+  padding-top: 2px;
+}

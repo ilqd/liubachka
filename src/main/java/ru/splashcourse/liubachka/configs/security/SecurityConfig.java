@@ -27,9 +27,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		// @formatter:off
-		http.authorizeRequests().antMatchers("/", "/*", "/**").permitAll().antMatchers("/manage", "/manage/**")
-				.hasAuthority(RoleName.ROLE_ADMIN.toString()).and().formLogin().loginPage("/").permitAll().and()
-				.logout().permitAll();
+		http.authorizeRequests().antMatchers("/", "/*", "/**").permitAll()
+				.antMatchers("/manage", "/manage/**").hasAuthority(RoleName.ROLE_ADMIN.toString())
+				.and().formLogin().loginPage("/").permitAll()
+				.and().logout().permitAll();
 
 		http.addFilterBefore(new JSONSecurityFilter(authenticationManager()),
 				UsernamePasswordAuthenticationFilter.class);
