@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {post, clearMessage} from '@/store/net.store.js';
+import {clearMessage, SUCCESS_MESSAGE} from '@/store/net.store.js';
 import {Button, FormControl, Row, Col, Modal} from 'react-bootstrap';
 import {types} from './QuestionTypes.js';
-import {addQuestion, alterField} from '@/store/skilltestCreator.store';
+import {addQuestion, alterField, loadTestToEdit, clearData, sumbitNewTest, sumbitTestUpdate} from '@/store/skilltestCreator.store';
 import {Map, List} from 'immutable';
 import CreateQuestion from './CreateQuestion';
 import {goBack} from '@/store/store';
@@ -18,12 +18,24 @@ class CreateTestClass extends React.Component {
         this.selectQType = this.selectQType.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.state = {qType: types[0]};
+        this.isEdit = false;
+    }
+    componentWillMount() {
+        if (this.props.match && this.props.match.params && this.props.match.params.editTestName) {
+            this.isEdit = true;
+            this.props.loadTestToEdit(this.props.match.params.editTestName);
+        }else{
+            this.props.clearData();
+        }
     }
     addQuestion() {
         this.props.addQuestion(this.state.qType.value ? this.state.qType.value : this.state.qType);
     }
     hideModal() {
         this.props.clearMessage();
+        if (this.props.netMessage == SUCCESS_MESSAGE) {
+            goBack();
+        }
     }
     selectQType(e) {
         this.setState({qType: e.target.value});
@@ -32,7 +44,11 @@ class CreateTestClass extends React.Component {
         this.props.alterField('testName', e.target.value);
     }
     submit() {
-        this.props.post('/api/tests/create', this.props.test.toJS());
+        if (this.isEdit) {
+            this.props.sumbitTestUpdate(this.props.test.toJS());
+        }else{
+            this.props.sumbitNewTest(this.props.test.toJS());
+        }
     }
     render() {
         return (
@@ -48,7 +64,7 @@ class CreateTestClass extends React.Component {
         <Row>
           <Col xs={12}>
             <FormControl
-              value={this.props.test.get('testName')}
+              value={this.props.test.get('testName') || ''}
               onChange={this.setTestName}
               id="testName"
               type="text"
@@ -74,8 +90,8 @@ class CreateTestClass extends React.Component {
             <Button onClick={goBack}>
               Назад
             </Button>
-            <Button onClick={this.submit} disabled={this.props.busy} style={{marginLeft: 5}}>
-            Создать тест!
+            <Button onClick={this.submit} disabled={this.props.busy || !this.props.test.get('testName')} style={{marginLeft: 5}}>
+            {this.isEdit ? 'Обновить тест!' : 'Создать тест!'}
             </Button>
           </Col>
         </Row>
@@ -87,10 +103,14 @@ CreateTestClass.propTypes = {
     addQuestion: React.PropTypes.func,
     alterField: React.PropTypes.func,
     test: React.PropTypes.object,
-    post: React.PropTypes.func,
+    sumbitNewTest: React.PropTypes.func,
+    sumbitTestUpdate: React.PropTypes.func,
     clearMessage: React.PropTypes.func,
     busy: React.PropTypes.bool,
     netMessage: React.PropTypes.string,
+    loadTestToEdit: React.PropTypes.string,
+    match: React.PropTypes.object,
+    clearData: React.PropTypes.func,
 };
 export default connect((state)=>({
     test: state.getIn(['skilltest', 'creator'], new Map()),
@@ -104,10 +124,19 @@ dispatch=>({
     alterField(field, value) {
         alterField(dispatch, field, value);
     },
-    post(url, data) {
-        post(dispatch, url, data);
+    sumbitNewTest(data) {
+        sumbitNewTest(dispatch, data);
+    },
+    sumbitTestUpdate(data) {
+        sumbitTestUpdate(dispatch, data);
     },
     clearMessage() {
         clearMessage(dispatch);
+    },
+    loadTestToEdit(testName) {
+        loadTestToEdit(dispatch, testName);
+    },
+    clearData() {
+        clearData(dispatch);
     }
 }))(CreateTestClass);

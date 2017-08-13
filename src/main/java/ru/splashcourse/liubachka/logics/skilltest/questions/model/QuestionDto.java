@@ -8,13 +8,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import ru.splashcourse.liubachka.ObjectWithId;
 
 @ToString()
 @EqualsAndHashCode
 @Setter
 @Getter
-public class QuestionDto implements ObjectWithId {
+public class QuestionDto {
 
     private Long id;
 

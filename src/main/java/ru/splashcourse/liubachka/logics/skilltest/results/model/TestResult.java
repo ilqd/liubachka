@@ -25,6 +25,6 @@ public class TestResult extends ObjectWithIdImpl {
 
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<AnsweredQuestion> anweredQuestions;
 }

@@ -2,6 +2,7 @@
 import { Map } from 'immutable';
 import {RestAPI} from '@/net.js';
 
+export const SUCCESS_MESSAGE = 'Success!';
 export const ajaxStatusReducer = (state = Map(), action) => {
     switch (action.type) {
         case 'POSTING':
@@ -18,7 +19,7 @@ export const post = (dispatch, url, data) =>{
     dispatch({ type: 'POSTING' });
     RestAPI.post(url, data).then(
       () => {
-          dispatch({ type: 'POSTED', message: 'Success!'});
+          dispatch({ type: 'POSTED', message: SUCCESS_MESSAGE});
       }
     ).catch(
       (response) => {

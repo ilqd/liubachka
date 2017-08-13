@@ -1,5 +1,6 @@
 /* eslint new-cap: ["error", { "capIsNew": false }]*/
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
+import {RestAPI} from '@/net.js';
 
 export const skilltestCreatorReducer = (state = Map(), action) => {
     let answerPath = [];
@@ -27,10 +28,13 @@ export const skilltestCreatorReducer = (state = Map(), action) => {
         case 'ALTER_TEXT_ANSWER_FIELD':
             answerPath = ['questions', action.qIdx, 'correctAnswers', action.aIdx];
             return state.setIn(answerPath, action.value);
-
         case 'REMOVE_ANSWER':
             answerPath = ['questions', action.qIdx, 'answers'];
             return state.setIn(answerPath, state.getIn(answerPath).delete(action.aIdx));
+        case 'CLEAR_TEST_CREATION_DATA':
+            return new Map();
+        case 'TEST_EDIT_LOADED':
+            return action.data;
         default:
             return state;
     }
@@ -68,3 +72,43 @@ dispatch({ type: 'ALTER_TEXT_ANSWER_FIELD', qIdx, aIdx, value });
 
 export const setAnswerCorrert = (dispatch, qIdx, aIdx, value)  =>
 dispatch({ type: 'ALTER_ANSWER_FIELD', field: 'correct', qIdx, aIdx, value });
+
+export const loadTestToEdit = (dispatch, testName)=>{
+    dispatch({type: 'CLEAR_TEST_CREATION_DATA'});
+    dispatch({ type: 'TEST_EDIT_LOADING'});
+    RestAPI.get(`/api/tests/last/${testName}`).then(
+    (data) => {
+        dispatch({ type: 'TEST_EDIT_LOADED', data: fromJS(data)});
+    }
+  );
+};
+export const clearData = (dispatch) => dispatch({type: 'CLEAR_TEST_CREATION_DATA'});
+
+
+export const sumbitNewTest = (dispatch, data) =>{
+    dispatch({type: 'CREATING_NEW_TEST'});
+    dispatch({ type: 'POSTING' });
+    RestAPI.post('/api/tests/create', data).then(
+    () => {
+        dispatch({ type: 'POSTED', message: 'Success!'});
+    }
+  ).catch(
+    (response) => {
+        dispatch({ type: 'POSTED', message: `Failed! :( Server is complaining about this:   ${response.message}` });
+    }
+  );
+};
+
+export const sumbitTestUpdate = (dispatch, data) =>{
+    dispatch({type: 'UPDATING_TEST'});
+    dispatch({ type: 'POSTING' });
+    RestAPI.patch('/api/tests/updateWithoutVersioning', data).then(
+    () => {
+        dispatch({ type: 'POSTED', message: 'Success!'});
+    }
+  ).catch(
+    (response) => {
+        dispatch({ type: 'POSTED', message: `Failed! :( Server is complaining about this:   ${response.message}` });
+    }
+  );
+};

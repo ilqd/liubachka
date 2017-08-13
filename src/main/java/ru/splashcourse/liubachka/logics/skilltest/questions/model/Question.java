@@ -7,7 +7,12 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.springframework.util.CollectionUtils;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,9 +34,20 @@ public class Question extends ObjectWithIdImpl {
     @Enumerated(EnumType.STRING)
     private AnswerType answerType;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<Answer> answers;
 
     @ElementCollection(targetClass = String.class)
     private List<String> correctAnswers;
+
+    @ManyToOne
+    @JoinColumn(name = "skill_test_id")
+    private SkillTest skillTest;
+
+    public void setAnswers(List<Answer> answers) {
+        if (!CollectionUtils.isEmpty(answers)) {
+            answers.forEach(q -> q.setQuestion(this));
+        }
+        this.answers = answers;
+    }
 }

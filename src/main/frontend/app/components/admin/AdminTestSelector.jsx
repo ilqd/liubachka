@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {List} from 'immutable';
 import {loadTests} from '@/store/skilltestList.store';
-import {Row, Col, Button} from 'react-bootstrap';
+import {Row, Col, Button, Glyphicon} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 class AdminTestSelectorClass extends React.Component {
     constructor(props) {
@@ -20,7 +20,9 @@ class AdminTestSelectorClass extends React.Component {
         {this.props.testList.map((t, idx)=>
           <Row key={idx}>
             <Col xs={12}>
-              {idx + 1}. {t}
+              {idx + 1}. {t} <LinkContainer to={`/admin/editTest/${t}`}>
+                <Button bsStyle="link"><Glyphicon glyph="pencil"/></Button>
+              </LinkContainer >
             </Col>
           </Row>)}
           <Row>

@@ -3,17 +3,17 @@ package ru.splashcourse.liubachka.configs.orika;
 import java.util.Map;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.data.repository.support.DomainClassConverter;
 import org.springframework.stereotype.Component;
 
 import ma.glasnost.orika.Converter;
 import ma.glasnost.orika.Mapper;
 import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.converter.ConverterFactory;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
-import ma.glasnost.orika.metadata.ClassMapBuilder;
 
 @Component
 public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationContextAware {
@@ -22,9 +22,9 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
 
     private ApplicationContext applicationContext;
 
-    /**
-     * OrikaBeanMapper
-     */
+    @Autowired
+    private DomainClassConverter domainClassConverter;
+
     public OrikaBeanMapper() {
         super(false);
     }
@@ -33,6 +33,12 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
     protected void configure(final MapperFactory factory) {
         this.factory = factory;
         addAllSpringBeans(applicationContext);
+        factory.getConverterFactory().registerConverter(new IdToObjectConverter(domainClassConverter));
+        factory.registerMapper(new ObjectWithIdMapper());
+        factory.registerMapper(new QuestionDtoCollectionMapper(domainClassConverter));
+        factory.registerMapper(new AnswerDtoCollectionMapper(domainClassConverter));
+        factory.registerMapper(new QuestionToDtoCollectionMapper());
+        factory.registerMapper(new AnswerToDtoCollectionMapper());
     }
 
     @Override
@@ -40,34 +46,16 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
         factoryBuilder.mapNulls(true);
     }
 
-    /**
-     * Constructs and registers a {@link ClassMapBuilder} into the {@link MapperFactory} using a {@link Mapper}.
-     *
-     * @param mapper
-     *            mapper
-     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void addMapper(final Mapper<?, ?> mapper) {
         factory.classMap(mapper.getAType(), mapper.getBType()).byDefault().customize((Mapper) mapper).mapNulls(false)
                 .mapNullsInReverse(false).register();
     }
 
-    /**
-     * Registers a {@link Converter} into the {@link ConverterFactory}.
-     *
-     * @param converter
-     *            converter
-     */
     public void addConverter(final Converter<?, ?> converter) {
         factory.getConverterFactory().registerConverter(converter);
     }
 
-    /**
-     * Scans the appliaction context and registers all Mappers and Converters found in it.
-     *
-     * @param applicationContext
-     *            applicationContext
-     */
     @SuppressWarnings("rawtypes")
     private void addAllSpringBeans(final ApplicationContext applicationContext) {
         final Map<String, Mapper> mappers = applicationContext.getBeansOfType(Mapper.class);

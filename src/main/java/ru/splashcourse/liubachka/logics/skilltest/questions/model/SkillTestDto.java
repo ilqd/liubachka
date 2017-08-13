@@ -6,13 +6,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import ru.splashcourse.liubachka.ObjectWithId;
 
 @ToString()
 @EqualsAndHashCode
 @Setter
 @Getter
-public class SkillTestDto implements ObjectWithId {
+public class SkillTestDto {
 
     private Long id;
 

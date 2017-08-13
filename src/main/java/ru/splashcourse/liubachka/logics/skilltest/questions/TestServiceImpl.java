@@ -7,10 +7,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
 import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTest;
@@ -74,7 +74,8 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void updateWithoutVersioning(SkillTestDto test) {
-        mapper.map(test, SkillTest.class);
+        SkillTest oldTest = repo.findOne(test.getId()).get();
+        mapper.map(test, oldTest);
     }
 
     @Override

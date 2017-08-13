@@ -5,9 +5,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.util.CollectionUtils;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,8 +30,15 @@ public class SkillTest extends ObjectWithIdImpl {
 
     private Long version;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "skillTest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<Question> questions;
 
     private boolean hidden;
+
+    public void setQuestions(List<Question> questions) {
+        if (!CollectionUtils.isEmpty(questions)) {
+            questions.forEach(q -> q.setSkillTest(this));
+        }
+        this.questions = questions;
+    }
 }

@@ -4,13 +4,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import ru.splashcourse.liubachka.ObjectWithId;
 
 @ToString()
 @EqualsAndHashCode
 @Setter
 @Getter
-public class AnswerDto implements ObjectWithId {
+public class AnswerDto {
 
     private Long id;
 
