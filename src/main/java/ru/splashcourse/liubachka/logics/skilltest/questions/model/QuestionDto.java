@@ -4,22 +4,28 @@ import java.util.List;
 
 import javax.persistence.OneToMany;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import ru.splashcourse.liubachka.ObjectWithId;
 
-@Data
+@ToString()
+@EqualsAndHashCode
+@Setter
+@Getter
 public class QuestionDto implements ObjectWithId {
 
-	private Long id;
+    private Long id;
 
-	private String question;
+    private String question;
 
-	private Integer pointsAwarded;
+    private Integer pointsAwarded;
 
-	private String answerType;
+    private String answerType;
 
-	@OneToMany
-	private List<AnswerDto> answers;
+    @OneToMany
+    private List<AnswerDto> answers;
 
-	private List<String> correctAnswers;
+    private List<String> correctAnswers;
 }

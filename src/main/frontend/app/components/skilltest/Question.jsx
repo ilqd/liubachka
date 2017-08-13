@@ -76,13 +76,13 @@ class Question extends React.Component {
     formAnswers() {
         let answers = <div/>;
         switch (this.props.data.get('answerType')) {
-            case 'selectOne':
+            case 'SELECT_ONE':
                 answers = this.formAnswerSelectOne();
                 break;
-            case 'selectMany':
+            case 'SELECT_MANY':
                 answers = this.formAnswerSelectMany();
                 break;
-            case 'text':
+            case 'TEXT':
                 answers = this.formAnswerText();
                 break;
             default:

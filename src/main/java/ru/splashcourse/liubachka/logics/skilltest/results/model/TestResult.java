@@ -2,24 +2,29 @@ package ru.splashcourse.liubachka.logics.skilltest.results.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import ru.splashcourse.liubachka.ObjectWithIdImpl;
 
 @Entity
-@Data
+@ToString()
 @EqualsAndHashCode(callSuper = true)
+@Setter
+@Getter
 public class TestResult extends ObjectWithIdImpl {
 
-	private String personName;
+    private String personName;
 
-	private String phone;
+    private String phone;
 
-	private String email;
+    private String email;
 
-	@OneToMany
-	private List<AnsweredQuestion> anweredQuestions;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<AnsweredQuestion> anweredQuestions;
 }

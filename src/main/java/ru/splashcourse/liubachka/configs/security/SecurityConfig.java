@@ -19,14 +19,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import ru.splashcourse.liubachka.configs.role.RoleName;
 
 @EnableWebSecurity
-@Import({ SecurityAutoConfiguration.class })
+@Import({SecurityAutoConfiguration.class})
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Override
-	protected void configure(final HttpSecurity http) throws Exception {
-		// @formatter:off
+    @Override
+    protected void configure(final HttpSecurity http) throws Exception {
+        // @formatter:off
 		http.authorizeRequests().antMatchers("/", "/*", "/**").permitAll()
 				.antMatchers("/manage", "/manage/**").hasAuthority(RoleName.ROLE_ADMIN.toString())
 				.and().formLogin().loginPage("/").permitAll()
@@ -37,50 +37,50 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.logout().logoutSuccessUrl("/");
 
-		// http.csrf().requireCsrfProtectionMatcher(request -> {
-		// return !(request.getMethod().equalsIgnoreCase("GET")
-		// || request.getRequestURI().equalsIgnoreCase("/login")
-		// || request.getRequestURI().equalsIgnoreCase("/logout"));
-		// });
+		 http.csrf().requireCsrfProtectionMatcher(request -> false);
+//		 {
+//		 return !(request.getMethod().equalsIgnoreCase("GET")
+//		 || request.getRequestURI().equalsIgnoreCase("/login")
+//		 || request.getRequestURI().equalsIgnoreCase("/logout"));
+//		 });
 		http.headers().frameOptions().disable();
 		// @formatter:on
-	}
+    }
 
-	/**
-	 * @return шифрователь паролей
-	 */
-	@Bean
-	public static PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    /**
+     * @return шифрователь паролей
+     */
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	/**
-	 * @param userDetailsService
-	 *            сервис данных пользователя
-	 * @return провайдер аутентификации
-	 */
-	@Bean
-	public DaoAuthenticationProvider daoAuthenticationProvider(final UserDetailsService userDetailsService) {
-		final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setUserDetailsService(userDetailsService);
-		authProvider.setPasswordEncoder(passwordEncoder());
-		return authProvider;
-	}
+    /**
+     * @param userDetailsService
+     *            сервис данных пользователя
+     * @return провайдер аутентификации
+     */
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(final UserDetailsService userDetailsService) {
+        final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
-	/**
-	 * Конфигурация провайдера аутентификации
-	 * 
-	 * @param auth
-	 *            билдер
-	 * @param userDetailsService
-	 *            сервис данных пользователя
-	 * @throws Exception
-	 *             ошибка
-	 */
-	@Autowired
-	public void configureGlobal(final AuthenticationManagerBuilder auth, final UserDetailsService userDetailsService)
-			throws Exception {
-		auth.authenticationProvider(daoAuthenticationProvider(userDetailsService))
-				.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
+    /**
+     * Конфигурация провайдера аутентификации
+     * 
+     * @param auth
+     *            билдер
+     * @param userDetailsService
+     *            сервис данных пользователя
+     * @throws Exception
+     *             ошибка
+     */
+    @Autowired
+    public void configureGlobal(final AuthenticationManagerBuilder auth, final UserDetailsService userDetailsService) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider(userDetailsService)).userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
+    }
 }

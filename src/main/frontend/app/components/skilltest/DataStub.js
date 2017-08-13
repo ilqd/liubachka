@@ -3,48 +3,39 @@ export const data = {
     version: '1',
     questions: [
         {
-            id: 1,
             question: 'How much ... the fish?',
             pointsAwarded: 5,
-            answerType: 'selectOne',
+            answerType: 'SELECT_ONE',
             answers: [{
-                id: 1,
                 text: 'is',
                 correct: true
             }, {
-                id: 2,
                 text: 'are',
                 correct: false
             }
         ]},
         {
-            id: 2,
             question: 'It a good day to ...',
             pointsAwarded: 15,
-            answerType: 'selectMany',
+            answerType: 'SELECT_MANY',
             answers: [{
-                id: 1,
                 text: 'die',
                 correct: false
             }, {
-                id: 2,
                 text: 'cry',
                 correct: false
             }, {
-                id: 3,
                 text: 'pie',
                 correct: true
             }, {
-                id: 4,
                 text: 'lie',
                 correct: true
             }
         ]},
         {
-            id: 3,
             question: 'Как зовут учителя?',
             pointsAwarded: 5000,
-            answerType: 'text',
+            answerType: 'TEXT',
             correctAnswers: ['Люба', 'Любовь', 'Любашка']
         }
     ]
