@@ -63,6 +63,10 @@ html{
   border: none;
   height: 45px;
 }
+.title-bar>.container {
+  display: flex;
+  justify-content: space-between;
+}
 
 .carousel .item img {
     width: 100%;

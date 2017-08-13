@@ -3,6 +3,8 @@ import { applyMiddleware, createStore } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import {skilltestQuestionsReducer} from './skilltestQuestions.store.js';
 import {skilltestResultsReducer} from './skilltestResults.store.js';
+import {skilltestCreatorReducer} from './skilltestCreator.store.js';
+import {ajaxStatusReducer} from './net.store.js';
 import { combineReducers } from 'redux-immutable';
 import createEngine from 'redux-storage-engine-localstorage';
 import merger from 'redux-storage-merger-immutablejs';
@@ -16,7 +18,9 @@ const superReducer = combineReducers({
     skilltest: combineReducers({
         questions: skilltestQuestionsReducer,
         results: skilltestResultsReducer,
+        creator: skilltestCreatorReducer,
     }),
+    ajaxStatus: ajaxStatusReducer,
 });
 const reducer = storage.reducer(superReducer, merger);
 const composeEnhancers = composeWithDevTools({});

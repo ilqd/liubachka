@@ -1,0 +1,17 @@
+.test-creation-form,
+.test-creation-form .row{
+  padding-top: 5px;
+}
+.test-creation-form .btn{
+  padding: 6px 2px;
+}
+.created-answer{
+  border: 1px solid #37bdbf;
+  margin: 10px 20px 10px 20px;
+}
+.created-answer>div{
+  padding: 10px
+}
+.created-answer hr{
+  margin: 10px 20px;
+}

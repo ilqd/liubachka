@@ -11,7 +11,7 @@ export default class Header extends React.Component {
             <img src={logo} style={{height: '2em'}}/>
             <div className="brand-text">SPLASH<br/>COURSE</div>
           </Navbar.Brand>
-          <Navbar.Brand pullRight className="pull-right" style={{margin: 0, paddingLeft: 1}}>
+          <Navbar.Brand pullRight className="pull-right" style={{margin: 0, paddingLeft: 1, marginLeft: 'auto'}}>
             <div>Наши телефоны</div>
             <div>﻿+7 919 775 97 63</div>
           </Navbar.Brand>
