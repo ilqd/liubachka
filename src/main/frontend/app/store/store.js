@@ -1,9 +1,10 @@
 import createHistory from 'history/createBrowserHistory';
 import { applyMiddleware, createStore } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware, goBack as routerGoBack } from 'react-router-redux';
 import {skilltestQuestionsReducer} from './skilltestQuestions.store.js';
 import {skilltestResultsReducer} from './skilltestResults.store.js';
 import {skilltestCreatorReducer} from './skilltestCreator.store.js';
+import {skilltestListReducer} from './skilltestList.store.js';
 import {ajaxStatusReducer} from './net.store.js';
 import { combineReducers } from 'redux-immutable';
 import createEngine from 'redux-storage-engine-localstorage';
@@ -19,6 +20,7 @@ const superReducer = combineReducers({
         questions: skilltestQuestionsReducer,
         results: skilltestResultsReducer,
         creator: skilltestCreatorReducer,
+        list: skilltestListReducer,
     }),
     ajaxStatus: ajaxStatusReducer,
 });
@@ -37,3 +39,6 @@ export const load = storage.createLoader(engine);
 load(store);
 
 export default store;
+export function goBack() {
+    store.dispatch(routerGoBack());
+}

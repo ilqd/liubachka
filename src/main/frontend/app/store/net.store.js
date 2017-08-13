@@ -8,6 +8,8 @@ export const ajaxStatusReducer = (state = Map(), action) => {
             return state.set('posting', true);
         case 'POSTED':
             return state.set('posting', false).set('message', action.message);
+        case 'CLEAR_NET_MESSAGE':
+            return state.delete('message');
         default:
             return state;
     }
@@ -20,7 +22,8 @@ export const post = (dispatch, url, data) =>{
       }
     ).catch(
       (response) => {
-          dispatch({ type: 'POSTED', message: `Failed! :( ${response}` });
+          dispatch({ type: 'POSTED', message: `Failed! :( Server is complaining about this:   ${response.message}` });
       }
     );
 };
+export const clearMessage = (dispatch)=> dispatch({type: 'CLEAR_NET_MESSAGE'});

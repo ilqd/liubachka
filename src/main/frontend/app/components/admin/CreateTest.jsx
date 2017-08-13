@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {post} from '@/store/net.store.js';
-import {Button, FormControl, Row, Col} from 'react-bootstrap';
+import {post, clearMessage} from '@/store/net.store.js';
+import {Button, FormControl, Row, Col, Modal} from 'react-bootstrap';
 import {types} from './QuestionTypes.js';
 import {addQuestion, alterField} from '@/store/skilltestCreator.store';
 import {Map, List} from 'immutable';
 import CreateQuestion from './CreateQuestion';
+import {goBack} from '@/store/store';
 import './creator.css';
 
 class CreateTestClass extends React.Component {
@@ -15,10 +16,14 @@ class CreateTestClass extends React.Component {
         this.addQuestion = this.addQuestion.bind(this);
         this.setTestName = this.setTestName.bind(this);
         this.selectQType = this.selectQType.bind(this);
+        this.hideModal = this.hideModal.bind(this);
         this.state = {qType: types[0]};
     }
     addQuestion() {
         this.props.addQuestion(this.state.qType.value ? this.state.qType.value : this.state.qType);
+    }
+    hideModal() {
+        this.props.clearMessage();
     }
     selectQType(e) {
         this.setState({qType: e.target.value});
@@ -32,6 +37,14 @@ class CreateTestClass extends React.Component {
     render() {
         return (
       <div className="test-creation-form">
+        <Modal show={this.props.netMessage} onHide={this.hideModal}>
+          <Modal.Body>
+            {this.props.netMessage}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.hideModal}>Оки доки</Button>
+          </Modal.Footer>
+        </Modal>
         <Row>
           <Col xs={12}>
             <FormControl
@@ -58,7 +71,10 @@ class CreateTestClass extends React.Component {
         </Row>
         <Row style={{marginTop: 5}}>
           <Col xs={12}>
-            <Button onClick={this.submit}>
+            <Button onClick={goBack}>
+              Назад
+            </Button>
+            <Button onClick={this.submit} disabled={this.props.busy} style={{marginLeft: 5}}>
             Создать тест!
             </Button>
           </Col>
@@ -72,9 +88,14 @@ CreateTestClass.propTypes = {
     alterField: React.PropTypes.func,
     test: React.PropTypes.object,
     post: React.PropTypes.func,
+    clearMessage: React.PropTypes.func,
+    busy: React.PropTypes.bool,
+    netMessage: React.PropTypes.string,
 };
 export default connect((state)=>({
     test: state.getIn(['skilltest', 'creator'], new Map()),
+    busy: state.getIn(['ajaxStatus', 'posting']),
+    netMessage: state.getIn(['ajaxStatus', 'message']),
 }),
 dispatch=>({
     addQuestion(qType) {
@@ -85,5 +106,8 @@ dispatch=>({
     },
     post(url, data) {
         post(dispatch, url, data);
+    },
+    clearMessage() {
+        clearMessage(dispatch);
     }
 }))(CreateTestClass);
