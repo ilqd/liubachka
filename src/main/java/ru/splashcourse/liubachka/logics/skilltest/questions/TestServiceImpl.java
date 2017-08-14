@@ -16,6 +16,9 @@ import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
 import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTest;
 import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestDto;
 import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestRepository;
+import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestSystemAssignments;
+import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestSystemAssignmentsRepository;
+import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestSystemTypes;
 
 @Service
 @Transactional
@@ -23,6 +26,9 @@ public class TestServiceImpl implements TestService {
 
     @Autowired
     private SkillTestRepository repo;
+
+    @Autowired
+    private SkillTestSystemAssignmentsRepository assigmentRepo;
 
     @Autowired
     protected OrikaBeanMapper mapper;
@@ -108,6 +114,24 @@ public class TestServiceImpl implements TestService {
     public void deleteAllTestsByName(String testName) {
         List<SkillTest> oldVersions = repo.findByTestName(testName);
         oldVersions.stream().forEach(t -> t.setHidden(true));
+    }
+
+    @Override
+    public void setSystemAssignment(SkillTestSystemTypes type, String testName) {
+        Optional<SkillTestSystemAssignments> assignment = assigmentRepo.findByType(type);
+        Optional<SkillTest> test = repo.findLastByTestNameOrderByVersionDesc(testName);
+        if (assignment.isPresent()) {
+            assignment.get().setTest(test.get());
+        } else {
+            SkillTestSystemAssignments newAssign = new SkillTestSystemAssignments(type, test.get());
+            assigmentRepo.save(newAssign);
+        }
+    }
+
+    @Override
+    public SkillTestDto getSystemAssignment(SkillTestSystemTypes type) {
+        SkillTestSystemAssignments assignment = assigmentRepo.findByType(type).get();
+        return mapper.map(repo.findOne(assignment.getTest().getId()).get(), SkillTestDto.class);
     }
 
 }

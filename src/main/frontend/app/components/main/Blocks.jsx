@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Row, Glyphicon} from 'react-bootstrap';
 import Block from './Block.jsx';
+import {types} from '../skilltest/SkillTestSystemTypes.js';
 export default class Blocks extends React.Component {
     render() {
         return (
@@ -54,7 +55,7 @@ export default class Blocks extends React.Component {
         </Row>
         <Row className="blocks">
         <Col xs={12}>
-          <Block url="skilltest">
+          <Block url={`skilltest/${types.default}`}>
             <h2>Пройти тест!</h2>
           </Block>
         </Col>

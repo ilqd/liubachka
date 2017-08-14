@@ -18,3 +18,11 @@ export const loadTests = (dispatch) =>{
       }
     );
 };
+export const assignTest = (dispatch, type, testName) =>{
+    dispatch({ type: 'ASSINGING_TEST_TYPE'});
+    RestAPI.put(`/api/tests/assign?type=${type}&testName=${testName}`).then(()=>
+    dispatch({ type: 'TEST_TYPE_ASSINGED'})
+  ).catch(()=>
+    dispatch({ type: 'TEST_TYPE_ASSINGNEMENT_FAILED'})
+  );
+};

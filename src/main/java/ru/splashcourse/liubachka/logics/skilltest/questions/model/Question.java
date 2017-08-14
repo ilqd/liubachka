@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.util.CollectionUtils;
 
 import lombok.EqualsAndHashCode;
@@ -35,6 +37,7 @@ public class Question extends ObjectWithIdImpl {
     private AnswerType answerType;
 
     @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Answer> answers;
 
     @ElementCollection(targetClass = String.class)

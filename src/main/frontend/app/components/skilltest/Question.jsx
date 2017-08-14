@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {Map, List, Set} from 'immutable';
 import {Row, Col, Checkbox, Radio, FormControl} from 'react-bootstrap';
 import {answerGiven} from '@/store/skilltestResults.store';
-
+import {typeName} from './QuestionTypes.js';
 class Question extends React.Component {
     constructor(props) {
         super(props);
@@ -76,13 +76,13 @@ class Question extends React.Component {
     formAnswers() {
         let answers = <div/>;
         switch (this.props.data.get('answerType')) {
-            case 'SELECT_ONE':
+            case typeName.SELECT_ONE:
                 answers = this.formAnswerSelectOne();
                 break;
-            case 'SELECT_MANY':
+            case typeName.SELECT_MANY:
                 answers = this.formAnswerSelectMany();
                 break;
-            case 'TEXT':
+            case typeName.TEXT:
                 answers = this.formAnswerText();
                 break;
             default:

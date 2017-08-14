@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.CollectionUtils;
 
@@ -31,6 +33,7 @@ public class SkillTest extends ObjectWithIdImpl {
     private Long version;
 
     @OneToMany(mappedBy = "skillTest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Question> questions;
 
     private boolean hidden;

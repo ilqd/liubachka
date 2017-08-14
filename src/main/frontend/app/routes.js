@@ -8,7 +8,7 @@ import AdminTestSelector from './components/admin/AdminTestSelector.jsx';
 export default (
 	<Switch>
 		<Route exact path="/" component={Main} />
-		<Route exact path="/skilltest" component={Skilltest} />
+		<Route exact path="/skilltest/:testType?" component={Skilltest} />
 		<Route exact path="/admin/createTest" component={CreateTest} />
 		<Route exact path="/admin/testList" component={AdminTestSelector} />
 		<Route path="/admin/editTest/:editTestName?" component={CreateTest} />

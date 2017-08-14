@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestDto;
+import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestSystemTypes;
 
 @RestController
 @RequestMapping(value = "/api/tests")
@@ -48,4 +50,13 @@ public class TestController {
         service.updateWithoutVersioning(test);
     }
 
+    @RequestMapping(value = "/assign", params = {"type", "testName"}, method = RequestMethod.PUT)
+    public void assignSystemTest(@RequestParam SkillTestSystemTypes type, String testName) {
+        service.setSystemAssignment(type, testName);
+    }
+
+    @RequestMapping(value = "/getAssigned/{type}", method = RequestMethod.GET)
+    public SkillTestDto getSystemAssignedTest(@PathVariable SkillTestSystemTypes type) {
+        return service.getSystemAssignment(type);
+    }
 }

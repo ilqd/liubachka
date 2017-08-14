@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {clearMessage, SUCCESS_MESSAGE} from '@/store/net.store.js';
 import {Button, FormControl, Row, Col, Modal} from 'react-bootstrap';
-import {types} from './QuestionTypes.js';
+import {types} from '../skilltest/QuestionTypes.js';
 import {addQuestion, alterField, loadTestToEdit, clearData, sumbitNewTest, sumbitTestUpdate} from '@/store/skilltestCreator.store';
 import {Map, List} from 'immutable';
 import CreateQuestion from './CreateQuestion';

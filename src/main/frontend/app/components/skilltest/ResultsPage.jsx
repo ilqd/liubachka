@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {Row, Col, Button} from 'react-bootstrap';
 import {List, Map, Set} from 'immutable';
+import {typeName} from './QuestionTypes.js';
 class Skilltest extends React.Component {
     constructor(props) {
         super(props);
@@ -45,13 +46,13 @@ class Skilltest extends React.Component {
                 const answerGiven = props.results.get(idx);
                 let isCorrect = false;
                 switch (question.get('answerType')) {
-                    case 'selectOne':
+                    case typeName.SELECT_ONE:
                         isCorrect = this.checkSelectOneQuestion(question, answerGiven);
                         break;
-                    case 'selectMany':
+                    case typeName.SELECT_MANY:
                         isCorrect = this.checkSelectManyQuestion(question, answerGiven);
                         break;
-                    case 'text':
+                    case typeName.TEXT:
                         isCorrect = this.checkSelectTextQuestion(question, answerGiven);
                         break;
                     default:

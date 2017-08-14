@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {loadData} from '@/store/skilltestQuestions.store';
+import {loadData, loadTestTypeData} from '@/store/skilltestQuestions.store';
 import {finishTest, restartTest} from '@/store/skilltestResults.store';
 import {data} from './DataStub.js';
 import Question from './Question';
@@ -18,7 +18,11 @@ class Skilltest extends React.Component {
         this.restart = this.restart.bind(this);
     }
     componentWillMount() {
-        this.props.loadData(data);
+        if (this.props.match && this.props.match.params && this.props.match.params.testType) {
+            this.props.loadTestTypeData(this.props.match.params.testType);
+        }else{
+            this.props.loadData(data);
+        }
     }
     back() {
         this.setState({questionIdx: this.state.questionIdx - 1});
@@ -40,13 +44,14 @@ class Skilltest extends React.Component {
         return 0;
     }
     render() {
+        const questionCount  = this.getQuestionsCount();
         return(
       !this.props.data || this.props.data.size === 0 ? <div/> :
       <div>
           <Row >
             <Col xs={12}>
               <h2 className="border-bottom">
-              {this.props.data.get('testName')}
+              {this.props.data.get('testName')}, вопрос {this.state.questionIdx + 1} из {questionCount}
               </h2>
             </Col>
           </Row>
@@ -64,7 +69,7 @@ class Skilltest extends React.Component {
                 }
               </Col>
               <Col xs={6}>
-              {this.state.questionIdx >= this.getQuestionsCount() - 1 ?
+              {this.state.questionIdx >= questionCount - 1 ?
                 <Button onClick={this.finish} style={{float: 'left'}}>
                 Завершить!
                 </Button> :
@@ -86,6 +91,8 @@ Skilltest.propTypes = {
     finishTest: React.PropTypes.func,
     restartTest: React.PropTypes.func,
     finished: React.PropTypes.bool,
+    match: React.PropTypes.object,
+    loadTestTypeData: React.PropTypes.func,
 };
 export default connect(
   (state)=>({
@@ -101,6 +108,9 @@ export default connect(
       },
       restartTest() {
           restartTest(dispatch);
+      },
+      loadTestTypeData(type) {
+          loadTestTypeData(dispatch, type);
       }
   })
 )(Skilltest);
