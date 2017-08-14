@@ -7,6 +7,7 @@ import Question from './Question';
 import {Row, Col, Button} from 'react-bootstrap';
 import {List} from 'immutable';
 import ResultsPage from './ResultsPage';
+import StartPage from './StartPage';
 class Skilltest extends React.Component {
     constructor(props) {
         super(props);
@@ -45,8 +46,9 @@ class Skilltest extends React.Component {
     }
     render() {
         const questionCount  = this.getQuestionsCount();
-        return(
-      !this.props.data || this.props.data.size === 0 ? <div/> :
+        //eslint-disable-next-line
+        return( !this.props.data || this.props.data.size === 0 ? <div/> :
+      !this.props.personName ? <StartPage/> :
       <div>
           <Row >
             <Col xs={12}>
@@ -93,11 +95,13 @@ Skilltest.propTypes = {
     finished: React.PropTypes.bool,
     match: React.PropTypes.object,
     loadTestTypeData: React.PropTypes.func,
+    personName: React.PropTypes.string,
 };
 export default connect(
   (state)=>({
       data: state.getIn(['skilltest', 'questions']),
       finished: state.getIn(['skilltest', 'results', 'finished']),
+      personName: state.getIn(['skilltest', 'results', 'info', 'personName']),
   }),
   (dispatch)=>({
       loadData(dataPassed) {
