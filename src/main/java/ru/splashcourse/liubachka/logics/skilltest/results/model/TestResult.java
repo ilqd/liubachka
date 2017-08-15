@@ -1,6 +1,8 @@
 package ru.splashcourse.liubachka.logics.skilltest.results.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.hibernate.annotations.Type;
 
@@ -10,6 +12,7 @@ import lombok.Setter;
 import lombok.ToString;
 import ru.splashcourse.liubachka.ObjectWithIdImpl;
 import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTest;
+import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestSystemTypes;
 
 @Entity
 @ToString()
@@ -45,4 +48,9 @@ public class TestResult extends ObjectWithIdImpl {
 
     private Integer pointsEarned;
     private Integer totalPoints;
+
+    private String testName;
+
+    @Enumerated(EnumType.STRING)
+    private SkillTestSystemTypes testType;
 }

@@ -9,7 +9,7 @@ import {List} from 'immutable';
 import ResultsPage from './ResultsPage';
 import StartPage from './StartPage';
 import {goBack} from '@/store/store';
-import {clearMessage} from '@/store/net.store.js';
+import {clearMessage, NET_ERROR_MESSAGE} from '@/store/net.store.js';
 
 class Skilltest extends React.Component {
     constructor(props) {
@@ -50,8 +50,10 @@ class Skilltest extends React.Component {
     }
     hideModal() {
         this.props.clearMessage();
-        this.props.restartTest();
-        goBack();
+        if (this.props.netMessage !== NET_ERROR_MESSAGE) {
+            this.props.restartTest();
+            goBack();
+        }
     }
     render() {
         const questionCount  = this.getQuestionsCount();
@@ -65,7 +67,7 @@ class Skilltest extends React.Component {
             {this.props.netMessage}
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.hideModal}>Оки доки</Button>
+            <Button onClick={this.hideModal}>Спасибо</Button>
           </Modal.Footer>
         </Modal>
           <Row >

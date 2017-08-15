@@ -39,4 +39,8 @@ public class TestResultDto {
 
     private Integer pointsEarned;
     private Integer totalPoints;
+
+    private String testName;
+
+    private String testType;
 }

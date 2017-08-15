@@ -99,6 +99,7 @@ class Skilltest extends React.Component {
         .set('resultsSnapShotDto', JSON.stringify(this.props.results.toJSON()));
         composedData = composedData.set('totalQuestions', this.state.questionsCount).set('correctAnswers', this.state.correctAnswersCount);
         composedData = composedData.set('totalPoints', this.state.totalPoints).set('pointsEarned', this.state.pointsEarned);
+        composedData = composedData.set('testName', this.props.questions.get('testName'));
         this.props.submitTestResults(composedData.toJS(), isInterested);
     }
     render() {

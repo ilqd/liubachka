@@ -1,12 +1,16 @@
 package ru.splashcourse.liubachka.logics.skilltest.results;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
+import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestSystemAssignments;
+import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestSystemAssignmentsRepository;
 import ru.splashcourse.liubachka.logics.skilltest.results.model.TestResult;
 import ru.splashcourse.liubachka.logics.skilltest.results.model.TestResultDto;
 import ru.splashcourse.liubachka.logics.skilltest.results.model.TestResultRepository;
@@ -20,6 +24,9 @@ public class ResultsServiceImpl implements ResultsService {
 
     @Autowired
     private OrikaBeanMapper mapper;
+
+    @Autowired
+    private SkillTestSystemAssignmentsRepository testAssignRepo;
 
     @Override
     public Long create(TestResultDto result) {
@@ -35,6 +42,12 @@ public class ResultsServiceImpl implements ResultsService {
     @Override
     public void update(TestResultDto result) {
         TestResult entity = repo.findOne(result.getId()).get();
+        if (StringUtils.isNotBlank(result.getTestName())) {
+            Optional<SkillTestSystemAssignments> testAssignment = testAssignRepo.findByTestTestName(result.getTestName());
+            if (testAssignment.isPresent()) {
+                result.setTestType(testAssignment.get().getType().toString());
+            }
+        }
         if (result.getPersonName().equals(entity.getPersonName()) && result.getEmail().equals(entity.getEmail())
                 && result.getAge().equals(entity.getAge())) {
             mapper.map(result, entity);

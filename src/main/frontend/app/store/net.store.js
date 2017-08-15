@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 import {RestAPI} from '@/net.js';
 
 export const SUCCESS_MESSAGE = 'Success!';
+export const NET_ERROR_MESSAGE = 'Что-то пошло не так, сервер вернул ошибку :(';
 export const ajaxStatusReducer = (state = Map(), action) => {
     switch (action.type) {
         case 'POSTING':
@@ -22,8 +23,8 @@ export const post = (dispatch, url, data) =>{
           dispatch({ type: 'POSTED', message: SUCCESS_MESSAGE});
       }
     ).catch(
-      (response) => {
-          dispatch({ type: 'POSTED', message: `Failed! :( Server is complaining about this:   ${response.message}` });
+      () => {
+          dispatch({ type: 'POSTED', message: NET_ERROR_MESSAGE });
       }
     );
 };

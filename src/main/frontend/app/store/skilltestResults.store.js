@@ -1,7 +1,7 @@
 /* eslint new-cap: ["error", { "capIsNew": false }]*/
 import { Map } from 'immutable';
 import {RestAPI} from '@/net.js';
-
+import {NET_ERROR_MESSAGE} from './net.store.js';
 export const skilltestResultsReducer = (state = Map(), action) => {
     switch (action.type) {
         case 'ANSWER_GIVEN':
@@ -19,14 +19,15 @@ dispatch({ type: 'ANSWER_GIVEN', questionId, answer });
 export const restartTest = (dispatch) =>
 dispatch({ type: 'CLEAR_ATTEMPT_DATA'});
 
-export const skilltestUserReducer = (state = Map(), action) => {
+const initialState = Map().set('age', 18);
+export const skilltestUserReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'TEST_STARTED':
             return state.set('id', action.id);
         case 'TEST_FINISED':
             return state.set('finished', true);
         case 'CLEAR_ATTEMPT_DATA':
-            return Map();
+            return initialState;
         case 'CHANGE_EXAMINEE_INFO':
             return state.set(action.field, action.value);
         default:
@@ -47,7 +48,7 @@ export const submitTestResults = (dispatch, data, isInterested)  =>{
           dispatch({ type: 'POSTED', message: isInterested ? 'Спасибо за Ваш интерес, наши менеджеры свяжутся с вами!' : 'Спасибо за Ваш интерес!'});
       }
       ).catch(()=>{
-          dispatch({ type: 'POSTED', message: isInterested ? 'Что-то пошло не так, сервер вернул ошибку :(' : undefined});
+          dispatch({ type: 'POSTED', message: isInterested ? NET_ERROR_MESSAGE : undefined});
       });
 };
 

@@ -11,4 +11,5 @@ public interface SkillTestSystemAssignmentsRepository extends CustomJpaRepositor
 
     Optional<SkillTestSystemAssignments> findByType(SkillTestSystemTypes type);
 
+    Optional<SkillTestSystemAssignments> findByTestTestName(String testName);
 }
