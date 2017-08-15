@@ -27,6 +27,10 @@ module.exports = {
       ]
     },
     plugins: [
+        // webpack gives your modules and chunks ids to identify them. Webpack can vary the
+        // distribution of the ids to get the smallest id length for often used ids with
+        // this plugin
+        new webpack.optimize.OccurenceOrderPlugin(),
 
         // handles creating an index.html file and injecting assets. necessary because assets
         // change name because the hash part changes. We want hash name changes to bust cache
@@ -40,10 +44,21 @@ module.exports = {
         // performance and is used in prod environments. Styles load faster on their own .css
         // file as they dont have to wait for the JS to load.
         new ExtractTextPlugin('[name]-[hash].min.css'),
-
+        // handles uglifying js
+        new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                warnings: false,
+                screw_ie8: true
+            }
+        }),
+        // creates a stats.json
+        new StatsPlugin('webpack.stats.json', {
+            source: false,
+            modules: false
+        }),
         // plugin for passing in data to the js, like what NODE_ENV we are in.
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('development')
+            'process.env.NODE_ENV': JSON.stringify('production')
         })
     ],
 
