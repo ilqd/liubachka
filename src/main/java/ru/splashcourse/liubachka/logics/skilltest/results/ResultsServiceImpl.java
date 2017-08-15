@@ -35,7 +35,14 @@ public class ResultsServiceImpl implements ResultsService {
     @Override
     public void update(TestResultDto result) {
         TestResult entity = repo.findOne(result.getId()).get();
-        mapper.map(result, entity);
+        if (result.getPersonName().equals(entity.getPersonName()) && result.getEmail().equals(entity.getEmail())
+                && result.getAge().equals(entity.getAge())) {
+            mapper.map(result, entity);
+        } else {
+            // WTF, impostor!
+            repo.save(mapper.map(result, TestResult.class));
+        }
+
     }
 
 }

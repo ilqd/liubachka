@@ -26,6 +26,8 @@ import ru.splashcourse.liubachka.ObjectWithIdImpl;
 @Getter
 public class SkillTest extends ObjectWithIdImpl {
 
+    public static final Long DATA_FORMAT_VERSION = 1L;
+
     @Column(name = "test_name", unique = true)
     @NotBlank
     private String testName;

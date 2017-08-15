@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTest;
 
 @ToString()
 @EqualsAndHashCode
@@ -21,13 +22,21 @@ public class TestResultDto {
 
     private Integer age;
 
-    private boolean isInterested = false;
+    private boolean interested = false;
 
     private boolean hasBeenCalled = false;
 
     private boolean willCome = false;
 
+    private Long testSnapShotDataVersion = SkillTest.DATA_FORMAT_VERSION;
+
     private String testSnapShotDto;
 
     private String resultsSnapShotDto;
+
+    private Integer correctAnswers;
+    private Integer totalQuestions;
+
+    private Integer pointsEarned;
+    private Integer totalPoints;
 }

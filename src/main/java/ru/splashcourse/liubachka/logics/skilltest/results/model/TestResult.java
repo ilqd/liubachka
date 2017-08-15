@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import ru.splashcourse.liubachka.ObjectWithIdImpl;
+import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTest;
 
 @Entity
 @ToString()
@@ -25,15 +26,23 @@ public class TestResult extends ObjectWithIdImpl {
 
     private Integer age;
 
-    private boolean isInterested = false;
+    private boolean interested = false;
 
     private boolean hasBeenCalled = false;
 
     private boolean willCome = false;
+
+    private Long testSnapShotDataVersion = SkillTest.DATA_FORMAT_VERSION;
 
     @Type(type = "text")
     private String testSnapShotDto;
 
     @Type(type = "text")
     private String resultsSnapShotDto;
+
+    private Integer correctAnswers;
+    private Integer totalQuestions;
+
+    private Integer pointsEarned;
+    private Integer totalPoints;
 }

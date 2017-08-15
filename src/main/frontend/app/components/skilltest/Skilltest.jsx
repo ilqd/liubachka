@@ -4,10 +4,13 @@ import {loadData, loadTestTypeData} from '@/store/skilltestQuestions.store';
 import {finishTest, restartTest} from '@/store/skilltestResults.store';
 import {data} from './DataStub.js';
 import Question from './Question';
-import {Row, Col, Button} from 'react-bootstrap';
+import {Row, Col, Button, Modal} from 'react-bootstrap';
 import {List} from 'immutable';
 import ResultsPage from './ResultsPage';
 import StartPage from './StartPage';
+import {goBack} from '@/store/store';
+import {clearMessage} from '@/store/net.store.js';
+
 class Skilltest extends React.Component {
     constructor(props) {
         super(props);
@@ -17,6 +20,7 @@ class Skilltest extends React.Component {
         this.state = {questionIdx: 0};
         this.finish = this.finish.bind(this);
         this.restart = this.restart.bind(this);
+        this.hideModal = this.hideModal.bind(this);
     }
     componentWillMount() {
         if (this.props.match && this.props.match.params && this.props.match.params.testType) {
@@ -44,16 +48,30 @@ class Skilltest extends React.Component {
         }
         return 0;
     }
+    hideModal() {
+        this.props.clearMessage();
+        this.props.restartTest();
+        goBack();
+    }
     render() {
         const questionCount  = this.getQuestionsCount();
+        const questionText = this.props.finished ? '' : `, вопрос ${this.state.questionIdx + 1} из ${questionCount}`;
         //eslint-disable-next-line
         return( !this.props.data || this.props.data.size === 0 ? <div/> :
-      !this.props.personName ? <StartPage/> :
+      !(this.props.personId || this.props.personId === 0) ? <StartPage/> :
       <div>
+        <Modal show={this.props.netMessage} onHide={this.hideModal}>
+          <Modal.Body>
+            {this.props.netMessage}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.hideModal}>Оки доки</Button>
+          </Modal.Footer>
+        </Modal>
           <Row >
             <Col xs={12}>
               <h2 className="border-bottom">
-              {this.props.data.get('testName')}, вопрос {this.state.questionIdx + 1} из {questionCount}
+              {this.props.data.get('testName')}{questionText}
               </h2>
             </Col>
           </Row>
@@ -95,13 +113,16 @@ Skilltest.propTypes = {
     finished: React.PropTypes.bool,
     match: React.PropTypes.object,
     loadTestTypeData: React.PropTypes.func,
-    personName: React.PropTypes.string,
+    personId: React.PropTypes.number,
+    clearMessage: React.PropTypes.func,
+    netMessage: React.PropTypes.string,
 };
 export default connect(
   (state)=>({
       data: state.getIn(['skilltest', 'questions']),
-      finished: state.getIn(['skilltest', 'results', 'finished']),
-      personName: state.getIn(['skilltest', 'results', 'info', 'personName']),
+      finished: state.getIn(['skilltest', 'attempt', 'data', 'finished']),
+      personId: state.getIn(['skilltest', 'attempt',  'data', 'id']),
+      netMessage: state.getIn(['ajaxStatus', 'message']),
   }),
   (dispatch)=>({
       loadData(dataPassed) {
@@ -115,6 +136,9 @@ export default connect(
       },
       loadTestTypeData(type) {
           loadTestTypeData(dispatch, type);
-      }
+      },
+      clearMessage() {
+          clearMessage(dispatch);
+      },
   })
 )(Skilltest);
