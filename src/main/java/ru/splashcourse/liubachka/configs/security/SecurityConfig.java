@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
 		http.authorizeRequests().antMatchers("/", "/*", "/**").permitAll()
 				.antMatchers("/manage", "/manage/**").hasAuthority(RoleName.ROLE_ADMIN.toString())
-				.and().formLogin().loginPage("/").permitAll()
+				.and().formLogin().loginPage("/login").permitAll()
 				.and().logout().permitAll();
 
 		http.addFilterBefore(new JSONSecurityFilter(authenticationManager()),
