@@ -1,25 +1,18 @@
 package ru.splashcourse.liubachka.logics.skilltest.results.model;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
-import org.hibernate.annotations.Type;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import ru.splashcourse.liubachka.ObjectWithIdImpl;
 import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTest;
-import ru.splashcourse.liubachka.logics.skilltest.questions.model.SkillTestSystemTypes;
 
-@Entity
 @ToString()
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Setter
 @Getter
-public class TestResult extends ObjectWithIdImpl {
+public class TestResultDto {
+
+    private Long id;
 
     private String personName;
 
@@ -37,10 +30,8 @@ public class TestResult extends ObjectWithIdImpl {
 
     private Long testSnapShotDataVersion = SkillTest.DATA_FORMAT_VERSION;
 
-    @Type(type = "text")
     private String testSnapShotDto;
 
-    @Type(type = "text")
     private String resultsSnapShotDto;
 
     private Integer correctAnswers;
@@ -51,6 +42,5 @@ public class TestResult extends ObjectWithIdImpl {
 
     private String testName;
 
-    @Enumerated(EnumType.STRING)
-    private SkillTestSystemTypes testType;
+    private String testType;
 }

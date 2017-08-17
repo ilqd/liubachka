@@ -112,7 +112,7 @@ Question.propTypes = {
 export default connect(
   (state, props)=>({
       data: state.getIn(['skilltest', 'questions', 'questions'], new List()).get(props.qIdx, new Map()),
-      results: state.getIn(['skilltest', 'results', props.qIdx]),
+      results: state.getIn(['skilltest', 'attempt', 'results', props.qIdx]),
   }),
   (dispatch, props)=>({
       answerGiven(answer) {

@@ -3,27 +3,52 @@ import { connect } from 'react-redux';
 import {Row, Col, Button} from 'react-bootstrap';
 import {List, Map, Set} from 'immutable';
 import {typeName} from './QuestionTypes.js';
+import MaskedFormControl from 'react-bootstrap-maskedinput';
+import { FormGroup, ControlLabel} from 'react-bootstrap';
+import {changeExamineeInfo, submitTestResults} from '@/store/skilltestResults.store';
 class Skilltest extends React.Component {
     constructor(props) {
         super(props);
         this.getQuestionsCount = this.getQuestionsCount.bind(this);
-        this.getCorrectAnswersCount = this.getCorrectAnswersCount.bind(this);
+        this.checkCorrectAnswers = this.checkCorrectAnswers.bind(this);
         this.checkSelectOneQuestion = this.checkSelectOneQuestion.bind(this);
         this.checkSelectManyQuestion = this.checkSelectManyQuestion.bind(this);
         this.checkSelectTextQuestion = this.checkSelectTextQuestion.bind(this);
-        this.state = {questionsCount: 0, correctAnswersCount: 0};
+        this.submitTestResults = this.submitTestResults.bind(this);
+        this.getResultValues = this.getResultValues.bind(this);
+        this.getPointsCount = this.getPointsCount.bind(this);
+        this.submitTestResultsCallMe = this.submitTestResults.bind(this, true);
+        this.submitTestResultsDontCall = this.submitTestResults.bind(this, false);
+        this.onPhoneChange = this.onPhoneChange.bind(this);
+        this.state = {questionsCount: 0, correctAnswersCount: 0, totalPoints: 0, pointsEarned: 0};
     }
     componentWillMount() {
-        this.setState({questionsCount: this.getQuestionsCount(),
-    correctAnswersCount: this.getCorrectAnswersCount()});
+        this.getResultValues();
     }
     componentWillReceiveProps(props) {
-        this.setState({questionsCount: this.getQuestionsCount(props),
-      correctAnswersCount: this.getCorrectAnswersCount(props)});
+        this.getResultValues(props);
+    }
+    onPhoneChange(e) {
+        this.props.changeExamineeInfo('phone', e.target.value);
+    }
+    getResultValues(props = this.props) {
+        const checkedAnswers = this.checkCorrectAnswers(props);
+        this.setState({
+            questionsCount: this.getQuestionsCount(props),
+            totalPoints: this.getPointsCount(props),
+            correctAnswersCount: checkedAnswers.count,
+            pointsEarned: checkedAnswers.points,
+        });
     }
     getQuestionsCount(props = this.props) {
-        if (props.data && props.data.size > 0) {
-            return props.data.get('questions', new List()).size;
+        if (props.questions) {
+            return props.questions.get('questions', new List()).size;
+        }
+        return 0;
+    }
+    getPointsCount(props = this.props) {
+        if (props.questions) {
+            return props.questions.get('questions', new List()).reduce((sum, q)=>sum + q.get('pointsAwarded'), 0);
         }
         return 0;
     }
@@ -39,10 +64,11 @@ class Skilltest extends React.Component {
         const correctAnswers = question.get('correctAnswers').toJS();
         return correctAnswers.findIndex(a => a.toLowerCase() === answer.toLowerCase()) > -1;
     }
-    getCorrectAnswersCount(props = this.props) {
+    checkCorrectAnswers(props = this.props) {
         let count = 0;
-        if (props.data && props.data.size > 0) {
-            props.data.get('questions', new List()).forEach((question, idx)=>{
+        let points = 0;
+        if (props.questions) {
+            props.questions.get('questions', new List()).forEach((question, idx)=>{
                 const answerGiven = props.results.get(idx);
                 let isCorrect = false;
                 switch (question.get('answerType')) {
@@ -60,10 +86,21 @@ class Skilltest extends React.Component {
                 }
                 if (isCorrect) {
                     count++;
+                    points += question.get('pointsAwarded');
                 }
             });
         }
-        return count;
+        return {count, points};
+    }
+    submitTestResults(isInterested) {
+        let composedData = new Map(this.props.attemptData);
+        composedData = composedData
+        .set('testSnapShotDto', JSON.stringify(this.props.questions.toJSON()))
+        .set('resultsSnapShotDto', JSON.stringify(this.props.results.toJSON()));
+        composedData = composedData.set('totalQuestions', this.state.questionsCount).set('correctAnswers', this.state.correctAnswersCount);
+        composedData = composedData.set('totalPoints', this.state.totalPoints).set('pointsEarned', this.state.pointsEarned);
+        composedData = composedData.set('testName', this.props.questions.get('testName'));
+        this.props.submitTestResults(composedData.toJS(), isInterested);
     }
     render() {
         return(
@@ -80,10 +117,26 @@ class Skilltest extends React.Component {
                 </div>
               </Col>
             </Row>
-            <Row >
-              <Col xs={6} style={{float: 'right'}}>
-                <Button onClick={this.props.restart}>
-                  Пройти тест заново
+            <Row>
+              <Col xs={12} md={3}>
+                <FormGroup style={{display: 'flex',    alignItems: 'center'}}>
+                  <ControlLabel syle={{marginRight: 10}}>Телефон</ControlLabel>
+                  <MaskedFormControl
+                    onChange={this.onPhoneChange}
+                    value={this.props.attemptData.get('phone') || ''}
+                    id="phone"
+                    type="text"
+                    label="Телефон" mask="+7 (111) 111-11-11" />
+                </FormGroup>
+              </Col>
+              <Col xs={12} md={3}>
+                <Button onClick={this.submitTestResultsCallMe} disabled={this.props.busy} bsStyle="primary" style={{width: '100%'}}>
+                  Хочу учиться!
+                </Button>
+              </Col>
+              <Col xs={12} md={3}>
+                <Button onClick={this.submitTestResultsDontCall} disabled={this.props.busy} style={{width: '100%'}}>
+                  Мне было просто интересно
                 </Button>
               </Col>
             </Row>
@@ -92,13 +145,26 @@ class Skilltest extends React.Component {
     }
 }
 Skilltest.propTypes = {
-    data: React.PropTypes.object,
-    results: React.PropTypes.func,
+    questions: React.PropTypes.object,
+    attemptData: React.PropTypes.object,
+    results: React.PropTypes.object,
     restart: React.PropTypes.func.isRequired,
+    submitTestResults: React.PropTypes.func,
+    changeExamineeInfo: React.PropTypes.func,
+    busy: React.PropTypes.bool,
 };
 export default connect(
   (state)=>({
-      data: state.getIn(['skilltest', 'questions']),
-      results: state.getIn(['skilltest', 'results']),
+      questions: state.getIn(['skilltest', 'questions']),
+      results: state.getIn(['skilltest', 'attempt', 'results']),
+      attemptData: state.getIn(['skilltest', 'attempt', 'data']),
+      busy: state.getIn(['ajaxStatus', 'posting']),
+  }), dispatch=>({
+      changeExamineeInfo(field, value) {
+          changeExamineeInfo(dispatch, field, value);
+      },
+      submitTestResults(data, isInterested) {
+          submitTestResults(dispatch, data, isInterested);
+      }
   })
-)(Skilltest);
+  )(Skilltest);
