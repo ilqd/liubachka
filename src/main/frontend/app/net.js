@@ -22,8 +22,16 @@ const commonRequestFunction = (url, data, requestType, userContentType) =>
      /* eslint no-unneeded-ternary: ["error", { "defaultAssignment": true }]*/
          contentType: userContentType !== undefined ? userContentType :
       'application/json; charset=utf-8',
-     }).done((responseData) => {
-         resolve(responseData);
+     }).done((responseData, textStatus, response) => {
+         if (response && response.getResponseHeader('AuthSuccessful')) {
+             resolve({ csrf: response.getResponseHeader('CSRF'),
+            firstName: response.getResponseHeader('FirstName'),
+            lastName: response.getResponseHeader('LastName'),
+            userId: response.getResponseHeader('UserId'),
+            roles: response.getResponseHeader('Roles') });
+         } else {
+             resolve(responseData);
+         }
      }).fail((response) => {
          const error = response.responseText && response.responseText != ''
        ? JSON.parse(response.responseText)

@@ -14,5 +14,6 @@ export default (
 		<Route exact path="/admin/createTest" component={CreateTest} />
 		<Route exact path="/admin/testList" component={AdminTestSelector} />
 		<Route path="/admin/editTest/:editTestName?" component={CreateTest} />
+		<Route exact path="/loginRedirect" component={Main} />
 	</Switch>
 );

@@ -1,6 +1,7 @@
 package ru.splashcourse.liubachka.logics.skilltest.results;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -48,8 +49,8 @@ public class ResultsServiceImpl implements ResultsService {
                 result.setTestType(testAssignment.get().getType().toString());
             }
         }
-        if (result.getPersonName().equals(entity.getPersonName()) && result.getEmail().equals(entity.getEmail())
-                && result.getAge().equals(entity.getAge())) {
+        if (Objects.equals(result.getPersonName(), entity.getPersonName()) && Objects.equals(result.getEmail(), entity.getEmail())
+                && Objects.equals(result.getAge(), entity.getAge())) {
             mapper.map(result, entity);
         } else {
             // WTF, impostor!

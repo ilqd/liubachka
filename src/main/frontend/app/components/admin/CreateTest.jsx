@@ -108,7 +108,7 @@ CreateTestClass.propTypes = {
     clearMessage: React.PropTypes.func,
     busy: React.PropTypes.bool,
     netMessage: React.PropTypes.string,
-    loadTestToEdit: React.PropTypes.string,
+    loadTestToEdit: React.PropTypes.func,
     match: React.PropTypes.object,
     clearData: React.PropTypes.func,
 };

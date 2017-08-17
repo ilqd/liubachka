@@ -13,8 +13,11 @@ html{
   margin: 0;
   border: 0;
 }
-.second-navbar{
+.second-navbar,
+.dropdown-menu{
   background-color: #00535f;
+}
+.second-navbar{
   display: flex;
   flex-direction: row-reverse;
   min-width: 100%;
@@ -42,7 +45,12 @@ html{
 .navbar-default .navbar-nav>li>a:hover,
 .navbar-default .navbar-nav>.active>a,
 .navbar-default .navbar-nav>.active>a:focus,
-.navbar-default .navbar-nav>.active>a:hover{
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus,
+.dropdown-menu>li>a:hover,
+.dropdown-menu>li>a:focus{
   background: cadetblue;
   color:white;
   border: 0;
@@ -172,6 +180,16 @@ html{
 }
 .btn{
   border-radius: 0;
+}
+.btn-primary{
+  background-image: linear-gradient(to bottom,#008095 0,#00535f 100%);
+  border-color: #003942;
+}
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus{
+  background-color: #00535f;
+  background-position: 0 -15px;
 }
 .border-bottom{
   border-bottom: 1px solid #37bdbf;

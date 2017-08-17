@@ -82,7 +82,7 @@ LoginPageClass.propTypes = {
 };
 
 export default connect((state)=>({
-    errors: state.getIn(['error', 'login_error']),
+    errors: state.getIn(['session', 'login_error']),
 }), dispatch=>({
     login: (user, pass) => tryToLogin(dispatch, user, pass)
 }))(LoginPageClass);

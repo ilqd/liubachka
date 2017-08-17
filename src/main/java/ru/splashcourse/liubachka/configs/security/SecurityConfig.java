@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import ru.splashcourse.liubachka.configs.role.RoleName;
 
@@ -28,13 +29,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         // @formatter:off
 		http.authorizeRequests().antMatchers("/", "/*", "/**").permitAll()
-				.antMatchers("/manage", "/manage/**").hasAuthority(RoleName.ROLE_ADMIN.toString())
-				.and().formLogin().loginPage("/login").permitAll()
-				.and().logout().permitAll();
+				.antMatchers("/admin","/admin/**","/manage", "/manage/**").hasAuthority(RoleName.ROLE_ADMIN.toString())
+				.and().formLogin().loginPage("/loginRedirect").permitAll()
+				.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
 		http.addFilterBefore(new JSONSecurityFilter(authenticationManager()),
 				UsernamePasswordAuthenticationFilter.class);
-
+	
 		http.logout().logoutSuccessUrl("/");
 
 		 http.csrf().requireCsrfProtectionMatcher(request -> false);
