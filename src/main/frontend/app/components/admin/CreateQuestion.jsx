@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {FormControl, Row, Col, Button} from 'react-bootstrap';
+import {FormControl, Row, Col, Button, Glyphicon} from 'react-bootstrap';
 import {setQuestionText, setQuestionValue, addAnswer, removeQuestion, addTextAnswer } from '@/store/skilltestCreator.store';
 import CreateAnswer from './CreateAnswer';
 import {List} from 'immutable';
+import {typeName} from '../skilltest/QuestionTypes';
 class CreateTestClass extends React.Component {
     constructor(props) {
         super(props);
@@ -19,7 +20,7 @@ class CreateTestClass extends React.Component {
         this.props.setQuestionValue(e.target.value);
     }
     addAnswer() {
-        if (this.props.question.get('answerType') == 'TEXT') {
+        if (this.props.question.get('answerType') == typeName.TEXT) {
             this.props.addTextAnswer();
         }else{
             this.props.addAnswer();
@@ -29,12 +30,26 @@ class CreateTestClass extends React.Component {
         this.props.removeQuestion();
     }
     render() {
-        return (
+        let glyph = '';
+        switch (this.props.question.get('answerType')) {
+            case typeName.TEXT:
+                glyph = 'pencil';
+                break;
+            case typeName.SELECT_MANY:
+                glyph = 'check';
+                break;
+            case typeName.SELECT_ONE:
+                glyph = 'record';
+                break;
+            default:
+                break;
+        }
+        return(
     <Row className="created-answer">
       <Col xs={12} >
         <Row>
           <Col xs={12} md={1}>
-          {this.props.qIdx + 1}.
+          {this.props.qIdx + 1}.<Glyphicon glyph={glyph}/>
           </Col>
           <Col xs={12} md={8}>
             <FormControl

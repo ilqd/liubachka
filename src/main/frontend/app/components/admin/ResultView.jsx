@@ -16,8 +16,8 @@ export default class ResultView extends React.Component {
               </Col>
             </Row>);
             const answers = fromJS(JSON.parse(this.props.data.get('resultsSnapShotDto')));
-            test.get('questions', new List()).forEach((q, idx)=>{
-                questions.push(<Question resultsViewMode data={q} results={answers.get(idx.toString())}/>);
+            questions = test.get('questions', new List()).map((q, idx)=>{
+                return (<Question key={idx} resultsViewMode data={q} results={answers.get(idx.toString())}/>);
             }
           );
         }

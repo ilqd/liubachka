@@ -44,12 +44,12 @@ export class Question extends React.Component {
     }
     formAnswerSelectOne() {
         const defaultValue = this.props.results ? this.props.results : -1;
-        return this.props.data.get('answers', new List()).map((e, idx)=>
-      <Row key={idx}>
+        return this.props.data.get('answers', new List()).map((e)=>
+      <Row key={e.get('id')}>
         <Col xs={12} className={this.formBackgroundClass(e)}>
           <Radio
           disabled={this.props.resultsViewMode}
-          name="radioGroup" id={e.get('id')}
+          name={`radioGroup_${this.props.data.get('id')}`} id={e.get('id')}
           checked={defaultValue == e.get('id')}
           onChange={this.saveAnswerRadio}>
             {e.get('text')}
@@ -60,8 +60,8 @@ export class Question extends React.Component {
     }
     formAnswerSelectMany() {
         const defaultValue = this.props.results ? this.props.results : new Set();
-        return this.props.data.get('answers', new List()).map((e, idx)=>
-        <Row key={idx}>
+        return this.props.data.get('answers', new List()).map((e)=>
+        <Row key={e.get('id')}>
           <Col xs={12} className={this.formBackgroundClass(e)}>
             <Checkbox disabled={this.props.resultsViewMode}
               id={e.get('id')} onChange={this.saveAnswerCheckbox} checked={defaultValue.toSet().has(e.get('id').toString())}>
