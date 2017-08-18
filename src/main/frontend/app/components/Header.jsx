@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navbar, Nav,  NavItem, Glyphicon, NavDropdown, MenuItem} from 'react-bootstrap';
+import {Navbar, Nav,  NavItem, Glyphicon, NavDropdown} from 'react-bootstrap';
 import {IndexLinkContainer} from 'react-router-bootstrap';
 import logo from '../res/logo.png';
 import { connect } from 'react-redux';
@@ -19,7 +19,7 @@ class Header extends React.Component {
             userDropdown =  (
           <NavDropdown eventKey="6" title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown">
             <IndexLinkContainer eventKey="6.1" to="/admin/testList"><NavItem >Настройка тестов</NavItem></IndexLinkContainer>
-          <MenuItem eventKey="6.2">Результаты тестов</MenuItem>
+            <IndexLinkContainer eventKey="6.2" to="/admin/testResults"><NavItem >Результаты тестов</NavItem></IndexLinkContainer>
         </NavDropdown>);
         }else if (this.props.roles && !this.props.roles.includes('ROLE_ADMIN')) {
             userDropdown = <NavDropdown eventKey="6" title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown"/>;

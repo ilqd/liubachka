@@ -3,6 +3,7 @@ package ru.splashcourse.liubachka.logics;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,11 @@ public class AppController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${liu.init.username}")
+    private String initUsername;
+    @Value("${liu.init.password}")
+    private String initPassword;
+
     @RequestMapping(value = {"/", "/loginRedirect", "/login", "/page/**", "/skilltest/**"}, method = RequestMethod.GET)
     public String index(HttpServletResponse response) {
         return "forward:/index.html";
@@ -31,14 +37,14 @@ public class AppController {
 
     @RequestMapping(value = "/init")
     public String init() {
-        if (!userRepo.findByUsername("admin").isPresent()) {
+        if (!userRepo.findByUsername("siteadmin").isPresent()) {
             User user = new User();
-            user.setUsername("admin");
-            user.setPassword(passwordEncoder.encode("adminInitPa33"));
+            user.setUsername(initUsername);
+            user.setPassword(passwordEncoder.encode(initPassword));
             user.setEnabled(true);
             user.setRoles(Sets.newHashSet(RoleName.ROLE_ADMIN));
-            user.setFirstName("admin");
-            user.setLastName("admin");
+            user.setFirstName("Liu");
+            user.setLastName("the Admin");
             userRepo.save(user);
         }
         return "forward:/index.html";

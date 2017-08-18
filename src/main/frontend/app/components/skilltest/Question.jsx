@@ -4,17 +4,28 @@ import {Map, List, Set} from 'immutable';
 import {Row, Col, Checkbox, Radio, FormControl} from 'react-bootstrap';
 import {answerGiven} from '@/store/skilltestResults.store';
 import {typeName} from './QuestionTypes.js';
-class Question extends React.Component {
+import {checkSelectTextQuestion} from './ResultsPage';
+export class Question extends React.Component {
     constructor(props) {
         super(props);
         this.formAnswers = this.formAnswers.bind(this);
         this.formAnswerSelectOne = this.formAnswerSelectOne.bind(this);
         this.formAnswerSelectMany = this.formAnswerSelectMany.bind(this);
         this.formAnswerText = this.formAnswerText.bind(this);
+        this.formBackgroundClass = this.formBackgroundClass.bind(this);
+        this.formBackgroundClassText = this.formBackgroundClassText.bind(this);
 
         this.saveAnswerText = this.saveAnswerText.bind(this);
         this.saveAnswerRadio = this.saveAnswerRadio.bind(this);
         this.saveAnswerCheckbox = this.saveAnswerCheckbox.bind(this);
+    }
+    formBackgroundClass(e) {
+        const className = e.get('correct') ? 'correct-answer' : 'incorrect-answer';
+        return this.props.resultsViewMode ? className : '';
+    }
+    formBackgroundClassText() {
+        const className = checkSelectTextQuestion(this.props.data, this.props.results) ? 'correct-text-answer' : 'incorrect-text-answer';
+        return this.props.resultsViewMode ? className : '';
     }
     saveAnswerText(e) {
         this.props.answerGiven(e.target.value);
@@ -35,8 +46,9 @@ class Question extends React.Component {
         const defaultValue = this.props.results ? this.props.results : -1;
         return this.props.data.get('answers', new List()).map((e, idx)=>
       <Row key={idx}>
-        <Col xs={12}>
+        <Col xs={12} className={this.formBackgroundClass(e)}>
           <Radio
+          disabled={this.props.resultsViewMode}
           name="radioGroup" id={e.get('id')}
           checked={defaultValue == e.get('id')}
           onChange={this.saveAnswerRadio}>
@@ -50,8 +62,9 @@ class Question extends React.Component {
         const defaultValue = this.props.results ? this.props.results : new Set();
         return this.props.data.get('answers', new List()).map((e, idx)=>
         <Row key={idx}>
-          <Col xs={12}>
-            <Checkbox id={e.get('id')} onChange={this.saveAnswerCheckbox} checked={defaultValue.has(e.get('id').toString())}>
+          <Col xs={12} className={this.formBackgroundClass(e)}>
+            <Checkbox disabled={this.props.resultsViewMode}
+              id={e.get('id')} onChange={this.saveAnswerCheckbox} checked={defaultValue.toSet().has(e.get('id').toString())}>
               {e.get('text')}
             </Checkbox>
           </Col>
@@ -62,8 +75,9 @@ class Question extends React.Component {
         const defaultValue = this.props.results ? this.props.results : '';
         return (
       <Row>
-        <Col xs={12} md={6}>
+        <Col xs={12} md={6} className={this.formBackgroundClassText()}>
           <FormControl
+            disabled={this.props.resultsViewMode}
             value={defaultValue}
             onChange={this.saveAnswerText}
             id="answerField"
@@ -71,6 +85,10 @@ class Question extends React.Component {
             placeholder="Введите ответ"
           />
         </Col>
+        {this.props.resultsViewMode ? <span>Правильные ответы:
+        {this.props.data.get('correctAnswers', new List()).join(',')}
+        </span>
+        : ''}
       </Row>);
     }
     formAnswers() {
@@ -95,7 +113,8 @@ class Question extends React.Component {
       <div className="border-bottom">
       <Row>
       <Col xs={12}>
-        {this.props.data.get('question')}
+        {this.props.data.get('question')} {this.props.resultsViewMode ?
+          <span>(стоимость {this.props.data.get('pointsAwarded') || 0} баллов)</span> : ''}
       </Col>
       </Row>
         {this.formAnswers()}
@@ -107,6 +126,7 @@ Question.propTypes = {
     qIdx: React.PropTypes.number,
     data: React.PropTypes.object,
     answerGiven: React.PropTypes.func,
+    resultsViewMode: React.PropTypes.bool,
     results: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.number, React.PropTypes.string])
 };
 export default connect(

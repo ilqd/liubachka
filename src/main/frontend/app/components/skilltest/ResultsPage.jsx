@@ -6,6 +6,12 @@ import {typeName} from './QuestionTypes.js';
 import MaskedFormControl from 'react-bootstrap-maskedinput';
 import { FormGroup, ControlLabel} from 'react-bootstrap';
 import {changeExamineeInfo, submitTestResults} from '@/store/skilltestResults.store';
+
+export function checkSelectTextQuestion(question, answer = '') {
+    const correctAnswers = question.get('correctAnswers').toJS();
+    return correctAnswers.findIndex(a => a.toLowerCase() === answer.toLowerCase()) > -1;
+}
+
 class Skilltest extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +19,7 @@ class Skilltest extends React.Component {
         this.checkCorrectAnswers = this.checkCorrectAnswers.bind(this);
         this.checkSelectOneQuestion = this.checkSelectOneQuestion.bind(this);
         this.checkSelectManyQuestion = this.checkSelectManyQuestion.bind(this);
-        this.checkSelectTextQuestion = this.checkSelectTextQuestion.bind(this);
+        this.checkSelectTextQuestion = checkSelectTextQuestion.bind(this);
         this.submitTestResults = this.submitTestResults.bind(this);
         this.getResultValues = this.getResultValues.bind(this);
         this.getPointsCount = this.getPointsCount.bind(this);
@@ -59,10 +65,6 @@ class Skilltest extends React.Component {
         const correctIds = question.get('answers', new List()).map(a=>a.get('correct') ? a.get('id') : undefined).filter(a=>a).toSet();
         const answerInt = answer.map(a=>parseInt(a, 10));
         return (correctIds.size == answerInt.size && correctIds.intersect(answerInt).size == correctIds.size);
-    }
-    checkSelectTextQuestion(question, answer = '') {
-        const correctAnswers = question.get('correctAnswers').toJS();
-        return correctAnswers.findIndex(a => a.toLowerCase() === answer.toLowerCase()) > -1;
     }
     checkCorrectAnswers(props = this.props) {
         let count = 0;
