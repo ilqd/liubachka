@@ -7,10 +7,12 @@ import javax.persistence.ManyToOne;
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.splashcourse.liubachka.ObjectWithIdImpl;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class PageToUrlMapping extends ObjectWithIdImpl {
 
     @NotBlank

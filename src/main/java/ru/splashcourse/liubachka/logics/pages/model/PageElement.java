@@ -3,13 +3,16 @@ package ru.splashcourse.liubachka.logics.pages.model;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.CollectionUtils;
 
@@ -44,6 +47,8 @@ public class PageElement extends ObjectWithIdImpl {
     private int elementOrder = 1;
 
     @ElementCollection
+    @MapKeyColumn(name = "key", length = 64)
+    @Column(name = "value")
     private Map<String, String> params;
 
     private String style;
@@ -51,5 +56,6 @@ public class PageElement extends ObjectWithIdImpl {
     @OneToMany
     private List<PageElement> children;
 
+    @Type(type = "text")
     private String content;
 }
