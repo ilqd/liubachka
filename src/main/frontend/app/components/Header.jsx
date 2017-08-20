@@ -18,8 +18,9 @@ class Header extends React.Component {
         if (this.props.roles && this.props.roles.includes('ROLE_ADMIN')) {
             userDropdown =  (
           <NavDropdown eventKey="6" title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown">
-            <IndexLinkContainer eventKey="6.1" to="/admin/testList"><NavItem >Настройка тестов</NavItem></IndexLinkContainer>
-            <IndexLinkContainer eventKey="6.2" to="/admin/testResults"><NavItem >Результаты тестов</NavItem></IndexLinkContainer>
+            <IndexLinkContainer eventKey="6.1.1" to="/admin/testList"><NavItem >Настройка тестов</NavItem></IndexLinkContainer>
+            <IndexLinkContainer eventKey="6.1.2" to="/admin/testResults"><NavItem >Результаты тестов</NavItem></IndexLinkContainer>
+            <IndexLinkContainer eventKey="6.2.1" to="/admin/pageList"><NavItem >Настройка страниц</NavItem></IndexLinkContainer>
         </NavDropdown>);
         }else if (this.props.roles && !this.props.roles.includes('ROLE_ADMIN')) {
             userDropdown = <NavDropdown eventKey="6" title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown"/>;

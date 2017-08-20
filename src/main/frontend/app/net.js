@@ -25,8 +25,6 @@ const commonRequestFunction = (url, data, requestType, userContentType) =>
       'application/json; charset=utf-8'
      }).done((responseData, textStatus, response) => {
          if (response.getResponseHeader('sessionexpired')) {
-           // WTF, gimme json
-             console.log('logout');
              logout(store.dispatch);
          } else if (response && response.getResponseHeader('AuthSuccessful')) {
              resolve({ csrf: response.getResponseHeader('CSRF'),

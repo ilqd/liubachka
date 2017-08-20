@@ -7,6 +7,7 @@ import {skilltestCreatorReducer} from './skilltestCreator.store.js';
 import {skilltestListReducer} from './skilltestList.store.js';
 import {useraccountReducer}from './useraccount.store.js';
 import {adminTestResultsReducer} from './adminTestResults.store.js';
+import {pageListReducer} from './adminPageList.store.js';
 import {ajaxStatusReducer} from './net.store.js';
 import { combineReducers } from 'redux-immutable';
 import createEngine from 'redux-storage-engine-localstorage';
@@ -42,6 +43,9 @@ const superReducer = combineReducers({
     }),
     admin: combineReducers({
         testResults: adminTestResultsReducer,
+        pages: combineReducers({
+            list: pageListReducer,
+        })
     }),
     ajaxStatus: ajaxStatusReducer,
     session: useraccountReducer,
