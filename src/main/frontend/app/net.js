@@ -1,6 +1,7 @@
 import $ from 'jquery';
-import store from './store/store';
+import store from '@/store/store';
 import {Promise} from 'es6-promise';
+import {logout} from '@/store/useraccount.store';
 
 const commonRequestFunction = (url, data, requestType, userContentType) =>
  new Promise((resolve, reject) => {
@@ -21,9 +22,13 @@ const commonRequestFunction = (url, data, requestType, userContentType) =>
          processData: false,
      /* eslint no-unneeded-ternary: ["error", { "defaultAssignment": true }]*/
          contentType: userContentType !== undefined ? userContentType :
-      'application/json; charset=utf-8',
+      'application/json; charset=utf-8'
      }).done((responseData, textStatus, response) => {
-         if (response && response.getResponseHeader('AuthSuccessful')) {
+         if (response.getResponseHeader('sessionexpired')) {
+           // WTF, gimme json
+             console.log('logout');
+             logout(store.dispatch);
+         } else if (response && response.getResponseHeader('AuthSuccessful')) {
              resolve({ csrf: response.getResponseHeader('CSRF'),
             firstName: response.getResponseHeader('FirstName'),
             lastName: response.getResponseHeader('LastName'),

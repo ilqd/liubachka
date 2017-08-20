@@ -30,7 +30,13 @@ public class AppController {
     @Value("${liu.init.password}")
     private String initPassword;
 
-    @RequestMapping(value = {"/", "/loginRedirect", "/login", "/page/**", "/skilltest/**"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/loginRedirect", method = RequestMethod.GET)
+    public String loginRedirect(HttpServletResponse response) {
+        response.setHeader("sessionExpired", "1");
+        return "forward:/index.html";
+    }
+
+    @RequestMapping(value = {"/", "/login", "/page/**", "/skilltest/**"}, method = RequestMethod.GET)
     public String index(HttpServletResponse response) {
         return "forward:/index.html";
     }

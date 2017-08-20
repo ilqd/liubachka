@@ -38,12 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 		http.logout().logoutSuccessUrl("/");
 
-		 http.csrf().requireCsrfProtectionMatcher(request -> false);
-//		 {
-//		 return !(request.getMethod().equalsIgnoreCase("GET")
-//		 || request.getRequestURI().equalsIgnoreCase("/login")
-//		 || request.getRequestURI().equalsIgnoreCase("/logout"));
-//		 });
+		 http.csrf().requireCsrfProtectionMatcher(request ->{
+		 return (!request.getMethod().equalsIgnoreCase("GET") &&
+		         request.getRequestURI().contains("/api/tests"));
+		 });
 		http.headers().frameOptions().disable();
 		// @formatter:on
     }

@@ -1,6 +1,6 @@
 import {RestAPI} from '@/net.js';
 import{Map, fromJS} from 'immutable';
-import {goBack} from '@/store/store';
+import {goBack, history} from '@/store/store';
 
 export const useraccountReducer = (state = Map(), action) => {
     switch (action.type) {
@@ -34,4 +34,5 @@ export const tryToLogin = (dispatch, username, pass) => {
 export const logout = (dispatch)=>{
     dispatch({ type: 'LOGOUT' });
     RestAPI.post('/logout');
+    history.replace('/login');
 };
