@@ -9,18 +9,34 @@ class StartPageClass extends React.Component {
     constructor(props) {
         super(props);
         this.submit = this.submit.bind(this);
-        this.onNameChange = this.onFieldChange.bind(this, 'personName');
-        this.onEmailChange = this.onFieldChange.bind(this, 'email');
+        this.onNameChange = this.onNameChange.bind(this);
+        this.onEmailChange = this.onEmailChange.bind(this);
         this.onAgeChange = this.onFieldChange.bind(this, 'age');
+        this.state = {emailValidation: 'error', nameValidation: 'error'};
     }
     submit() {
-        this.props.startTest(this.props.data.toJS());
+        if (this.state.emailValidation == 'success' && this.state.nameValidation == 'success') {
+            this.props.startTest(this.props.data.toJS());
+        }
     }
+    onNameChange(e) {
+        const length = e.target.value ? e.target.value.length : 0;
+        this.setState({nameValidation: length >= 2 ? 'success' : 'error'});
+        this.onFieldChange('personName', e);
+    }
+    onEmailChange(e) {
+        const email = e.target.value || '';
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        this.setState({emailValidation: re.test(email) ? 'success' : 'error'});
+        this.onFieldChange('email', e);
+    }
+
     onFieldChange(field, e) {
         this.props.changeExamineeInfo(field, e.target.value);
     }
 
     render() {
+        const canSubmit = this.state.emailValidation == 'success' && this.state.nameValidation == 'success';
         return (<div>
             <Row>
               <Col xs={12}><h4>Пожалуйста, заполните свои контактные данные</h4></Col>
@@ -30,6 +46,7 @@ class StartPageClass extends React.Component {
                 <FieldGroup
                   onChange={this.onNameChange}
                   value={this.props.data.get('personName') || ''}
+                  validationState={this.state.nameValidation}
                   id="personName"
                   type="text"
                   label="Ваше имя"
@@ -41,6 +58,7 @@ class StartPageClass extends React.Component {
               <Col xs={12} md={6}>
                 <FieldGroup
                   onChange={this.onEmailChange}
+                  validationState={this.state.emailValidation}
                   value={this.props.data.get('email') || ''}
                   id="email"
                   type="email"
@@ -64,7 +82,7 @@ class StartPageClass extends React.Component {
             </Row>
             <Row>
               <Col xs={12}>
-                <Button disabled={this.props.busy} onClick={this.submit}>Далее</Button>
+                <Button disabled={this.props.busy || !canSubmit} onClick={this.submit}>Далее</Button>
               </Col>
             </Row>
   </div>);

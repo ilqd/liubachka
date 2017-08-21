@@ -1,7 +1,6 @@
 package ru.splashcourse.liubachka.logics.pages.model;
 
 import java.util.List;
-import java.util.Map;
 
 import lombok.Data;
 
@@ -16,7 +15,7 @@ public class PageElementDto {
 
     private int elementOrder = 1;
 
-    private Map<String, String> params;
+    private String params;
 
     private String style;
 

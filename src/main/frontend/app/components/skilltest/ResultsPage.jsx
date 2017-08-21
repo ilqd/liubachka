@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {Row, Col, Button} from 'react-bootstrap';
 import {List, Map, Set} from 'immutable';
 import {typeName} from './QuestionTypes.js';
-import MaskedFormControl from 'react-bootstrap-maskedinput';
+import InputMask from 'react-input-mask';
 import { FormGroup, ControlLabel} from 'react-bootstrap';
 import {changeExamineeInfo, submitTestResults} from '@/store/skilltestResults.store';
 
@@ -26,7 +26,7 @@ class Skilltest extends React.Component {
         this.submitTestResultsCallMe = this.submitTestResults.bind(this, true);
         this.submitTestResultsDontCall = this.submitTestResults.bind(this, false);
         this.onPhoneChange = this.onPhoneChange.bind(this);
-        this.state = {questionsCount: 0, correctAnswersCount: 0, totalPoints: 0, pointsEarned: 0};
+        this.state = {questionsCount: 0, correctAnswersCount: 0, totalPoints: 0, pointsEarned: 0, phoneValid: false};
     }
     componentWillMount() {
         this.getResultValues();
@@ -36,6 +36,8 @@ class Skilltest extends React.Component {
     }
     onPhoneChange(e) {
         this.props.changeExamineeInfo('phone', e.target.value);
+        const regExp = /^\+7 \([0-9]{3}\) [0-9]{3}-[0-9]{2}-[0-9]{2}$/;
+        this.setState({phoneValid: regExp.test(e.target.value)});
     }
     getResultValues(props = this.props) {
         const checkedAnswers = this.checkCorrectAnswers(props);
@@ -95,6 +97,9 @@ class Skilltest extends React.Component {
         return {count, points};
     }
     submitTestResults(isInterested) {
+        if (isInterested && !this.state.phoneValid) {
+            return;
+        }
         let composedData = new Map(this.props.attemptData);
         composedData = composedData
         .set('testSnapShotDto', JSON.stringify(this.props.questions.toJSON()))
@@ -122,17 +127,15 @@ class Skilltest extends React.Component {
             <Row>
               <Col xs={12} md={3}>
                 <FormGroup style={{display: 'flex',    alignItems: 'center'}}>
-                  <ControlLabel syle={{marginRight: 10}}>Телефон</ControlLabel>
-                  <MaskedFormControl
-                    onChange={this.onPhoneChange}
-                    value={this.props.attemptData.get('phone') || ''}
-                    id="phone"
-                    type="text"
-                    label="Телефон" mask="+7 (111) 111-11-11" />
+                  <ControlLabel style={{marginRight: 10}}>Телефон</ControlLabel>
+                    <InputMask className="form-control"
+                     mask="+7 (999) 999-99-99"
+                     onChange={this.onPhoneChange}
+                     value={ this.props.attemptData.get('phone') || '' }/>
                 </FormGroup>
               </Col>
               <Col xs={12} md={3}>
-                <Button onClick={this.submitTestResultsCallMe} disabled={this.props.busy} bsStyle="primary" style={{width: '100%'}}>
+                <Button onClick={this.submitTestResultsCallMe} disabled={!this.state.phoneValid || this.props.busy} bsStyle="primary" style={{width: '100%'}}>
                   Хочу учиться!
                 </Button>
               </Col>
