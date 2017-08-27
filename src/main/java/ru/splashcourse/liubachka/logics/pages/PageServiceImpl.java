@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
 import ru.splashcourse.liubachka.logics.pages.model.Page;
@@ -16,6 +18,8 @@ import ru.splashcourse.liubachka.logics.pages.model.PageRepository;
 import ru.splashcourse.liubachka.logics.pages.model.PageToUrlMapping;
 import ru.splashcourse.liubachka.logics.pages.model.PageToUrlMappingRepository;
 
+@Service
+@Transactional
 public class PageServiceImpl implements PageService {
 
     @Autowired

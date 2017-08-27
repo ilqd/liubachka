@@ -5,22 +5,26 @@ import {finishTest, restartTest} from '@/store/skilltestResults.store';
 import {data} from './DataStub.js';
 import Question from './Question';
 import {Row, Col, Button, Modal} from 'react-bootstrap';
-import {List} from 'immutable';
+import {List, Map} from 'immutable';
 import ResultsPage from './ResultsPage';
 import StartPage from './StartPage';
 import {goBack} from '@/store/store';
 import {clearMessage, NET_ERROR_MESSAGE} from '@/store/net.store.js';
+import Progress from './Progress';
 
 class Skilltest extends React.Component {
     constructor(props) {
         super(props);
+        this.jumpToQuestion = this.jumpToQuestion.bind(this);
         this.back = this.back.bind(this);
         this.next = this.next.bind(this);
         this.getQuestionsCount = this.getQuestionsCount.bind(this);
-        this.state = {questionIdx: 0};
         this.finish = this.finish.bind(this);
+        this.finishAnyway = this.finishAnyway.bind(this);
         this.restart = this.restart.bind(this);
         this.hideModal = this.hideModal.bind(this);
+        this.hidenotAllAnsweredConfirmation = this.hidenotAllAnsweredConfirmation.bind(this);
+        this.state = {questionIdx: 0, notAllAnswered: false};
     }
     componentWillMount() {
         if (this.props.match && this.props.match.params && this.props.match.params.testType) {
@@ -29,6 +33,9 @@ class Skilltest extends React.Component {
             this.props.loadData(data);
         }
     }
+    jumpToQuestion(idx) {
+        this.setState({questionIdx: idx});
+    }
     back() {
         this.setState({questionIdx: this.state.questionIdx - 1});
     }
@@ -36,6 +43,14 @@ class Skilltest extends React.Component {
         this.setState({questionIdx: this.state.questionIdx + 1});
     }
     finish() {
+        if (this.getQuestionsCount() - this.props.answersCount <= 0) {
+            this.props.finishTest();
+        }else{
+            this.setState({notAllAnswered: true, triedToFinish: true});
+        }
+    }
+    finishAnyway() {
+        this.setState({notAllAnswered: false});
         this.props.finishTest();
     }
     restart() {
@@ -55,6 +70,9 @@ class Skilltest extends React.Component {
             goBack();
         }
     }
+    hidenotAllAnsweredConfirmation() {
+        this.setState({notAllAnswered: false});
+    }
     render() {
         const questionCount  = this.getQuestionsCount();
         const questionText = this.props.finished ? '' : `, вопрос ${this.state.questionIdx + 1} из ${questionCount}`;
@@ -70,6 +88,15 @@ class Skilltest extends React.Component {
             <Button onClick={this.hideModal}>Спасибо</Button>
           </Modal.Footer>
         </Modal>
+        <Modal show={this.state.notAllAnswered} onHide={this.hidenotAllAnsweredConfirmation}>
+          <Modal.Body>
+            Вы не ответили на {questionCount - this.props.answersCount} вопросов! Продолжить?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.finishAnyway}>Да</Button>
+            <Button onClick={this.hidenotAllAnsweredConfirmation}>Нет</Button>
+          </Modal.Footer>
+        </Modal>
           <Row >
             <Col xs={12}>
               <h2 className="border-bottom">
@@ -81,6 +108,11 @@ class Skilltest extends React.Component {
           <ResultsPage restart={this.restart}/>
             :
           <div>
+            <Row >
+              <Col xs={12} className={`${this.state.triedToFinish ? 'tried-to-finish' : ''}`} >
+                <Progress jumpToQuestion={this.jumpToQuestion} currentIdx={this.state.questionIdx}/>
+              </Col>
+            </Row>
             <Question qIdx={this.state.questionIdx}/>
             <Row >
               <Col xs={6}>
@@ -118,6 +150,7 @@ Skilltest.propTypes = {
     personId: React.PropTypes.number,
     clearMessage: React.PropTypes.func,
     netMessage: React.PropTypes.string,
+    answersCount: React.PropTypes.number,
 };
 export default connect(
   (state)=>({
@@ -125,6 +158,7 @@ export default connect(
       finished: state.getIn(['skilltest', 'attempt', 'data', 'finished']),
       personId: state.getIn(['skilltest', 'attempt',  'data', 'id']),
       netMessage: state.getIn(['ajaxStatus', 'message']),
+      answersCount: state.getIn(['skilltest', 'attempt', 'results'], new Map()).size || 0,
   }),
   (dispatch)=>({
       loadData(dataPassed) {
