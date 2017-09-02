@@ -255,3 +255,9 @@ html{
     color: red;
     font-weight: bold;
 }
+.page-element{
+  min-height: 10px;
+}
+.page-element.edit-page-element{
+  border: 1px solid #eeeeee
+}

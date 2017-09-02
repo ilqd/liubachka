@@ -1,5 +1,5 @@
 /* eslint new-cap: ["error", { "capIsNew": false }]*/
-import { Map, fromJS } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
 
 export const adminPageEditReducer = (state = Map(), action) => {
@@ -8,6 +8,10 @@ export const adminPageEditReducer = (state = Map(), action) => {
             return fromJS(action.data);
         case 'CHANGE_PAGE_FIELD':
             return state.set(action.field, action.value);
+        case 'PAGE_ADD_ROW':
+            return state.setIn(action.path,
+              state.getIn(action.path, new List()).push(new Map({type: 'ROW'}))
+            );
         case 'LOGOUT':
         case 'CREATING_NEW_PAGE':
             return Map();
@@ -30,6 +34,12 @@ export const loadPageToEdit = (dispatch, id) =>{
 export const changeField = (dispatch, field, value) =>{
     dispatch({ type: 'CHANGE_PAGE_FIELD', field, value });
 };
+
+export const addRow = (dispatch, path)=>{
+    dispatch({type: 'PAGE_ADD_ROW', path});
+};
+
+
 export const save = (dispatch, data) =>{
     dispatch({type: 'SAVING_PAGE'});
     dispatch({ type: 'POSTING' });

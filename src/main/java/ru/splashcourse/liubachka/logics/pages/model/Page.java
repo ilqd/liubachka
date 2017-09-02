@@ -2,6 +2,7 @@ package ru.splashcourse.liubachka.logics.pages.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -29,7 +30,7 @@ public class Page extends ObjectWithIdImpl {
     @NotBlank
     private String name;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<PageElement> children;
 
     @Column(unique = true)

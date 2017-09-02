@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
 import Main from '../main/Main';
+import {PageElement} from './PageElement';
 class Page extends React.Component {
     constructor(props) {
         super(props);
@@ -32,7 +33,7 @@ class Page extends React.Component {
             return <div>Загрузка...</div>;
         }
         if (this.state.pageFound) {
-            return <div>{this.page.get('name')}</div>;
+            return <div>{this.page.get('children', new List()).map((elem, idx)=><PageElement key={idx} data={elem}/>)}</div>;
         } return <Main/>;
     }
 }

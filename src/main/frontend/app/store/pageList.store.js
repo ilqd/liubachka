@@ -2,12 +2,12 @@
 import { List, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
 
-export const pageListReducer = (state = List(), action) => {
+export const pageListReducer = (state = new List(), action) => {
     switch (action.type) {
         case 'PAGES_LOADED':
             return fromJS(action.data);
         case 'LOGOUT':
-            return List();
+            return new List();
         default:
             return state;
     }

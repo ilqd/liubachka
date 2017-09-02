@@ -2,6 +2,7 @@ package ru.splashcourse.liubachka.logics.pages.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -9,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.CollectionUtils;
 
 import lombok.Data;
@@ -34,7 +34,7 @@ public class PageElement extends ObjectWithIdImpl {
     @ManyToOne
     private PageElement parentElement;
 
-    @NotBlank
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private PageElementType type;
 

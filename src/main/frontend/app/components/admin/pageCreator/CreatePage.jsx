@@ -4,9 +4,10 @@ import {Row, Col, Button, Modal} from 'react-bootstrap';
 import {clearMessage, SUCCESS_MESSAGE} from '@/store/net.store.js';
 import {goBack} from '@/store/store';
 import {FieldGroup} from '@/components/Util.js';
-import {Map} from 'immutable';
-import {loadPageToEdit, createNewPage, changeField, save } from '@/store/adminPageEdit.store';
-
+import {Map, List} from 'immutable';
+import {loadPageToEdit, createNewPage, changeField, save,
+addRow } from '@/store/adminPageEdit.store';
+import {PageElement} from '@/components/page/PageElement';
 class CreatePage extends React.Component {
     constructor(props) {
         super(props);
@@ -14,6 +15,7 @@ class CreatePage extends React.Component {
         this.onUrlChange = this.onFieldChange.bind(this, 'url');
         this.hideModal = this.hideModal.bind(this);
         this.save = this.save.bind(this);
+        this.addRow = this.addRow.bind(this);
         this.state = {nameValidation: 'error'};
     }
     componentWillMount() {
@@ -40,6 +42,9 @@ class CreatePage extends React.Component {
     }
     save() {
         this.props.save(this.props.data);
+    }
+    addRow() {
+        this.props.addRow();
     }
     render() {
         return (<div>
@@ -72,9 +77,15 @@ class CreatePage extends React.Component {
         />
       </Col>
     </Row>
+    {this.props.data.get('children', new List()).map((elem, idx)=><PageElement key={idx} editMode data={elem}/>)}
     <Row>
       <Col xs={12}>
-        <Button onClick={this.save}>Создать</Button>
+        <Button onClick={this.addRow}>Добавить ряд</Button>
+      </Col>
+    </Row>
+    <Row style={{marginTop: 30}}>
+      <Col xs={12}>
+        <Button style={{float: 'left'}}onClick={this.save}>Создать</Button>
       </Col>
     </Row>
   </div>);
@@ -89,6 +100,7 @@ CreatePage.propTypes = {
     clearMessage: React.PropTypes.func,
     save: React.PropTypes.func,
     netMessage: React.PropTypes.string,
+    addRow: React.PropTypes.func,
 };
 export default connect(state=> ({
     data: state.getIn(['admin', 'pages', 'edit'], new Map()),
@@ -110,4 +122,7 @@ export default connect(state=> ({
     clearMessage() {
         clearMessage(dispatch);
     },
+    addRow(path = ['children']) {
+        addRow(dispatch, path);
+    }
 }))(CreatePage);
