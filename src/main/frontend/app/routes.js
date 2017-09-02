@@ -6,18 +6,21 @@ import CreateTest from './components/admin/CreateTest.jsx';
 import AdminTestSelector from './components/admin/AdminTestSelector.jsx';
 import ResultsList from './components/admin/ResultsList.jsx';
 import PageList from './components/admin/pageCreator/PageList.jsx';
+import CreatePage from './components/admin/pageCreator/CreatePage.jsx';
 import LoginPage from './components/useraccount/Login.jsx';
+import Page from './components/page/Page';
 
-export default (
-	<Switch>
-		<Route exact path="/login" component={LoginPage} />
-		<Route exact path="/skilltest/:testType?" component={Skilltest} />
-		<Route exact path="/admin/createTest" component={CreateTest} />
-		<Route exact path="/admin/testList" component={AdminTestSelector} />
-		<Route exact path="/admin/testResults" component={ResultsList} />
-		<Route exact path="/admin/pageList" component={PageList} />
-		<Route path="/admin/editTest/:editTestName?" component={CreateTest} />
-		<Route exact path="/loginRedirect" component={Main} />,
-		<Route path="/" component={Main} />
-	</Switch>
-);
+export default <Switch>
+  <Route exact path="/login" component={LoginPage} />
+  <Route exact path="/loginRedirect" component={Main} />
+  <Route exact path="/skilltest/:testType?" component={Skilltest} />
+  <Route exact path="/admin/createTest" component={CreateTest} />
+  <Route exact path="/admin/testList" component={AdminTestSelector} />
+  <Route exact path="/admin/testResults" component={ResultsList} />
+  <Route exact path="/admin/pageList" component={PageList} />
+  <Route exact path="/admin/createPage" component={CreatePage} />
+  <Route path="/admin/editPage/:editPageId?" component={CreatePage} />
+  <Route path="/admin/editTest/:editTestName?" component={CreateTest} />
+  <Route path="/page/:url?" component={Page} />,
+  <Route path="/" component={Main} />
+</Switch>;

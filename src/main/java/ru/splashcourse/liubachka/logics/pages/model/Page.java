@@ -32,6 +32,9 @@ public class Page extends ObjectWithIdImpl {
     @OneToMany
     private List<PageElement> children;
 
+    @Column(unique = true)
+    private String url;
+
     private boolean hidden = false;
 
 }

@@ -1,15 +1,15 @@
 package ru.splashcourse.liubachka.logics.pages;
 
 import java.util.List;
-import java.util.Map;
 
+import ru.splashcourse.liubachka.logics.pages.model.Page;
 import ru.splashcourse.liubachka.logics.pages.model.PageDto;
 
 public interface PageService {
 
-    void createPage(String name);
+    Page createPage(PageDto pageDto);
 
-    void updatePage(PageDto pageDto);
+    Page updatePage(PageDto pageDto);
 
     void deletePage(Long id);
 
@@ -25,7 +25,5 @@ public interface PageService {
 
     PageDto getPageForURL(String url);
 
-    Map<String, String> getAllMappings();
-
-    void setPageForUrl(String url, Long pageId);
+    List<PageDto> getAllMappings();
 }

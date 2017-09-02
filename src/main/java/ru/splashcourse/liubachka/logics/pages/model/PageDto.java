@@ -13,4 +13,6 @@ public class PageDto {
 
     private List<PageElementDto> children;
 
+    private String url;
+
 }

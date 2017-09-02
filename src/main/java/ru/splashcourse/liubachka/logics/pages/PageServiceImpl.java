@@ -1,10 +1,7 @@
 package ru.splashcourse.liubachka.logics.pages;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +12,6 @@ import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
 import ru.splashcourse.liubachka.logics.pages.model.Page;
 import ru.splashcourse.liubachka.logics.pages.model.PageDto;
 import ru.splashcourse.liubachka.logics.pages.model.PageRepository;
-import ru.splashcourse.liubachka.logics.pages.model.PageToUrlMapping;
-import ru.splashcourse.liubachka.logics.pages.model.PageToUrlMappingRepository;
 
 @Service
 @Transactional
@@ -26,22 +21,20 @@ public class PageServiceImpl implements PageService {
     private PageRepository repo;
 
     @Autowired
-    private PageToUrlMappingRepository pageToUrlRepo;
-
-    @Autowired
     private OrikaBeanMapper mapper;
 
     @Override
-    public void createPage(String name) {
+    public Page createPage(PageDto pageDto) {
         Page page = new Page();
-        page.setName(name);
-        repo.save(page);
+        mapper.map(pageDto, page);
+        return repo.save(page);
     }
 
     @Override
-    public void updatePage(PageDto pageDto) {
-        Optional<Page> page = repo.findOne(pageDto.getId());
-        mapper.map(pageDto, page.get());
+    public Page updatePage(PageDto pageDto) {
+        Page page = repo.findOne(pageDto.getId()).get();
+        mapper.map(pageDto, page);
+        return page;
     }
 
     @Override
@@ -68,6 +61,7 @@ public class PageServiceImpl implements PageService {
     public List<PageDto> getAllPages() {
         List<PageDto> result = new ArrayList<>();
         mapper.mapAsCollection(repo.findAll(), result, PageDto.class);
+        result.forEach(p -> p.setChildren(new ArrayList<>()));
         return result;
     }
 
@@ -78,30 +72,13 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageDto getPageForURL(String url) {
-        return mapper.map(pageToUrlRepo.findByUrl(url), PageDto.class);
+        return mapper.map(repo.findByUrl(url), PageDto.class);
     }
 
     @Override
-    public void setPageForUrl(String url, Long pageId) {
-        Optional<PageToUrlMapping> present = pageToUrlRepo.findByUrl(url);
-        Optional<Page> page = repo.findOne(pageId);
-        if (present.isPresent()) {
-            present.get().setPage(page.get());
-        } else {
-            PageToUrlMapping newMapping = new PageToUrlMapping();
-            newMapping.setPage(page.get());
-            newMapping.setUrl(url);
-            pageToUrlRepo.save(newMapping);
-        }
-    }
-
-    @Override
-    public Map<String, String> getAllMappings() {
-        List<PageToUrlMapping> allMappings = pageToUrlRepo.findAll();
-        Map<String, String> result = new HashMap<>();
-        allMappings.forEach(mapping -> {
-            result.put(mapping.getUrl(), mapping.getPage().getName());
-        });
+    public List<PageDto> getAllMappings() {
+        List<PageDto> result = new ArrayList<>();
+        mapper.mapAsCollection(repo.findByUrlNotNull(), result, PageDto.class);
         return result;
     }
 
