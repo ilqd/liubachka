@@ -1,8 +1,29 @@
 {
-    "presets": ["react", "es2015", "stage-0"],
-    "plugins": ["react-hot-loader/babel",
-      ["babel-root-import", {
-    "rootPathSuffix": "app",
-    "rootPathPrefix": "@"
-  }]],
+  "plugins": ["transform-es3-member-expression-literals",
+    "transform-es3-property-literals",
+    "transform-class-properties",
+    "tailcall-optimization",
+    "lodash",
+    ["babel-plugin-root-import", {
+      "rootPathSuffix": "app",
+      "rootPathPrefix": "@"
+    }]],
+  "presets": [
+    "stage-1",
+    "react",
+    "react-optimize",
+    ["env", { "modules": false }]
+  ],
+  "env": {
+    "production": {
+      "plugins": ["transform-react-remove-prop-types"]
+    },
+    "test": {
+      "presets": [
+        "env",
+        "stage-1",
+        "react"
+      ],
+    }
+  }
 }
