@@ -33,5 +33,5 @@ public interface UserRepository extends CustomJpaRepository<User, Long> {
 
     List<UserProjection> findByUsernameNotNull();
 
-    User findById(Long id);
+    User findById(long id);
 }

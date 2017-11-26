@@ -261,6 +261,16 @@ html{
 .page-element.edit-page-element{
   border: 1px solid #eeeeee
 }
+.form-control,
 .react-bs-table-bordered{
   border-radius: 0;
+}
+.user-enabled{
+  font-weight: bold;
+}
+.user-edit select[multiple]{
+  height: 4em
+}
+.user-edit-button .btn .btn-link{
+  padding: 0;
 }

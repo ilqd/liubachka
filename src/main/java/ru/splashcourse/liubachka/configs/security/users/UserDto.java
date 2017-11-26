@@ -2,7 +2,10 @@ package ru.splashcourse.liubachka.configs.security.users;
 
 import lombok.Data;
 
+import java.util.Set;
+
 import ru.splashcourse.liubachka.ObjectWithId;
+import ru.splashcourse.liubachka.configs.role.RoleName;
 
 /**
  * UserDto
@@ -24,5 +27,5 @@ public class UserDto implements ObjectWithId {
 
     private String email;
 
-    private String roles = "";
+    private Set<RoleName> roles;
 }

@@ -2,6 +2,7 @@ package ru.splashcourse.liubachka.logics.admin.usermanagment;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import ru.splashcourse.liubachka.configs.security.users.User;
 import ru.splashcourse.liubachka.configs.security.users.UserDto;
 import ru.splashcourse.liubachka.configs.security.users.UserProjection;
 
@@ -28,7 +28,7 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public User findById(Long id) {
+    public UserDto findById(@PathVariable long id) {
         return service.findById(id);
     }
 

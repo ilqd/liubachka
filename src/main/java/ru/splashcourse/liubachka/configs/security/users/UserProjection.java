@@ -17,4 +17,6 @@ public interface UserProjection {
     boolean isEnabled();
 
     String getEmail();
+
+    String getRoles();
 }

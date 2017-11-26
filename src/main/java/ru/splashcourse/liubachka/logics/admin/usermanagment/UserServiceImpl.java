@@ -35,8 +35,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Long id) {
-        return repo.findById(id);
+    public UserDto findById(Long id) {
+        UserDto result = new UserDto();
+        mapper.map(repo.findById(id), result);
+        result.setPassword(null);
+        return result;
     }
 
     @Override
@@ -52,10 +55,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(UserDto dto) {
+        User user = repo.getOne(dto.getId());
         if (StringUtils.isNoneBlank(dto.getPassword())) {
             dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        } else {
+            dto.setPassword(user.getPassword());
         }
-        User user = repo.getOne(dto.getId());
         mapper.map(dto, user);
     }
 
