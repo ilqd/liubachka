@@ -10,6 +10,8 @@ import CreatePage from './components/admin/pageCreator/CreatePage.jsx';
 import LoginPage from './components/useraccount/Login.jsx';
 import Page from './components/page/Page';
 import CardCreator from './components/admin/stuff/CardCreator';
+import UserList from './components/admin/userManagment/UserList';
+
 export default <Switch>
   <Route exact path="/login" component={LoginPage} />
   <Route exact path="/loginRedirect" component={Main} />
@@ -20,6 +22,7 @@ export default <Switch>
   <Route exact path="/admin/pageList" component={PageList} />
   <Route exact path="/admin/createPage" component={CreatePage} />
   <Route exact path="/admin/cardCreator" component={CardCreator} />
+  <Route exact path="/admin/userList" component={UserList} />
   <Route path="/admin/editPage/:editPageId?" component={CreatePage} />
   <Route path="/admin/editTest/:editTestName?" component={CreateTest} />
   <Route path="/page/:url?" component={Page} />,

@@ -1,5 +1,16 @@
 package ru.splashcourse.liubachka.configs.security.users;
 
+// @formatter:off
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,15 +27,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.Email;
-
-// @formatter:off
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import ru.splashcourse.liubachka.ObjectWithId;
 import ru.splashcourse.liubachka.configs.role.RoleName;
 import ru.splashcourse.liubachka.configs.security.CustomUserDetails;
@@ -47,16 +49,19 @@ public class User implements ObjectWithId {
 	private Long id;
 
 	@Column(nullable = false, unique = true, length = MAX_LENGTH_USERNAME)
+    @NotBlank
 	private String username;
-
-	@Column(nullable = false)
+	
+    @NotBlank
 	private String password;
 
+    @NotBlank
 	private String firstName;
 
+    @NotBlank
 	private String lastName;
 
-	private boolean enabled;
+	private boolean enabled=true;
 
 	private LocalDateTime creationTime;
 

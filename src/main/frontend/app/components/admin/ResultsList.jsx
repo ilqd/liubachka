@@ -6,7 +6,7 @@ import 'react-bootstrap-table/css/react-bootstrap-table.css';
 import {Row, Col, Glyphicon, Button} from 'react-bootstrap';
 import {List} from 'immutable';
 import ResultView from './ResultView';
-import{ getCheckboxFilter} from '@/components/Util';
+import{ checkboxFilter} from '@/components/Util';
 class ResultList extends React.Component {
     constructor(props) {
         super(props);
@@ -53,7 +53,6 @@ class ResultList extends React.Component {
     }
 
     render() {
-        const checboxFilter = {type: 'CustomFilter', getElement: getCheckboxFilter, customFilterParameters: { textOK: 'Да', textNOK: 'Нет' }};
         const options = {...this.options, ...{
             sizePerPageList: [ {text: '25', value: 25 }, {text: '50', value: 50},
              {text: '100', value: 100}, {text: 'Все', value: this.props.results.size} ]}};
@@ -67,9 +66,9 @@ class ResultList extends React.Component {
              <TableHeaderColumn filter={{ type: 'TextFilter', delay: 250 }}dataField="phone">Телефон</TableHeaderColumn>
              <TableHeaderColumn filter={{ type: 'TextFilter', delay: 250 }}dataField="email">Почта</TableHeaderColumn>
              <TableHeaderColumn dataField="age" width="80px"dataSort>Возраст</TableHeaderColumn>
-             <TableHeaderColumn filter={checboxFilter} dataFormat={this.checkbox} dataField="interested" dataSort>Хочет учиться!</TableHeaderColumn>
-             <TableHeaderColumn filter={checboxFilter} dataFormat={this.checkbox} dataField="hasBeenCalled" dataSort>С ним/ней связались</TableHeaderColumn>
-             <TableHeaderColumn filter={checboxFilter} dataFormat={this.checkbox} dataField="willCome"  dataSort>Ура! Придёт!</TableHeaderColumn>
+             <TableHeaderColumn filter={checkboxFilter} dataFormat={this.checkbox} dataField="interested" dataSort>Хочет учиться!</TableHeaderColumn>
+             <TableHeaderColumn filter={checkboxFilter} dataFormat={this.checkbox} dataField="hasBeenCalled" dataSort>С ним/ней связались</TableHeaderColumn>
+             <TableHeaderColumn filter={checkboxFilter} dataFormat={this.checkbox} dataField="willCome"  dataSort>Ура! Придёт!</TableHeaderColumn>
              <TableHeaderColumn dataFormat={this.resultFormatter}>Результаты</TableHeaderColumn>
             </BootstrapTable>
           }

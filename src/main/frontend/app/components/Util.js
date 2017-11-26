@@ -17,7 +17,6 @@ FieldGroup.propTypes = {
     validationState: React.PropTypes.string,
 };
 
-
 class CheckboxFilter extends React.Component {
     constructor(props) {
         super(props);
@@ -50,7 +49,7 @@ class CheckboxFilter extends React.Component {
         return (
       <div>
         <input ref="okCheckbox" type="checkbox" className="filter" onChange={ this.filter } defaultChecked /><label>{ this.props.textOK }</label>
-        <input ref="nokCheckbox" type="checkbox" className="filter" onChange={ this.filter } defaultChecked style={ { marginLeft: 30 + 'px' } } /><label>{ this.props.textNOK }</label>
+        <input ref="nokCheckbox" type="checkbox" className="filter" onChange={ this.filter } defaultChecked style={ { marginLeft: 10 } } /><label>{ this.props.textNOK }</label>
       </div>
     );
     }
@@ -72,3 +71,5 @@ export function getCheckboxFilter(filterHandler, customFilterParameters) {
     <CheckboxFilter filterHandler={ filterHandler } textOK={ customFilterParameters.textOK } textNOK={ customFilterParameters.textNOK } />
   );
 }
+
+export const checkboxFilter = {type: 'CustomFilter', getElement: getCheckboxFilter, customFilterParameters: { textOK: 'Да', textNOK: 'Нет' }};

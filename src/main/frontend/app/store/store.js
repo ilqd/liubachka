@@ -9,6 +9,7 @@ import {useraccountReducer}from './useraccount.store.js';
 import {adminTestResultsReducer} from './adminTestResults.store.js';
 import {adminPageListReducer} from './adminPageList.store';
 import {adminPageEditReducer} from './adminPageEdit.store';
+import {adminUsersListReducer} from './adminUsersList.store';
 import {pageListReducer} from './pageList.store.js';
 import {ajaxStatusReducer} from './net.store.js';
 import { combineReducers } from 'redux-immutable';
@@ -49,6 +50,10 @@ const superReducer = combineReducers({
         pages: combineReducers({
             list: adminPageListReducer,
             edit: adminPageEditReducer,
+        }),
+        users: combineReducers({
+            list: adminUsersListReducer,
+            edit: adminUsersListReducer,
         })
     }),
     ajaxStatus: ajaxStatusReducer,
