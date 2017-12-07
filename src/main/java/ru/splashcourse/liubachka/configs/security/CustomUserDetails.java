@@ -3,11 +3,11 @@ package ru.splashcourse.liubachka.configs.security;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import ru.splashcourse.liubachka.configs.security.users.User;
 
 /**
  * CustomUserDetails

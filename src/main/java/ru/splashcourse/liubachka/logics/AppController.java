@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.google.common.collect.Sets;
 
 import ru.splashcourse.liubachka.configs.role.RoleName;
-import ru.splashcourse.liubachka.configs.security.users.User;
-import ru.splashcourse.liubachka.configs.security.users.UserRepository;
+import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
+import ru.splashcourse.liubachka.logics.admin.usermanagment.UserRepository;
 
 @Controller
 public class AppController {

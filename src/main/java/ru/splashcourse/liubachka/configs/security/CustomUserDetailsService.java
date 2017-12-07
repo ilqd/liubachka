@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import ru.splashcourse.liubachka.configs.security.users.User;
-import ru.splashcourse.liubachka.configs.security.users.UserRepository;
+import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
+import ru.splashcourse.liubachka.logics.admin.usermanagment.UserRepository;
 
 /**
  * CustomUserDetailsService

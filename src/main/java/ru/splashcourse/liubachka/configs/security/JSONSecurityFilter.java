@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,7 +30,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.splashcourse.liubachka.configs.security.users.User;
 
 public class JSONSecurityFilter extends AbstractAuthenticationProcessingFilter {
 

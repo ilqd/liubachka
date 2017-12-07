@@ -121,6 +121,8 @@ class UserEditClass extends React.Component {
                 label="Роли"
                 multiple
               >
+                <option value="ROLE_STUDENT">Студент</option>
+                <option value="ROLE_TEACHER">Учитель</option>
                 <option value="ROLE_ADMIN">Админ</option>
                 <option value="ROLE_USER">Пользователь</option>
               </FieldGroup>

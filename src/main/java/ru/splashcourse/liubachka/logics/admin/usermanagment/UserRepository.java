@@ -1,4 +1,4 @@
-package ru.splashcourse.liubachka.configs.security.users;
+package ru.splashcourse.liubachka.logics.admin.usermanagment;
 
 import org.springframework.stereotype.Repository;
 

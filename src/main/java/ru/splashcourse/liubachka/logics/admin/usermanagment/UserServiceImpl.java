@@ -6,15 +6,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
 import ru.splashcourse.liubachka.configs.security.SecurityConfig;
-import ru.splashcourse.liubachka.configs.security.users.User;
-import ru.splashcourse.liubachka.configs.security.users.UserDto;
-import ru.splashcourse.liubachka.configs.security.users.UserProjection;
-import ru.splashcourse.liubachka.configs.security.users.UserRepository;
 
 @Service
 @Transactional
@@ -22,6 +19,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository repo;
+
+    @Autowired
+    private UserGroupRepository groupRepo;
 
     @Autowired
     private OrikaBeanMapper mapper;
@@ -62,6 +62,30 @@ public class UserServiceImpl implements UserService {
             dto.setPassword(user.getPassword());
         }
         mapper.map(dto, user);
+    }
+
+    @Override
+    public UserGroupDto findGroupById(Long id) {
+        return mapper.map(groupRepo.findOne(id), UserGroupDto.class);
+    }
+
+    @Override
+    public void createGroup(UserGroupDto dto) {
+        groupRepo.save(mapper.map(dto, UserGroup.class));
+    }
+
+    @Override
+    public void updateGroup(UserGroupDto dto) {
+        UserGroup group = groupRepo.findOne(dto.getId()).get();
+        mapper.map(dto, group);
+    }
+
+    @Override
+    public List<UserGroupDto> findAllGroups() {
+        List<UserGroup> groups = groupRepo.findAll();
+        List<UserGroupDto> result = new ArrayList<>();
+        mapper.mapAsCollection(groups, result, UserGroupDto.class);
+        return result;
     }
 
 }

@@ -11,34 +11,34 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/users")
-public class UserController {
+@RequestMapping(path = "/api/userGroups")
+public class UserGroupController {
 
     @Autowired
     private UserService service;
 
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<UserProjection> findAll() {
-        return service.findAll();
+    public List<UserGroupDto> findAll() {
+        return service.findAllGroups();
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public UserDto findById(@PathVariable long id) {
-        return service.findById(id);
+    public UserGroupDto findById(@PathVariable long id) {
+        return service.findGroupById(id);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void create(@RequestBody UserDto dto) {
-        service.create(dto);
+    public void create(@RequestBody UserGroupDto dto) {
+        service.createGroup(dto);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void update(@RequestBody UserDto dto) {
-        service.update(dto);
+    public void update(@RequestBody UserGroupDto dto) {
+        service.updateGroup(dto);
     }
 
 }

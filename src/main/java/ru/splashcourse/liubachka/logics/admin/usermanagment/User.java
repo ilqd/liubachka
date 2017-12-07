@@ -1,4 +1,4 @@
-package ru.splashcourse.liubachka.configs.security.users;
+package ru.splashcourse.liubachka.logics.admin.usermanagment;
 
 // @formatter:off
 
@@ -8,21 +8,31 @@ import lombok.Setter;
 import lombok.ToString;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -74,6 +84,22 @@ public class User implements ObjectWithId {
 	@Getter(lombok.AccessLevel.NONE)
 	@Setter(lombok.AccessLevel.NONE)
 	private String roles = "";
+	
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="student_schedule_items", joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="schedule_item_id"))  
+    @Fetch(FetchMode.SUBSELECT)
+	private List<ScheduleItem> sheduleItemsAsStudent;
+    
+    @OneToMany(mappedBy = "teacher", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<ScheduleItem> sheduleItemsAsTeacher;
+    
+    public void setSheduleItemsAsTeacher(List<ScheduleItem> sheduleItemsAsTeacher) {
+        if (!CollectionUtils.isEmpty(sheduleItemsAsTeacher)) {
+            sheduleItemsAsTeacher.forEach(q -> q.setTeacher(this));
+        }
+        this.sheduleItemsAsTeacher = sheduleItemsAsTeacher;
+    }
 
 	/**
 	 * User
@@ -96,6 +122,8 @@ public class User implements ObjectWithId {
 		this.lastName = user.lastName;
 		this.roles = user.roles;
 		this.email = user.email;
+		this.sheduleItemsAsStudent = user.sheduleItemsAsStudent;
+		this.sheduleItemsAsTeacher = user.sheduleItemsAsTeacher;
 	}
 
 	/**
