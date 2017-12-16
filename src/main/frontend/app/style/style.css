@@ -8,6 +8,9 @@ html{
   border-radius: 0 !important;
   border-bottom: none;
 }
+.second-navbar .nav.nav-tabs.nav-justified.navbar-nav{
+  white-space: nowrap;
+}
 .navbar .nav-tabs li>a{
   padding: 11px;
   border-bottom: 0;
