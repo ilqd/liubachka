@@ -1,6 +1,6 @@
 package ru.splashcourse.liubachka.logics;
 
-import javax.servlet.http.HttpServletResponse;
+import com.google.common.collect.Sets;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.google.common.collect.Sets;
+import javax.servlet.http.HttpServletResponse;
 
 import ru.splashcourse.liubachka.configs.role.RoleName;
 import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
@@ -36,7 +36,7 @@ public class AppController {
         return "forward:/index.html";
     }
 
-    @RequestMapping(value = {"/", "/login", "/page/**", "/skilltest/**"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/login", "/page/**", "/video/**", "/skilltest/**"}, method = RequestMethod.GET)
     public String index(HttpServletResponse response) {
         return "forward:/index.html";
     }
