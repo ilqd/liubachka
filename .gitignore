@@ -2,6 +2,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 *.log
 src/main/resources/application-production.properties
+src/main/resources/client_secret.json
 
 ### STS ###
 .apt_generated

@@ -17,17 +17,27 @@ import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatus;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
+import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
+import ru.splashcourse.liubachka.logics.video.model.VideoMeta;
+import ru.splashcourse.liubachka.logics.video.model.VideoMetaDto;
+import ru.splashcourse.liubachka.logics.video.model.VideoMetaRepository;
+import ru.splashcourse.liubachka.utils.UtilsSecurity;
 
 @Service
 public class UploadVideoService {
@@ -47,18 +57,22 @@ public class UploadVideoService {
      */
     private static final String VIDEO_FILE_FORMAT = "video/*";
 
-    private static final String SAMPLE_VIDEO_FILENAME = "sample.mp4";
-
     @Value("${liu.google.refreshToken}")
     private String googleRefreshToken;
 
-    private String secretsFileName = "client_secret.json";
+    @Autowired
+    private VideoMetaRepository repo;
+
+    @Autowired
+    protected OrikaBeanMapper mapper;
+
+    private static final String SECRETS_FILE_NAME = "client_secret.json";
 
     private Credential generateCredentialWithUserApprovedToken() throws GeneralSecurityException, IOException {
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GoogleClientSecrets clientSecrets = null;
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(secretsFileName)) {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(SECRETS_FILE_NAME)) {
             InputStreamReader inputStreamReader = new InputStreamReader(is);
             clientSecrets = GoogleClientSecrets.load(jsonFactory, inputStreamReader);
         } catch (IOException e) {
@@ -68,55 +82,37 @@ public class UploadVideoService {
                 .build().setRefreshToken(googleRefreshToken);
     }
 
-    public void upload() {
+    public void upload(VideoMetaDto meta, MultipartFile file) {
         try {
+            VideoMeta video = new VideoMeta(meta);
+            User creator = UtilsSecurity.getUser();
+            video.setCreator(creator);
+
             Credential cred = generateCredentialWithUserApprovedToken();
             cred.refreshToken();
-            // This object is used to make YouTube Data API requests.
             YouTube youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred).setApplicationName("splashcourse").build();
 
-            // YouTube youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
-            // @Override
-            // public void initialize(HttpRequest httpRequest) throws IOException {
-            // }
-            // }).setYouTubeRequestInitializer(new YouTubeRequestInitializer(googleAppKey)).setApplicationName("Splash").build();
+            System.out.println("Uploading: " + meta.getName());
 
-            System.out.println("Uploading: " + SAMPLE_VIDEO_FILENAME);
-
-            // Add extra information to the video before uploading.
             Video videoObjectDefiningMetadata = new Video();
 
-            // Set the video to be publicly visible. This is the default
-            // setting. Other supporting settings are "unlisted" and "private."
             VideoStatus status = new VideoStatus();
-            status.setPrivacyStatus("unlisted");
+            status.setPrivacyStatus(YoutubePrivacy.UNLISTED.getName());
             videoObjectDefiningMetadata.setStatus(status);
 
-            // Most of the video's metadata is set on the VideoSnippet object.
             VideoSnippet snippet = new VideoSnippet();
 
-            // This code uses a Calendar instance to create a unique name and
-            // description for test purposes so that you can easily upload
-            // multiple files. You should remove this code from your project
-            // and use your own standard names instead.
             Calendar cal = Calendar.getInstance();
-            snippet.setTitle("Test Upload via Java on " + cal.getTime());
-            snippet.setDescription("Video uploaded via YouTube Data API V3 using the Java library " + "on " + cal.getTime());
+            snippet.setTitle(meta.getName() + " by " + video.getCreator().getFullName() + "@" + cal.getTime());
+            snippet.setDescription(meta.getDescription());
 
-            // Set the keyword tags that you want to associate with the video.
             List<String> tags = new ArrayList<String>();
-            tags.add("test");
-            tags.add("example");
-            tags.add("java");
-            tags.add("YouTube Data API V3");
-            tags.add("erase me");
+            tags.add("SplashCourse");
             snippet.setTags(tags);
 
-            // Add the completed snippet object to the video resource.
             videoObjectDefiningMetadata.setSnippet(snippet);
 
-            InputStreamContent mediaContent = new InputStreamContent(VIDEO_FILE_FORMAT,
-                    new FileInputStream("C:\\git\\liuback\\sample.mp4"));
+            InputStreamContent mediaContent = new InputStreamContent(VIDEO_FILE_FORMAT, file.getInputStream());
 
             // Insert the video. The command sends three arguments. The first
             // specifies which information the API request is setting and which
@@ -174,6 +170,9 @@ public class UploadVideoService {
             System.out.println("  - Tags: " + returnedVideo.getSnippet().getTags());
             System.out.println("  - Privacy Status: " + returnedVideo.getStatus().getPrivacyStatus());
             System.out.println("  - Video Count: " + returnedVideo.getStatistics().getViewCount());
+            video.setUploadDate(new Date());
+            video.setYoutubeId(returnedVideo.getId());
+            repo.save(video);
 
         } catch (GoogleJsonResponseException e) {
             e.printStackTrace();
@@ -182,5 +181,17 @@ public class UploadVideoService {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    public List<VideoMetaDto> getList() {
+        List<VideoMeta> metaList = repo.findAll();
+        if (metaList != null) {
+            return metaList.stream().map(elem -> {
+                VideoMetaDto dto = mapper.map(elem, VideoMetaDto.class);
+                dto.setCreatorName(elem.getCreator().getFullName());
+                return dto;
+            }).collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 }

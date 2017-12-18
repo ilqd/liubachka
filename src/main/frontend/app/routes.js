@@ -12,7 +12,8 @@ import Page from './components/page/Page';
 import CardCreator from './components/admin/stuff/CardCreator';
 import UserList from './components/admin/userManagment/UserList';
 import UserEdit from './components/admin/userManagment/UserEdit';
-import YoutubeUpload from './components/video/YoutubeUploadPage';
+import VideoUpload from './components/video/YoutubeUploadPage';
+import VideoList from './components/video/VideoList';
 
 export default <Switch>
   <Route exact path="/login" component={LoginPage} />
@@ -25,7 +26,8 @@ export default <Switch>
   <Route exact path="/admin/createPage" component={CreatePage} />
   <Route exact path="/admin/cardCreator" component={CardCreator} />
   <Route exact path="/admin/userList" component={UserList} />
-  <Route exact path="/video/upload" component={YoutubeUpload} />
+  <Route exact path="/video/upload" component={VideoUpload} />
+  <Route exact path="/video/list" component={VideoList} />
   <Route path="/admin/userEdit/:editUserId?" component={UserEdit} />
   <Route path="/admin/editPage/:editPageId?" component={CreatePage} />
   <Route path="/admin/editTest/:editTestName?" component={CreateTest} />

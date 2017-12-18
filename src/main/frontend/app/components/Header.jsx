@@ -15,9 +15,11 @@ class Header extends React.Component {
     }
     render() {
         let userDropdown = undefined;
+        const videoLink =  <IndexLinkContainer to="/video/list"><NavItem >Видео</NavItem></IndexLinkContainer>;
         if (this.props.roles && this.props.roles.includes('ROLE_ADMIN')) {
             userDropdown =  (
           <NavDropdown title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown">
+            {videoLink}
             <IndexLinkContainer to="/admin/testList"><NavItem >Настройка тестов</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/testResults"><NavItem >Результаты тестов</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/pageList"><NavItem >Настройка страниц</NavItem></IndexLinkContainer>
@@ -25,7 +27,9 @@ class Header extends React.Component {
             <IndexLinkContainer to="/admin/userList"><NavItem >Пользователи</NavItem></IndexLinkContainer>
         </NavDropdown>);
         }else if (this.props.roles && !this.props.roles.includes('ROLE_ADMIN')) {
-            userDropdown = <NavDropdown title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown"/>;
+            userDropdown = (<NavDropdown title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown">
+            {videoLink}
+            </NavDropdown>);
         }
         return (
       <Navbar fixedTop style={{width: '100vw', maxWidth: '100%'}}>

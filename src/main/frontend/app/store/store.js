@@ -12,6 +12,8 @@ import {adminPageEditReducer} from './adminPageEdit.store';
 import {adminUsersListReducer} from './adminUsersList.store';
 import {adminUserEditReducer} from './adminUserEdit.store';
 import {pageListReducer} from './pageList.store.js';
+import {videoEditReducer} from './videoEdit.store';
+import {videoListReducer} from './videoList.store';
 import {ajaxStatusReducer} from './net.store.js';
 import { combineReducers } from 'redux-immutable';
 import createEngine from 'redux-storage-engine-localstorage';
@@ -56,6 +58,10 @@ const superReducer = combineReducers({
             list: adminUsersListReducer,
             edit: adminUserEditReducer,
         })
+    }),
+    video: combineReducers({
+        edit: videoEditReducer,
+        list: videoListReducer,
     }),
     ajaxStatus: ajaxStatusReducer,
     session: useraccountReducer,

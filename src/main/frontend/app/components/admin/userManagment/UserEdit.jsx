@@ -34,7 +34,7 @@ class UserEditClass extends React.Component {
         this.props.saveUser(this.props.data);
     }
     setField(field, value) {
-        if (!value || value.target) {
+        if (!value || !value.target) {
             this.props.updateUserFields(field, '');
         }if (value.target.type == 'checkbox') {
             this.props.updateUserFields(field, value.target.checked);

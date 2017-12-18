@@ -1,5 +1,15 @@
 package ru.splashcourse.liubachka.logics.skilltest.questions.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
+import org.springframework.util.CollectionUtils;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,14 +22,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.springframework.util.CollectionUtils;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import ru.splashcourse.liubachka.ObjectWithIdImpl;
 
 @Entity
@@ -29,6 +31,7 @@ import ru.splashcourse.liubachka.ObjectWithIdImpl;
 @Getter
 public class Question extends ObjectWithIdImpl {
 
+    @Type(type = "text")
     private String question;
 
     private Integer pointsAwarded;

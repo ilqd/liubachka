@@ -5,7 +5,6 @@ package ru.splashcourse.liubachka.logics.admin.usermanagment;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
@@ -45,14 +44,18 @@ import ru.splashcourse.liubachka.configs.security.CustomUserDetails;
  * User
  */
 @EqualsAndHashCode(of = { "username", "password", "roles", "enabled" })
-@ToString(of = { "id", "username" })
 @Setter
 @Getter
 @Entity
 @Table(name = "users")
 public class User implements ObjectWithId {
 
-	static final int MAX_LENGTH_USERNAME = 30;
+	@Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
+
+    static final int MAX_LENGTH_USERNAME = 30;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -165,5 +168,9 @@ public class User implements ObjectWithId {
 
 	private String collectionToString(Collection<?> rolesCol) {
 		return rolesCol == null || rolesCol.isEmpty() ? "" : StringUtils.join(rolesCol, ',');
+	}
+	
+	public String getFullName() {
+	    return firstName+" "+lastName;
 	}
 }
