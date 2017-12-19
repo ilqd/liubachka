@@ -17,6 +17,7 @@ import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatus;
 
+import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
 
 import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
 import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
@@ -91,7 +94,7 @@ public class UploadVideoService {
                 .build().setRefreshToken(googleRefreshToken);
     }
 
-    public VideoMeta upload(VideoMetaDto meta, MultipartFile file, OutputStream progressOutStream) {
+    public VideoMeta upload(VideoMetaDto meta, MultipartFile file, OutputStream progressOutStream, HttpServletResponse response) {
         try {
             VideoMeta video = new VideoMeta(meta);
             User creator = userRepo.findById(UtilsSecurity.getUser().getId());
@@ -164,6 +167,7 @@ public class UploadVideoService {
                             break;
                         case MEDIA_COMPLETE:
                             Logger.getLogger(this.getClass()).debug("Upload Completed!");
+                            response.setStatus(HttpStatus.SC_OK);
                             break;
                         case NOT_STARTED:
                             Logger.getLogger(this.getClass()).debug("Upload Not Started!");

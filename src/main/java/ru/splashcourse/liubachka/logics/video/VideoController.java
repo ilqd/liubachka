@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import ru.splashcourse.liubachka.logics.video.model.VideoMeta;
 import ru.splashcourse.liubachka.logics.video.model.VideoMetaDto;
@@ -26,14 +26,10 @@ public class VideoController {
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public StreamingResponseBody upload(@RequestPart("meta") VideoMetaDto meta, @RequestPart("file") MultipartFile file) {
-        return new StreamingResponseBody() {
-            @Override
-            public void writeTo(OutputStream out) throws IOException {
-                VideoMeta result = service.upload(meta, file, out);
-                service.persist(result);
-            }
-        };
+    public void upload(@RequestPart("meta") VideoMetaDto meta, @RequestPart("file") MultipartFile file, HttpServletResponse response)
+            throws IOException {
+        VideoMeta result = service.upload(meta, file, response.getOutputStream(), response);
+        service.persist(result);
     }
 
     @RequestMapping(value = "/list", produces = "application/json")

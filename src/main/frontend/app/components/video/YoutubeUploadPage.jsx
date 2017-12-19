@@ -79,6 +79,7 @@ class YoutubeUpload extends React.Component {
           <Row>
             <Col xs={12} sm={8}>
               <Dropzone
+              disabled={this.props.busy}
               style={{
                   width: '100%',
                   height: '2.4em',
