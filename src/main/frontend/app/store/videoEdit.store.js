@@ -25,15 +25,24 @@ export const loadVideo = (dispatch, id) =>{
       );
 };
 export const saveVideo = (dispatch, data) =>{
-    const method = data.get('id') || data.get('id') === 0 ? RestAPI.put : RestAPI.post;
+    const method = data.get('id') || data.get('id') === 0 ? RestAPI.put : RestAPI.postWithProgress;
     dispatch({ type: 'VIDEO_EDIT_SAVING' });
     dispatch({ type: 'POSTING' });
     method('/api/video/upload', data, false).then((response)=>{
         dispatch({ type: 'VIDEO_EDIT_SAVED', response});
         dispatch({ type: 'POSTED', message: 'Success!'});
+        dispatch({ type: 'UPLOAD_PROGRESS', progress: 100});
     })
-    .catch((response)=>
-      dispatch({ type: 'VIDEO_EDIT_SAVE_FAILED', response})
+    .catch((response)=>{
+        dispatch({ type: 'VIDEO_EDIT_SAVE_FAILED', response});
+        let message = 'Ошибка! :(';
+        if (!response.status) {
+            message = 'Ошибка! :( Возможная причина - файл слишком большой или потеряно соединение с сервером.';
+        }else if (response.message) {
+            message = `Ошибка! :( Сервер жалуется на это:   ${response.message}.`;
+        }
+        dispatch({ type: 'POSTED', message });
+    }
     );
 };
 

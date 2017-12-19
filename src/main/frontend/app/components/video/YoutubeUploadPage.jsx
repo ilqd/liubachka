@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Button, Glyphicon, Modal} from 'react-bootstrap';
+import {Row, Col, Button, Glyphicon, Modal } from 'react-bootstrap';
 import {FieldGroup} from '@/components/Util.js';
 import {connect} from 'react-redux';
 import {loadVideo, clearData, updateVideoField, saveVideo} from '@/store/videoEdit.store.js';
@@ -7,6 +7,7 @@ import {clearMessage, SUCCESS_MESSAGE} from '@/store/net.store.js';
 import {goBack} from '@/store/store';
 import Dropzone from 'react-dropzone';
 import './video.css';
+import ProgressBar from './ProgressBar';
 
 class YoutubeUpload extends React.Component {
     constructor(props) {
@@ -46,7 +47,7 @@ class YoutubeUpload extends React.Component {
         }
     }
     render() {
-        return (<div>
+        return (<div className="video-upload">
         <Modal show={this.props.netMessage} onHide={this.hideModal}>
           <Modal.Body>
             {this.props.netMessage}
@@ -89,9 +90,10 @@ class YoutubeUpload extends React.Component {
               }}
               onDrop={this.onDrop} accept="video/*" multiple={false}>
               <div className="file-upload-text">
-              {(this.state.files && this.state.files.length > 0 && this.state.files[0].name) || 'Выберите файл'}
+              {(this.state.files && this.state.files.length > 0 && this.state.files[0].name) || 'Выберите файл (1GB макс)'}
               </div>
               </Dropzone>
+              <ProgressBar/>
             </Col>
             <Col xs={12} sm={4}>
             <Button bsStyle="primary" style={{float: 'right'}} onClick={this.save} disabled={this.props.busy || this.state.files.length < 1}>

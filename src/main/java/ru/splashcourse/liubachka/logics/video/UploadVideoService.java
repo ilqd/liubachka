@@ -17,14 +17,18 @@ import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatus;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,12 +38,14 @@ import java.util.stream.Collectors;
 
 import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
 import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
+import ru.splashcourse.liubachka.logics.admin.usermanagment.UserRepository;
 import ru.splashcourse.liubachka.logics.video.model.VideoMeta;
 import ru.splashcourse.liubachka.logics.video.model.VideoMetaDto;
 import ru.splashcourse.liubachka.logics.video.model.VideoMetaRepository;
 import ru.splashcourse.liubachka.utils.UtilsSecurity;
 
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class UploadVideoService {
 
     /**
@@ -64,7 +70,10 @@ public class UploadVideoService {
     private VideoMetaRepository repo;
 
     @Autowired
-    protected OrikaBeanMapper mapper;
+    private OrikaBeanMapper mapper;
+
+    @Autowired
+    private UserRepository userRepo;
 
     private static final String SECRETS_FILE_NAME = "client_secret.json";
 
@@ -82,17 +91,18 @@ public class UploadVideoService {
                 .build().setRefreshToken(googleRefreshToken);
     }
 
-    public void upload(VideoMetaDto meta, MultipartFile file) {
+    public VideoMeta upload(VideoMetaDto meta, MultipartFile file, OutputStream progressOutStream) {
         try {
             VideoMeta video = new VideoMeta(meta);
-            User creator = UtilsSecurity.getUser();
+            User creator = userRepo.findById(UtilsSecurity.getUser().getId());
+
             video.setCreator(creator);
 
             Credential cred = generateCredentialWithUserApprovedToken();
             cred.refreshToken();
             YouTube youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred).setApplicationName("splashcourse").build();
 
-            System.out.println("Uploading: " + meta.getName());
+            Logger.getLogger(this.getClass()).debug("Uploading: " + meta.getName());
 
             Video videoObjectDefiningMetadata = new Video();
 
@@ -140,20 +150,23 @@ public class UploadVideoService {
                 public void progressChanged(MediaHttpUploader uploader) throws IOException {
                     switch (uploader.getUploadState()) {
                         case INITIATION_STARTED:
-                            System.out.println("Initiation Started");
+                            Logger.getLogger(this.getClass()).debug("Initiation Started");
                             break;
                         case INITIATION_COMPLETE:
-                            System.out.println("Initiation Completed");
+                            Logger.getLogger(this.getClass()).debug("Initiation Completed");
                             break;
                         case MEDIA_IN_PROGRESS:
-                            System.out.println("Upload in progress");
-                            System.out.println("Upload percentage: " + uploader.getProgress());
+                            Logger.getLogger(this.getClass()).debug("Upload in progress");
+                            Double progress = 1d * uploader.getNumBytesUploaded() / file.getSize() * 100d;
+                            Logger.getLogger(this.getClass()).debug("Upload percentage: " + progress);
+                            progressOutStream.write((progress + " ").getBytes());
+                            progressOutStream.flush();
                             break;
                         case MEDIA_COMPLETE:
-                            System.out.println("Upload Completed!");
+                            Logger.getLogger(this.getClass()).debug("Upload Completed!");
                             break;
                         case NOT_STARTED:
-                            System.out.println("Upload Not Started!");
+                            Logger.getLogger(this.getClass()).debug("Upload Not Started!");
                             break;
                     }
                 }
@@ -164,15 +177,15 @@ public class UploadVideoService {
             Video returnedVideo = videoInsert.execute();
 
             // Print data about the newly inserted video from the API response.
-            System.out.println("\n================== Returned Video ==================\n");
-            System.out.println("  - Id: " + returnedVideo.getId());
-            System.out.println("  - Title: " + returnedVideo.getSnippet().getTitle());
-            System.out.println("  - Tags: " + returnedVideo.getSnippet().getTags());
-            System.out.println("  - Privacy Status: " + returnedVideo.getStatus().getPrivacyStatus());
-            System.out.println("  - Video Count: " + returnedVideo.getStatistics().getViewCount());
+            Logger.getLogger(this.getClass()).debug("\n================== Returned Video ==================\n");
+            Logger.getLogger(this.getClass()).debug("  - Id: " + returnedVideo.getId());
+            Logger.getLogger(this.getClass()).debug("  - Title: " + returnedVideo.getSnippet().getTitle());
+            Logger.getLogger(this.getClass()).debug("  - Tags: " + returnedVideo.getSnippet().getTags());
+            Logger.getLogger(this.getClass()).debug("  - Privacy Status: " + returnedVideo.getStatus().getPrivacyStatus());
+            Logger.getLogger(this.getClass()).debug("  - Video Count: " + returnedVideo.getStatistics().getViewCount());
             video.setUploadDate(new Date());
             video.setYoutubeId(returnedVideo.getId());
-            repo.save(video);
+            return video;
 
         } catch (GoogleJsonResponseException e) {
             e.printStackTrace();
@@ -181,6 +194,11 @@ public class UploadVideoService {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+        return null;
+    }
+
+    public void persist(VideoMeta meta) {
+        repo.save(meta);
     }
 
     public List<VideoMetaDto> getList() {

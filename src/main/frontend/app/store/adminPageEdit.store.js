@@ -49,7 +49,7 @@ export const save = (dispatch, data) =>{
       }
     ).catch(
       (response) => {
-          dispatch({ type: 'POSTED', message: `Failed! :( Server is complaining about this:   ${response.message}` });
+          dispatch({ type: 'POSTED', message: `Ошибка! :( Сервер жалуется на это:   ${response.message}.` });
       }
     );
 };
