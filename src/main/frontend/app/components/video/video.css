@@ -2,25 +2,29 @@
   border-radius: 0;
 }
 
-.video-block img{
-  width: 100%
-}
 .video-block div{
   text-align: center;
 }
 .video-block .video-title{
   font-weight: bolder;
+  text-overflow: ellipsis;
+    overflow: hidden;
 }
 .video-block .video-author{
   font-size: smaller;
   font-style: italic;
+  text-overflow: ellipsis;
+    overflow: hidden;
 }
-.video-block {
-  border: 1px solid lightgray;
-  border-radius: 3px;
-  padding: 2px;
-  margin: 2px;
-  height: 100%;
+.video-block .video-play-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.video-block .video-play-container .video-play{
+  position: absolute;
+  font-size: x-large;
+  padding: 0 !important;
 }
 .video-block:hover{
   background: lightgray;
@@ -28,10 +32,14 @@
 .video-row{
   display: flex;
   flex-wrap: wrap;
+  padding: 0 15px;
+}
+.video-row img{
+  width: 100%;
 }
 .video-row>div{
   min-height: 200px;
-  padding-bottom: 5px;
+  padding: 0;
 }
 .video-block.upload-new {
     display: flex;
@@ -56,8 +64,22 @@
 }
 .video-player>div{
   display: flex;
-  height: 360px
+  justify-content: center;
 }
 .video-player iframe{
   max-width: 100% !important;
+}
+.video-page .slick-slide img{
+  width: 100%
+}
+.video-page .show-video-list{
+  float: right;
+  padding:0;
+}
+.video-page .upload-video-button{
+  float: left;
+  padding:0;
+}
+.video-page .upload-video-button .glyphicon{
+  padding-right: 5px;
 }

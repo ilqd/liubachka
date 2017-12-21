@@ -6,6 +6,9 @@ import {LinkContainer} from 'react-router-bootstrap';
 import {List} from 'immutable';
 import './video.css';
 import YouTube from 'react-youtube';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 class VideoBlock extends React.Component {
     constructor(props) {
@@ -13,23 +16,24 @@ class VideoBlock extends React.Component {
         this.openPlayer = this.openPlayer.bind(this);
     }
     openPlayer() {
+        window.scrollTo(0, 0);
         this.props.openPlayer(this.props.elem);
     }
     render() {
-        const show = this.props.show;
-        return (<Col xs={12}  sm={show ? 12 : 4} lg={show ? 12 : 3}>
-    <div className="video-block" onClick={this.openPlayer}>
-      <img src={`https://img.youtube.com/vi/${this.props.elem.get('youtubeId')}/0.jpg`}/>
-        <div className="video-title">{this.props.elem.get('name')}</div>
-        <div className="video-author">{this.props.elem.get('creatorName')}</div>
-      </div>
-    </Col>);
+        return (<div>
+            <div className="video-play-container">
+              <img src={`https://img.youtube.com/vi/${this.props.elem.get('youtubeId')}/0.jpg`}/>
+              <div className="btn btn-link video-play"><Glyphicon onClick={this.openPlayer} glyph="play"/></div>
+            </div>
+            <div className="video-title">{this.props.elem.get('name')}</div>
+            <div className="video-author">{this.props.elem.get('creatorName')}</div>
+          </div>
+        );
     }
 }
 VideoBlock.propTypes = {
     elem: React.PropTypes.object,
     openPlayer: React.PropTypes.func,
-    show: React.PropTypes.bool,
 };
 //eslint-disable-next-line
 class VideoList extends React.Component {
@@ -38,7 +42,8 @@ class VideoList extends React.Component {
         this.openPlayer = this.openPlayer.bind(this);
         this.closePlayer = this.closePlayer.bind(this);
         this.onReady = this.onReady.bind(this);
-        this.state = {showPlayer: false};
+        this.showList = this.showList.bind(this);
+        this.state = {showPlayer: false, showList: false};
     }
     componentWillMount() {
         this.props.loadVideos();
@@ -52,23 +57,13 @@ class VideoList extends React.Component {
     onReady(event) {
         event.target.pauseVideo();
     }
+    showList() {
+        this.setState({showList: !this.state.showList});
+    }
     render() {
         const show = this.state.showPlayer;
 
-
-        const uploadBlock = (<LinkContainer to={'/video/upload'}>
-          <div className="video-block upload-new">
-            <Glyphicon glyph="plus"/>
-          </div>
-        </LinkContainer>);
-
-
-        const list = (<Row className="video-row">
-        <Col xs={12} sm={show ? 12 : 4} lg={show ? 12 : 3}>
-        {uploadBlock}
-        </Col>
-        {this.props.data.map((e, idx)=><VideoBlock key={idx} show={show} openPlayer={this.openPlayer} elem={e}/>)}
-        </Row>);
+        const list = this.props.data.map((e, idx)=><div key={idx} className="video-block"><VideoBlock elem={e}  openPlayer={this.openPlayer}/></div>);
 
 
         const opts = {
@@ -84,22 +79,30 @@ class VideoList extends React.Component {
             opts={opts}
             onReady={this.onReady}
           />
-          <Button onClick={this.closePlayer}>
-            <Glyphicon glyph="chevron-left"/>
-          </Button>
           </Col>
         </Row>);
 
 
         return (<div className="video-page">
-          <Row>
-          {show && <Col xs={12} md={8}>
+          <Row >
+          {show && <Col xs={12}>
           {player}
           </Col>}
-          <Col xs={12} md={show ? 4 : 12}>
+          <Col xs={12}>
+          <Slider arrows swipeToSlide responsive={ [
+             { breakpoint: 768, settings: { slidesToShow: 3 } },
+             { breakpoint: 1024, settings: { slidesToShow: 5 } },
+             { breakpoint: 1920, settings: { slidesToShow: 7 } } ]}>
           {list}
+          </Slider >
+          <LinkContainer to={'/video/upload'}><Button bsStyle="link" className="upload-video-button"><Glyphicon glyph="cloud-upload"/>Загрузить видео</Button></LinkContainer>
+          <Button bsStyle="link" onClick={this.showList} className="show-video-list">{`${this.state.showList ? 'Спрятать список' : 'Показать список'}`}</Button>
           </Col>
           </Row>
+          {this.state.showList && <Row className="video-row">
+              {this.props.data.map((e, idx)=><Col key={idx} xs={12} sm={4} md={3} lg={2} className="video-block"><VideoBlock show={show} openPlayer={this.openPlayer} elem={e}/></Col>)}
+            </Row>
+          }
         </div>);
     }
 }
