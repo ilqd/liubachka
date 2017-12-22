@@ -9,6 +9,7 @@ import YouTube from 'react-youtube';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import $ from 'jquery';
 
 class VideoBlock extends React.Component {
     constructor(props) {
@@ -43,6 +44,7 @@ class VideoList extends React.Component {
         this.closePlayer = this.closePlayer.bind(this);
         this.onReady = this.onReady.bind(this);
         this.showList = this.showList.bind(this);
+        this.initWheel = this.initWheel.bind(this);
         this.state = {showPlayer: false, showList: false};
     }
     componentWillMount() {
@@ -59,6 +61,23 @@ class VideoList extends React.Component {
     }
     showList() {
         this.setState({showList: !this.state.showList});
+    }
+    initWheel() {
+        if (this.wheelInited) {
+            return;
+        }
+        const elem = $('.video-carousel');
+        const that = this;
+        if (elem.length > 0) {
+            elem.bind('mousewheel', e=> {
+                if (e.originalEvent.wheelDelta / 120 > 0) { // up
+                    that.refs.slick.slickPrev();
+                }else{// down
+                    that.refs.slick.slickNext();
+                }
+            });
+            this.wheelInited = true;
+        }
     }
     render() {
         const show = this.state.showPlayer;
@@ -81,7 +100,7 @@ class VideoList extends React.Component {
           />
           </Col>
         </Row>);
-
+        this.initWheel();
 
         return (<div className="video-page">
           <Row >
@@ -89,7 +108,7 @@ class VideoList extends React.Component {
           {player}
           </Col>}
           <Col xs={12}>
-          <Slider arrows swipeToSlide responsive={ [
+          <Slider className="video-carousel" ref="slick" arrows swipeToSlide responsive={ [
              { breakpoint: 768, settings: { slidesToShow: 3 } },
              { breakpoint: 1024, settings: { slidesToShow: 5 } },
              { breakpoint: 1920, settings: { slidesToShow: 7 } } ]}>

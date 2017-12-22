@@ -9,7 +9,6 @@ import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.googleapis.media.MediaHttpUploaderProgressListener;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -21,6 +20,7 @@ import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,9 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
+import ru.splashcourse.liubachka.LiubackApplication;
 import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
+import ru.splashcourse.liubachka.configs.role.RoleName;
 import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
 import ru.splashcourse.liubachka.logics.admin.usermanagment.UserRepository;
 import ru.splashcourse.liubachka.logics.video.model.VideoMeta;
@@ -49,17 +51,7 @@ import ru.splashcourse.liubachka.utils.UtilsSecurity;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW)
-public class UploadVideoService {
-
-    /**
-     * Define a global instance of the HTTP transport.
-     */
-    public static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-
-    /**
-     * Define a global instance of the JSON factory.
-     */
-    public static final JsonFactory JSON_FACTORY = new JacksonFactory();
+public class VideoServiceImpl implements VideoService {
 
     /**
      * Define a global variable that specifies the MIME type of the video being uploaded.
@@ -94,6 +86,7 @@ public class UploadVideoService {
                 .build().setRefreshToken(googleRefreshToken);
     }
 
+    @Override
     public VideoMeta upload(VideoMetaDto meta, MultipartFile file, OutputStream progressOutStream, HttpServletResponse response) {
         try {
             VideoMeta video = new VideoMeta(meta);
@@ -103,7 +96,8 @@ public class UploadVideoService {
 
             Credential cred = generateCredentialWithUserApprovedToken();
             cred.refreshToken();
-            YouTube youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred).setApplicationName("splashcourse").build();
+            YouTube youtube = new YouTube.Builder(LiubackApplication.HTTP_TRANSPORT, JacksonFactory.getDefaultInstance(), cred)
+                    .setApplicationName("splashcourse").build();
 
             Logger.getLogger(this.getClass()).debug("Uploading: " + meta.getName());
 
@@ -180,13 +174,11 @@ public class UploadVideoService {
             // Call the API and upload the video.
             Video returnedVideo = videoInsert.execute();
 
-            // Print data about the newly inserted video from the API response.
             Logger.getLogger(this.getClass()).debug("\n================== Returned Video ==================\n");
             Logger.getLogger(this.getClass()).debug("  - Id: " + returnedVideo.getId());
             Logger.getLogger(this.getClass()).debug("  - Title: " + returnedVideo.getSnippet().getTitle());
             Logger.getLogger(this.getClass()).debug("  - Tags: " + returnedVideo.getSnippet().getTags());
             Logger.getLogger(this.getClass()).debug("  - Privacy Status: " + returnedVideo.getStatus().getPrivacyStatus());
-            Logger.getLogger(this.getClass()).debug("  - Video Count: " + returnedVideo.getStatistics().getViewCount());
             video.setUploadDate(new Date());
             video.setYoutubeId(returnedVideo.getId());
             return video;
@@ -201,10 +193,32 @@ public class UploadVideoService {
         return null;
     }
 
+    @Override
     public void persist(VideoMeta meta) {
         repo.save(meta);
     }
 
+    @Override
+    public void delete(Long id) {
+        setHidden(id, true);
+    }
+
+    @Override
+    public void restore(Long id) {
+        setHidden(id, false);
+    }
+
+    private void setHidden(Long id, boolean hidden) {
+        VideoMeta video = repo.findOne(id).get();
+        User currentUser = UtilsSecurity.getUser();
+        if (video.getCreator().getId() == currentUser.getId() || currentUser.getRoles().contains(RoleName.ROLE_ADMIN)) {
+            video.setHidden(hidden);
+        } else {
+            throw new AccessDeniedException("Недостаточно прав для " + (hidden ? "удаления" : "восстановления") + " видео.");
+        }
+    }
+
+    @Override
     public List<VideoMetaDto> getList() {
         List<VideoMeta> metaList = repo.findAll();
         if (metaList != null) {

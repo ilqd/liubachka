@@ -53,6 +53,8 @@ public class VideoMeta extends ObjectWithIdImpl {
     @OrderBy(value = "date DESC")
     private List<Comment> comments;
 
+    private Boolean hidden = false;
+
     public void setComments(List<Comment> comments) {
         if (comments != null) {
             comments.forEach(comment -> comment.setVideo(this));

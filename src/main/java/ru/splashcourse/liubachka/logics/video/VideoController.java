@@ -3,6 +3,7 @@ package ru.splashcourse.liubachka.logics.video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -22,7 +23,7 @@ import ru.splashcourse.liubachka.logics.video.model.VideoMetaDto;
 public class VideoController {
 
     @Autowired
-    private UploadVideoService service;
+    private VideoService service;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
@@ -37,5 +38,17 @@ public class VideoController {
     public @ResponseBody List<VideoMetaDto> getList() {
         List<VideoMetaDto> result = service.getList();
         return result;
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, value = "/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, value = "/restore/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public void restore(@PathVariable Long id) {
+        service.restore(id);
     }
 }

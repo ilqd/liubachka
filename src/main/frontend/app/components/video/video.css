@@ -67,7 +67,21 @@
   justify-content: center;
 }
 .video-player iframe{
-  max-width: 100% !important;
+  width: 100% !important;
+}
+.video-player>div>span{
+  width: 100%;
+}
+.video-player .ytp-youtube-button svg{
+  display: none;
+}
+.video-player .ytp-youtube-button::after {
+    display: block;
+    content: 'Liu';
+    text-align: center;
+    font-size: x-large;
+    font-family: sans-serif;
+    font-weight: bolder;
 }
 .video-page .slick-slide img{
   width: 100%

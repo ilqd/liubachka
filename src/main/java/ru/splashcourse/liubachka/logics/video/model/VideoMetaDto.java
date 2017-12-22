@@ -30,6 +30,8 @@ public class VideoMetaDto {
 
     private Date uploadDate;
 
+    private Boolean hidden;
+
     @OrderBy(value = "date")
     private List<CommentDto> comments;
 
