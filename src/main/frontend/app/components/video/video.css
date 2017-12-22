@@ -38,7 +38,6 @@
   width: 100%;
 }
 .video-row>div{
-  min-height: 200px;
   padding: 0;
 }
 .video-block.upload-new {
@@ -72,10 +71,10 @@
 .video-player>div>span{
   width: 100%;
 }
-.video-player .ytp-youtube-button svg{
+.ytp-youtube-button svg{
   display: none;
 }
-.video-player .ytp-youtube-button::after {
+.ytp-youtube-button::after {
     display: block;
     content: 'Liu';
     text-align: center;
@@ -96,4 +95,16 @@
 }
 .video-page .upload-video-button .glyphicon{
   padding-right: 5px;
+}
+.video-info.video-info-list-mode{
+  position: absolute;
+  color: white;
+  background: black;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  display: none;
+}
+.video-block:hover .video-info.video-info-list-mode{
+  display: block;
 }
