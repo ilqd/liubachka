@@ -280,3 +280,8 @@ html{
 .user-edit-button .btn .btn-link{
   padding: 0;
 }
+.btn-link:hover,
+.btn-link:active,
+.btn-link:focus{
+  color: #37bdbf;
+ }

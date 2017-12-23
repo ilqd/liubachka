@@ -25,7 +25,7 @@ class VideoBlock extends React.Component {
               <img src={`https://img.youtube.com/vi/${this.props.elem.get('youtubeId')}/0.jpg`}/>
               <div className="btn btn-link video-play"><Glyphicon onClick={this.openPlayer} glyph="play"/></div>
             </div>
-            <div className={`video-info ${this.props.listMode && 'video-info-list-mode'}`}>
+            <div className={`video-info ${this.props.listMode && 'video-info-list-mode' || ''}`}>
               <div className="video-title">{this.props.elem.get('name')}</div>
               <div className="video-author">{this.props.elem.get('creatorName')}</div>
             </div>
@@ -76,12 +76,27 @@ class VideoPlayer extends React.Component {
         this.scroll();
         return (<div>
         <Row className="video-player">
-          <Col xs={12}>
+          <Col xs={12} className="video-player-col">
             <YouTube
+              className="video-player-iframe"
               videoId={this.props.videoId}
               opts={this.opts}
               onReady={this.onReady}
             />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <div className="video-button-container">
+                <div>
+                  <Button bsStyle="link" className="video-button" title="Комментировать">
+                    <Glyphicon glyph="comment"/>
+                  </Button>
+                  <Button bsStyle="link" onClick={this.props.closePlayer} className="video-button" title="Закрыть видео">
+                    <Glyphicon glyph="home"/>
+                  </Button>
+                </div>
+              </div>
             </Col>
           </Row>
           <Row>
@@ -93,6 +108,7 @@ class VideoPlayer extends React.Component {
 }
 VideoPlayer.propTypes = {
     videoId: React.PropTypes.String,
+    closePlayer: React.PropTypes.func,
 };
 
 
@@ -147,28 +163,34 @@ class VideoList extends React.Component {
         this.initWheel();
 
         return (<div className="video-page">
-          <Row >
-          <Col xs={12}>
-          <Slider className="video-carousel" ref="slick" arrows swipeToSlide responsive={ [
-             { breakpoint: 768, settings: { slidesToShow: 3 } },
-             { breakpoint: 1024, settings: { slidesToShow: 5 } },
-             { breakpoint: 1920, settings: { slidesToShow: 7 } } ]}>
-          {list}
-          </Slider >
-          <LinkContainer to={'/video/upload'}><Button bsStyle="link" className="upload-video-button"><Glyphicon glyph="cloud-upload"/>Загрузить видео</Button></LinkContainer>
-          <Button bsStyle="link" onClick={this.showList} className="show-video-list">{`${this.state.showList ? 'Спрятать список' : 'Показать список'}`}</Button>
-          </Col>
+          <Row className="video-carousel-row">
+            <Col xs={12}>
+              <Slider className="video-carousel" ref="slick" arrows swipeToSlide responsive={ [
+                 { breakpoint: 576, settings: { slidesToShow: 2 } },
+                 { breakpoint: 768, settings: { slidesToShow: 3 } },
+                 { breakpoint: 1024, settings: { slidesToShow: 5 } },
+                 { breakpoint: 1920, settings: { slidesToShow: 7 } } ]}>
+              {list}
+              </Slider >
+              <div className="video-button-container">
+                <LinkContainer to={'/video/upload'}><Button bsStyle="link" className="video-button" title="Загрузить видео">
+                  <Glyphicon glyph="cloud-upload"/>
+                </Button></LinkContainer>
+                <Button bsStyle="link" onClick={this.showList} className="video-button show-video-list" title={`${this.state.showList ? 'Спрятать список' : 'Показать список'}`}>
+                  <Glyphicon glyph="list"/>
+                </Button>
+              </div>
+            </Col>
           </Row>
           {this.state.showList && <Row className="video-row">
               {this.props.data.map((e, idx)=><Col key={idx} xs={12} sm={4} md={3} lg={2} className="video-block">
-              <VideoBlock show={show} openPlayer={this.openPlayer} elem={e} listMode/>
-              </Col>)}
+                <VideoBlock show={show} openPlayer={this.openPlayer} elem={e} listMode/>
+                </Col>)}
           </Row>  }
           {show && <Row>
             <Col xs={12} className="video-player-container">
-              <VideoPlayer videoId={this.state.videoId}/>
+              <VideoPlayer videoId={this.state.videoId} closePlayer={this.closePlayer}/>
             </Col>
-            <Button bsStyle="link" onClick={this.closePlayer}>Уродливая кнопка закрытия плеера</Button>
           </Row>}
         </div>);
     }
