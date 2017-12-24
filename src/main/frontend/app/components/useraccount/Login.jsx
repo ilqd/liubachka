@@ -18,20 +18,21 @@ class LoginPageClass extends React.Component {
         };
         document.title = 'Login';
     }
-    onSubmit() {
+    onSubmit(event) {
+        event.preventDefault();
         this.props.login(
-      this.state.username,
+      this.state.username.trim(),
       this.state.password);
     }
     handleUserNameChange(event) {
-        this.setState({ username: event.target.value, password: this.state.password });
+        this.setState({ username: event.target.value.trim(), password: this.state.password });
     }
     handlePasswordChange(event) {
         this.setState({ password: event.target.value, username: this.state.username });
     }
     render() {
         return (
-      <div>
+      <form onSubmit={this.onSubmit}>
         <Row>
           <Col xs={12} md={4} mdOffset={4}>
             <FieldGroup
@@ -56,7 +57,7 @@ class LoginPageClass extends React.Component {
         </Row>
         <Row>
           <Col xs={12} md={4} mdOffset={4}>
-            <Button  onClick={this.onSubmit} bsStyle="primary"style={{ width: '100%' }}>
+            <Button  type="submit" bsStyle="primary"style={{ width: '100%' }}>
                 Войти
             </Button>
           </Col>
@@ -73,7 +74,7 @@ class LoginPageClass extends React.Component {
 
           </Col>
         </Row>
-      </div>);
+      </form>);
     }
   }
 LoginPageClass.propTypes = {

@@ -1,13 +1,13 @@
 package ru.splashcourse.liubachka.configs.security;
 
-import java.io.IOException;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
+import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
@@ -22,14 +22,16 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
 
 public class JSONSecurityFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -101,15 +103,20 @@ public class JSONSecurityFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
         CsrfToken token = (CsrfToken) request.getAttribute("org.springframework.security.web.csrf.CsrfToken");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
         response.addIntHeader("AuthSuccessful", 1);
         response.addHeader("CSRF", token.getToken());
 
         User principal = (User) authResult.getPrincipal();
-
-        response.addHeader("FirstName", principal.getFirstName() == null ? "" : principal.getFirstName());
         response.addHeader("UserId", principal.getId() == null ? "" : principal.getId().toString());
-        response.addHeader("LastName", principal.getLastName() == null ? "" : principal.getLastName());
         response.addHeader("Roles", principal.getRoles().isEmpty() ? "" : StringUtils.join(principal.getRoles(), ','));
+        Map<String, String> responsePayload = new HashMap<>();
+        responsePayload.put("FirstName", principal.getFirstName() == null ? "" : principal.getFirstName());
+        responsePayload.put("LastName", principal.getLastName() == null ? "" : principal.getLastName());
+        response.getWriter().write(new ObjectMapper().writeValueAsString(responsePayload));
         super.successfulAuthentication(request, response, chain, authResult);
     }
 

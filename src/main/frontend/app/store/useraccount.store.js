@@ -1,6 +1,6 @@
 import {RestAPI} from '@/net.js';
 import{Map, fromJS} from 'immutable';
-import {goBack, history} from '@/store/store';
+import {history} from '@/store/store';
 
 export const useraccountReducer = (state = Map(), action) => {
     switch (action.type) {
@@ -24,7 +24,7 @@ export const tryToLogin = (dispatch, username, pass) => {
         dispatch({ type: 'LOGIN_SUCCESSFUL',  info: {csrf: response.csrf, firstName: response.firstName,
         lastName: response.lastName, userId: response.userId,
          roles: response.roles} });
-        goBack();
+        history.replace('/');
     },
       (response) => {
           dispatch({ type: 'LOGIN_FAILED', error: response.login_error });

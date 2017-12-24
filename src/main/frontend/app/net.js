@@ -59,9 +59,10 @@ const commonRequestFunction = (url, data, requestType, userContentType, showProg
          if (response.getResponseHeader('sessionexpired')) {
              logout(store.dispatch);
          } else if (response && response.getResponseHeader('AuthSuccessful')) {
+             const person = JSON.parse(responseData);
              resolve({ csrf: response.getResponseHeader('CSRF'),
-            firstName: response.getResponseHeader('FirstName'),
-            lastName: response.getResponseHeader('LastName'),
+            firstName: person.FirstName,
+            lastName: person.LastName,
             userId: response.getResponseHeader('UserId'),
             roles: response.getResponseHeader('Roles') });
          } else {
