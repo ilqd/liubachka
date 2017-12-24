@@ -1,5 +1,6 @@
 import { Map, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
+import {SUCCESS_MESSAGE} from './net.store';
 
 const defaultState = Map({enabled: true});
 
@@ -30,7 +31,7 @@ export const saveUser = (dispatch, data) =>{
     dispatch({ type: 'ADMIN_SAVING_USER' });
     method('/api/users', data).then((response)=>{
         dispatch({ type: 'ADMIN_USER_SAVED', response});
-        dispatch({ type: 'POSTED', message: 'Success!'});
+        dispatch({ type: 'POSTED', message: SUCCESS_MESSAGE});
     })
     .catch((response)=>
       dispatch({ type: 'ADMIN_USER_SAVE_FAILED', response})

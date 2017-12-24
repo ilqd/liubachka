@@ -1,6 +1,10 @@
 package ru.splashcourse.liubachka.configs.orika;
 
-import java.util.Map;
+import ma.glasnost.orika.Converter;
+import ma.glasnost.orika.Mapper;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.ConfigurableMapper;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +13,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.repository.support.DomainClassConverter;
 import org.springframework.stereotype.Component;
 
-import ma.glasnost.orika.Converter;
-import ma.glasnost.orika.Mapper;
-import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.ConfigurableMapper;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
+import java.util.Map;
 
 @Component
 public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationContextAware {
@@ -39,6 +39,8 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
         factory.registerMapper(new AnswerDtoCollectionMapper(domainClassConverter));
         factory.registerMapper(new QuestionToDtoCollectionMapper());
         factory.registerMapper(new AnswerToDtoCollectionMapper());
+        factory.registerMapper(new CommentDtoCollectionMapper(domainClassConverter));
+        factory.registerMapper(new CommentToDtoCollectionMapper());
     }
 
     @Override

@@ -1,6 +1,6 @@
 import { Map, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
-
+import {SUCCESS_MESSAGE} from './net.store';
 export const videoEditReducer = (state = Map(), action) => {
     switch (action.type) {
         case 'VIDEO_EDIT_LOADED':
@@ -30,7 +30,7 @@ export const saveVideo = (dispatch, data) =>{
     dispatch({ type: 'POSTING' });
     method('/api/video/upload', data, false).then((response)=>{
         dispatch({ type: 'VIDEO_EDIT_SAVED', response});
-        dispatch({ type: 'POSTED', message: 'Success!'});
+        dispatch({ type: 'POSTED', message: SUCCESS_MESSAGE});
         dispatch({ type: 'UPLOAD_PROGRESS', progress: 100});
     })
     .catch((response)=>{

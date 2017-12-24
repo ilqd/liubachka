@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @ToString()
 @EqualsAndHashCode
@@ -24,5 +25,9 @@ public class CommentDto {
     private Date date;
 
     private Long video;
+
+    private List<CommentDto> children;
+
+    private Long parent;
 
 }

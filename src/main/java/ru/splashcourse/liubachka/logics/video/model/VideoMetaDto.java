@@ -6,9 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.OrderBy;
 
 @ToString()
 @EqualsAndHashCode
@@ -31,8 +28,5 @@ public class VideoMetaDto {
     private Date uploadDate;
 
     private Boolean hidden;
-
-    @OrderBy(value = "date")
-    private List<CommentDto> comments;
 
 }

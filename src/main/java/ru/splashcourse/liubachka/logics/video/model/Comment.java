@@ -8,10 +8,14 @@ import lombok.ToString;
 import org.hibernate.annotations.Type;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import ru.splashcourse.liubachka.ObjectWithIdImpl;
 import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
@@ -24,6 +28,7 @@ import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
 public class Comment extends ObjectWithIdImpl {
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
     private User author;
 
     @Type(type = "text")
@@ -33,5 +38,11 @@ public class Comment extends ObjectWithIdImpl {
 
     @ManyToOne
     private VideoMeta video;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Comment> children;
+
+    @ManyToOne
+    private Comment parent;
 
 }

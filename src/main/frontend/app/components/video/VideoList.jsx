@@ -5,115 +5,14 @@ import {loadVideos} from '@/store/videoList.store.js';
 import {LinkContainer} from 'react-router-bootstrap';
 import {List} from 'immutable';
 import './video.css';
-import YouTube from 'react-youtube';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import $ from 'jquery';
+import VideoBlock from './VideoBlock';
+import VideoPlayer from './VideoPlayer';
 
-class VideoBlock extends React.Component {
-    constructor(props) {
-        super(props);
-        this.openPlayer = this.openPlayer.bind(this);
-    }
-    openPlayer() {
-        this.props.openPlayer(this.props.elem);
-    }
-    render() {
-        return (<div>
-            <div className="video-play-container">
-              <img src={`https://img.youtube.com/vi/${this.props.elem.get('youtubeId')}/0.jpg`}/>
-              <div className="btn btn-link video-play"><Glyphicon onClick={this.openPlayer} glyph="play"/></div>
-            </div>
-            <div className={`video-info ${this.props.listMode && 'video-info-list-mode' || ''}`}>
-              <div className="video-title">{this.props.elem.get('name')}</div>
-              <div className="video-author">{this.props.elem.get('creatorName')}</div>
-            </div>
-          </div>
-        );
-    }
-}
-VideoBlock.propTypes = {
-    elem: React.PropTypes.object,
-    openPlayer: React.PropTypes.func,
-    listMode: React.PropTypes.bool,
-};
-
-//eslint-disable-next-line
-class VideoPlayer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.onReady = this.onReady.bind(this);
-        this.opts = {
-            playerVars: {
-                height: '360',
-                width: '640',
-                rel: 0,
-                controls: 2,
-                modestbranding: 1,
-            }
-        };
-    }
-    componentDidMount() {
-        this.scroll();
-    }
-    onReady(event) {
-        event.target.pauseVideo();
-    }
-    scroll() {
-        setTimeout(()=> {
-            const elem = $('.video-player-container');
-            if (elem.length > 0) {
-                $('.video-player-container')[0].scrollIntoView();
-            }
-        }, 200);
-    }
-    render() {
-        const stubArray = [];
-        for (let i = 0; i < 10; i++) {
-            stubArray.push(i);
-        }
-        this.scroll();
-        return (<div>
-        <Row className="video-player">
-          <Col xs={12} className="video-player-col">
-            <YouTube
-              className="video-player-iframe"
-              videoId={this.props.videoId}
-              opts={this.opts}
-              onReady={this.onReady}
-            />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <div className="video-button-container">
-                <div>
-                  <Button bsStyle="link" className="video-button" title="Комментировать">
-                    <Glyphicon glyph="comment"/>
-                  </Button>
-                  <Button bsStyle="link" onClick={this.props.closePlayer} className="video-button" title="Закрыть видео">
-                    <Glyphicon glyph="home"/>
-                  </Button>
-                </div>
-              </div>
-            </Col>
-          </Row>
-          <Row>
-        {stubArray.map(i=><Col xs={11} xsOffset={1} key={i}>Коммент {i}</Col>)}
-          </Row>
-        </div>
-        );
-    }
-}
-VideoPlayer.propTypes = {
-    videoId: React.PropTypes.String,
-    closePlayer: React.PropTypes.func,
-};
-
-
-//eslint-disable-next-line
-class VideoList extends React.Component {
+class VideoList extends React.PureComponent {
     constructor(props) {
         super(props);
         this.openPlayer = this.openPlayer.bind(this);
@@ -126,7 +25,7 @@ class VideoList extends React.Component {
         this.props.loadVideos();
     }
     openPlayer(elem) {
-        this.setState({savedYScroll: window.pageYOffset, showPlayer: true, videoId: elem.get('youtubeId')});
+        this.setState({savedYScroll: window.pageYOffset, showPlayer: true, videoDBId: elem.get('id'), videoId: elem.get('youtubeId')});
     }
     closePlayer() {
         this.setState({showPlayer: false});
@@ -189,7 +88,7 @@ class VideoList extends React.Component {
           </Row>  }
           {show && <Row>
             <Col xs={12} className="video-player-container">
-              <VideoPlayer videoId={this.state.videoId} closePlayer={this.closePlayer}/>
+              <VideoPlayer videoId={this.state.videoId} videoDBId={this.state.videoDBId} closePlayer={this.closePlayer}/>
             </Col>
           </Row>}
         </div>);

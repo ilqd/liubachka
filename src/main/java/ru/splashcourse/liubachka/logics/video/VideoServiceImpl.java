@@ -20,10 +20,12 @@ import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -44,6 +46,9 @@ import ru.splashcourse.liubachka.configs.orika.OrikaBeanMapper;
 import ru.splashcourse.liubachka.configs.role.RoleName;
 import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
 import ru.splashcourse.liubachka.logics.admin.usermanagment.UserRepository;
+import ru.splashcourse.liubachka.logics.video.model.Comment;
+import ru.splashcourse.liubachka.logics.video.model.CommentDto;
+import ru.splashcourse.liubachka.logics.video.model.CommentRepository;
 import ru.splashcourse.liubachka.logics.video.model.VideoMeta;
 import ru.splashcourse.liubachka.logics.video.model.VideoMetaDto;
 import ru.splashcourse.liubachka.logics.video.model.VideoMetaRepository;
@@ -63,6 +68,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private VideoMetaRepository repo;
+
+    @Autowired
+    private CommentRepository commentRepo;
 
     @Autowired
     private OrikaBeanMapper mapper;
@@ -220,7 +228,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public List<VideoMetaDto> getList() {
-        List<VideoMeta> metaList = repo.findAll();
+        List<VideoMeta> metaList = repo.findAll(new Sort(Sort.Direction.DESC, "id"));
         if (metaList != null) {
             return metaList.stream().map(elem -> {
                 VideoMetaDto dto = mapper.map(elem, VideoMetaDto.class);
@@ -229,5 +237,29 @@ public class VideoServiceImpl implements VideoService {
             }).collect(Collectors.toList());
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<CommentDto> getComments(Long videoId) {
+        List<Comment> comments = commentRepo.findByVideoIdOrderByIdDesc(videoId);
+        if (!CollectionUtils.isEmpty(comments)) {
+            return comments.stream().map(elem -> {
+                CommentDto dto = mapper.map(elem, CommentDto.class);
+                dto.setAuthorName(elem.getAuthor().getFullName());
+                return dto;
+            }).collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public CommentDto addComment(CommentDto dto) {
+        Long currentUserId = UtilsSecurity.getUser().getId();
+        dto.setAuthor(currentUserId);
+        dto.setDate(new Date());
+        Comment comment = new Comment();
+        mapper.map(dto, comment);
+        return mapper.map(commentRepo.save(comment), CommentDto.class);
+
     }
 }

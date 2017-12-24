@@ -14,6 +14,7 @@ import {adminUserEditReducer} from './adminUserEdit.store';
 import {pageListReducer} from './pageList.store.js';
 import {videoEditReducer} from './videoEdit.store';
 import {videoListReducer} from './videoList.store';
+import {videoCommentReducer} from './videoComment.store';
 import {videoUploadProgressReducer} from './videoUploadProgress.store';
 import {ajaxStatusReducer} from './net.store.js';
 import { combineReducers } from 'redux-immutable';
@@ -64,6 +65,7 @@ const superReducer = combineReducers({
         edit: videoEditReducer,
         list: videoListReducer,
         uploadProgress: videoUploadProgressReducer,
+        comments: videoCommentReducer,
     }),
     ajaxStatus: ajaxStatusReducer,
     session: useraccountReducer,

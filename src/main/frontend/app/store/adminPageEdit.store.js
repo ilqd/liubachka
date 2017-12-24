@@ -1,6 +1,7 @@
 /* eslint new-cap: ["error", { "capIsNew": false }]*/
 import { Map, List, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
+import {SUCCESS_MESSAGE} from './net.store';
 
 export const adminPageEditReducer = (state = Map(), action) => {
     switch (action.type) {
@@ -45,7 +46,7 @@ export const save = (dispatch, data) =>{
     dispatch({ type: 'POSTING' });
     RestAPI.put('/api/page/savePage', data).then(
       () => {
-          dispatch({ type: 'POSTED', message: 'Success!'});
+          dispatch({ type: 'POSTED', message: SUCCESS_MESSAGE});
       }
     ).catch(
       (response) => {

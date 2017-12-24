@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import ru.splashcourse.liubachka.logics.video.model.CommentDto;
 import ru.splashcourse.liubachka.logics.video.model.VideoMeta;
 import ru.splashcourse.liubachka.logics.video.model.VideoMetaDto;
 
@@ -21,4 +22,8 @@ public interface VideoService {
     List<VideoMetaDto> getList();
 
     void restore(Long id);
+
+    List<CommentDto> getComments(Long videoId);
+
+    CommentDto addComment(CommentDto dto);
 }

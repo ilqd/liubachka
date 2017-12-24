@@ -1,13 +1,14 @@
 package ru.splashcourse.liubachka.configs.orika;
 
-import java.util.Optional;
+import ma.glasnost.orika.MappingContext;
+import ma.glasnost.orika.converter.BidirectionalConverter;
+import ma.glasnost.orika.metadata.Type;
 
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.data.repository.support.DomainClassConverter;
 
-import ma.glasnost.orika.MappingContext;
-import ma.glasnost.orika.converter.BidirectionalConverter;
-import ma.glasnost.orika.metadata.Type;
+import java.util.Optional;
+
 import ru.splashcourse.liubachka.ObjectWithId;
 
 public class IdToObjectConverter<T extends ObjectWithId> extends BidirectionalConverter<Long, T> {
@@ -33,7 +34,7 @@ public class IdToObjectConverter<T extends ObjectWithId> extends BidirectionalCo
     @Override
     public T convertTo(Long arg0, Type<T> arg1, MappingContext arg2) {
         Optional<T> opt = (Optional<T>) domainClassConverter.convert(arg0, TypeDescriptor.valueOf(Long.class),
-                TypeDescriptor.valueOf(destinationType.getRawType()));
+                TypeDescriptor.valueOf(arg1.getRawType()));
         return opt.get();
     }
 }
