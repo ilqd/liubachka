@@ -1,6 +1,12 @@
 /* eslint react/no-multi-comp: "off" */
 import React from 'react';
 import {FormGroup, ControlLabel, FormControl, HelpBlock} from 'react-bootstrap';
+import store from '@/store/store';
+
+export function isAdmin() {
+    return store.getState().getIn(['session', 'roles'], '').indexOf('ROLE_ADMIN') > -1;
+}
+
 export function FieldGroup({ id, label, help, ...props }) {
     return (
     <FormGroup controlId={id} validationState={props.validationState}>

@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.CollectionUtils;
@@ -70,9 +71,12 @@ public class User implements ObjectWithId {
 
     @NotBlank
 	private String firstName;
-
+      
     @NotBlank
 	private String lastName;
+    
+    @Formula("concat(first_name,' ',last_name)")
+    private String fullName;
 
 	private boolean enabled=true;
 
@@ -168,9 +172,5 @@ public class User implements ObjectWithId {
 
 	private String collectionToString(Collection<?> rolesCol) {
 		return rolesCol == null || rolesCol.isEmpty() ? "" : StringUtils.join(rolesCol, ',');
-	}
-	
-	public String getFullName() {
-	    return firstName+" "+lastName;
 	}
 }

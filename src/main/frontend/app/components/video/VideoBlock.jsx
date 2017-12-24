@@ -11,10 +11,13 @@ export default class VideoBlock extends React.PureComponent {
         this.props.openPlayer(this.props.elem);
     }
     render() {
-        return (<div>
+        return (<div onClick={this.openPlayer}>
             <div className="video-play-container">
+              <div className="video-comment-count">
+                <span className="video-comment-count-number">{this.props.elem.get('commentCount') || 0}</span>
+              </div>
               <img src={`https://img.youtube.com/vi/${this.props.elem.get('youtubeId')}/0.jpg`}/>
-              <div className="btn btn-link video-play"><Glyphicon onClick={this.openPlayer} glyph="play"/></div>
+              <div className="btn btn-link video-play"><Glyphicon glyph="play"/></div>
             </div>
             <div className={`video-info ${this.props.listMode && 'video-info-list-mode' || ''}`}>
               <div className="video-title">{this.props.elem.get('name')}</div>

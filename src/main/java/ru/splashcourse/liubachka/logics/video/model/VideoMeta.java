@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 
 import java.util.Date;
@@ -49,8 +51,9 @@ public class VideoMeta extends ObjectWithIdImpl {
 
     private Date uploadDate;
 
-    @OneToMany(mappedBy = "video", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "video", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderBy(value = "date DESC")
+    @Fetch(FetchMode.SUBSELECT)
     private List<Comment> comments;
 
     private Boolean hidden = false;
@@ -60,6 +63,28 @@ public class VideoMeta extends ObjectWithIdImpl {
             comments.forEach(comment -> comment.setVideo(this));
         }
         this.comments = comments;
+    }
+
+    private Integer nestedCommentCount(Comment comment) {
+        Integer result = 0;
+        if (comment.getChildren() != null) {
+            result += comment.getChildren().size();
+            for (Comment child : comment.getChildren()) {
+                result += nestedCommentCount(child);
+            }
+        }
+        return result;
+    }
+
+    public Integer getCommentsCount() {
+        if (comments != null) {
+            Integer result = comments.size();
+            for (Comment comment : comments) {
+                result += nestedCommentCount(comment);
+            }
+            return result;
+        }
+        return 0;
     }
 
 }

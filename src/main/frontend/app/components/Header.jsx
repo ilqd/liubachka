@@ -32,7 +32,7 @@ class Header extends React.Component {
             </NavDropdown>);
         }
         return (
-      <Navbar fixedTop style={{width: '100vw', maxWidth: '100%'}}>
+      <Navbar fixedTop style={{width: '100vw', maxWidth: '100%'}} collapseOnSelect >
         <Navbar className="title-bar row">
           <Navbar.Brand style={{ display: 'flex', paddingRight: 1}}>
             <img src={logo} style={{height: '2em'}}/>

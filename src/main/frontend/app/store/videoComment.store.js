@@ -6,10 +6,21 @@ export const videoCommentReducer = (state = Map(), action) => {
         case 'COMMENTS_LIST_LOADED':
             return state.set(action.videoId, fromJS(action.data));
         case 'COMMENT_CHANGED':
-            return state.set('new', action.value);
+            return state.setIn(['reply', 'text'], action.value);
         case 'COMMENTS_LIST_LOADING':
         case 'COMMENT_POSTED':
-            return state.delete('new');
+        case 'COMMENT_CLEARED':
+            return state.delete('reply');
+        case 'COMMENT_REPLY_OPENED':
+            if (state.getIn(['reply', 'parent']) == action.commentId) {
+                return state.delete('reply');
+            }
+            return state.delete('reply').setIn(['reply', 'parent'], action.commentId);
+        case 'COMMENT_CREATE_OPENED':
+            if (state.getIn(['reply', 'video']) == action.videoId) {
+                return state.delete('reply');
+            }
+            return state.delete('reply').setIn(['reply', 'video'], action.videoId);
         case 'LOGOUT':
             return Map();
         default:
@@ -17,6 +28,15 @@ export const videoCommentReducer = (state = Map(), action) => {
     }
 };
 
+export const reply = (dispatch, commentId) =>{
+    dispatch({ type: 'COMMENT_REPLY_OPENED', commentId });
+};
+export const create = (dispatch, videoId) =>{
+    dispatch({ type: 'COMMENT_CREATE_OPENED', videoId });
+};
+export const clear = (dispatch) =>{
+    dispatch({ type: 'COMMENT_CLEARED' });
+};
 export const loadComments = (dispatch, videoId) =>{
     dispatch({ type: 'COMMENTS_LIST_LOADING' });
     RestAPI.get(`/api/video/comments/${videoId}`).then((data)=>

@@ -5,13 +5,17 @@ import YouTube from 'react-youtube';
 import $ from 'jquery';
 import NewComment from './NewComment';
 import CommentList from './CommentList';
-export default class VideoPlayer extends React.PureComponent {
+import {isAdmin} from '../Util';
+import {connect} from 'react-redux';
+import {Map} from 'immutable';
+import {create, clear} from '@/store/videoComment.store.js';
+class VideoPlayer extends React.PureComponent {
     constructor(props) {
         super(props);
         this.onReady = this.onReady.bind(this);
         this.switchShowComment = this.switchShowComment.bind(this);
-        this.hideComment = this.setShowComment.bind(this, false);
-        this.showComment = this.setShowComment.bind(this, true);
+        this.hideComment = this.setHidden.bind(this);
+        this.setHidden = this.setHidden.bind(this);
         this.opts = {
             playerVars: {
                 height: '360',
@@ -26,11 +30,19 @@ export default class VideoPlayer extends React.PureComponent {
     componentDidMount() {
         this.scroll();
     }
-    setShowComment(bool) {
-        this.setState({showComment: bool});
+    componentWillReceiveProps(props) {
+        if (!this.props.video || this.props.video.get('id') != props.video.get('id')) {
+            this.scroll();
+        }
+    }
+    setHidden() {
+        this.props.setHidden(this.props.video.get('id'), !this.props.video.get('hidden'));
+    }
+    hideComment() {
+        this.props.clear();
     }
     switchShowComment() {
-        this.setState({showComment: !this.state.showComment });
+        this.props.create();
     }
     onReady(event) {
         event.target.pauseVideo();
@@ -48,19 +60,35 @@ export default class VideoPlayer extends React.PureComponent {
         for (let i = 0; i < 10; i++) {
             stubArray.push(i);
         }
-        this.scroll();
+        const showDelete = isAdmin() || this.props.userId == this.props.video.get('creator');
         return (<div>
         <Row className="video-player">
           <Col xs={12} className="video-player-col">
             <YouTube
               className="video-player-iframe"
-              videoId={this.props.videoId}
+              videoId={this.props.video.get('youtubeId')}
               opts={this.opts}
               onReady={this.onReady}
             />
             </Col>
           </Row>
           <Row>
+            {this.props.video.get('name') && <Col xs={12}>
+              <span className="video-details-name">{this.props.video.get('name')}</span>
+              {showDelete && <Button bsStyle="link" disabled={this.props.busy} className="video-delete-button" onClick={this.setHidden}
+                title={`${this.props.video.get('hidden') ? 'Восстановить' : 'Удалить'}`}>
+                <Glyphicon glyph={`${this.props.video.get('hidden') ? 'repeat' : 'trash'}`}/>
+              </Button>}
+            </Col> }
+            <Col xs={12}>
+              <span className="video-details-creator-label">Загрузил:</span>
+              <span className="video-details-creator-name">{this.props.video.get('creatorName')}</span>
+              <span className="video-details-creation-date">{new Date(this.props.video.get('uploadDate')).toLocaleString()}</span>
+            </Col>
+            <Col xs={12}>
+              <span className="video-details-description-label">Описание:</span>
+              <span className="video-details-description">{this.props.video.get('description')}</span>
+            </Col>
             <Col xs={12}>
               <div className="video-button-container">
                 <div>
@@ -74,18 +102,32 @@ export default class VideoPlayer extends React.PureComponent {
               </div>
             </Col>
           </Row>
-          {this.state.showComment && <Row key={this.props.videoDBId}>
+          {this.props.replyComment.get('video') === this.props.video.get('id') && <Row key={this.props.video.get('id')}>
             <Col xs={12}>
-              <NewComment videoDBId={this.props.videoDBId} commentPosted={this.hideComment}/>
+              <NewComment videoDBId={this.props.video.get('id')} commentPosted={this.hideComment}/>
             </Col>
           </Row>}
-          <CommentList videoDBId={this.props.videoDBId}/>
+          <CommentList videoDBId={this.props.video.get('id')}/>
         </div>
         );
     }
 }
 VideoPlayer.propTypes = {
-    videoId: React.PropTypes.String,
+    video: React.PropTypes.object,
     closePlayer: React.PropTypes.func,
+    busy: React.PropTypes.bool,
+    userId: React.oneOfType([React.PropTypes.string, React.PropTypes.number]),
     videoDBId: React.oneOfType([React.PropTypes.string, React.PropTypes.number]),
 };
+export default connect(state=>({
+    replyComment: state.getIn(['video', 'comments', 'reply'], new Map()),
+    userId: state.getIn(['session', 'userId'], '')
+}), (dispatch, props)=>({
+    create() {
+        create(dispatch, props.video.get('id'));
+    },
+    clear() {
+        clear(dispatch);
+    }
+
+}))(VideoPlayer);

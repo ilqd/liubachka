@@ -29,4 +29,6 @@ public class VideoMetaDto {
 
     private Boolean hidden;
 
+    private Integer commentCount;
+
 }

@@ -4,6 +4,7 @@ import {Row, Col} from 'react-bootstrap';
 import {loadComments} from '@/store/videoComment.store.js';
 import {List} from 'immutable';
 import './video.css';
+import Comment from './Comment';
 class CommentList extends React.PureComponent {
     componentWillMount() {
         this.props.loadComments(this.props.videoDBId);
@@ -17,24 +18,7 @@ class CommentList extends React.PureComponent {
         return(
         <Row>
           <Col xs={12}>
-            {this.props.data.map(elem=>(<Row className="comment" key={elem.get('id')}>
-              <Col xs={12}>
-                <div className="comment-container">
-                  <div className="comment-info">
-                    <span className="comment-author">
-                      {elem.get('authorName')}
-                    </span>
-                    <span className="comment-date">
-                      {new Date(elem.get('date')).toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="comment-text">
-                      {elem.get('text') || ''}
-                  </div>
-                </div>
-                <hr/>
-              </Col>
-            </Row>))}
+            {this.props.data.map(elem=>(<Comment key={elem.get('id')} elem={elem}/>))}
           </Col>
         </Row>);
     }
@@ -44,7 +28,7 @@ CommentList.propTypes = {
     data: React.PropTypes.object,
 };
 export default connect((state, props)=>({
-    newComment: state.getIn(['video', 'comments', 'new']),
+    newComment: state.getIn(['video', 'comments', 'reply']),
     data: state.getIn(['video', 'comments', props.videoDBId], new List()),
 }), (dispatch)=>({
     loadComments(videoDBId) {

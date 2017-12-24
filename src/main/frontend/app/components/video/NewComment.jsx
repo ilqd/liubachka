@@ -4,7 +4,7 @@ import './video.css';
 import {connect} from 'react-redux';
 import {addComment, typeComment} from '@/store/videoComment.store.js';
 import {clearMessage, SUCCESS_MESSAGE} from '@/store/net.store.js';
-
+import {Map} from 'immutable';
 class NewComment extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -25,7 +25,7 @@ class NewComment extends React.PureComponent {
         this.props.typeComment(e.target && e.target.value || '');
     }
     submit() {
-        this.props.addComment({text: this.props.value, video: this.props.videoDBId, parent: this.props.parent});
+        this.props.addComment(this.props.comment.toJS());
     }
     render() {
         return (<div className="video-comment-container">
@@ -37,13 +37,13 @@ class NewComment extends React.PureComponent {
             <Button onClick={this.hideModal}>Оки доки</Button>
           </Modal.Footer>
         </Modal>
-          <FormControl value={this.props.value} onChange={this.onChange} componentClass="textarea" placeholder="Введите комментарий" rows="4" />
-          <Button bsStyle="link" disabled={this.props.busy} onClick={this.submit}>Отправить</Button>
+          <FormControl value={this.props.comment.get('text')} onChange={this.onChange} componentClass="textarea" placeholder="Введите комментарий" rows="4" />
+          <Button bsStyle="link" disabled={this.props.busy || !this.props.comment.get('text')} onClick={this.submit}>Отправить</Button>
         </div>);
     }
 }
 NewComment.propTypes = {
-    value: React.PropTypes.string,
+    comment: React.PropTypes.object,
     typeComment: React.PropTypes.func,
     addComment: React.PropTypes.func,
     clearMessage: React.PropTypes.func,
@@ -52,8 +52,8 @@ NewComment.propTypes = {
     videoDBId: React.oneOfType([React.PropTypes.string, React.PropTypes.number]),
     parent: React.oneOfType([React.PropTypes.string, React.PropTypes.number]),
 };
-export default connect(state=>({
-    value: state.getIn(['video', 'comments', 'new'], ''),
+export default connect((state)=>({
+    comment: state.getIn(['video', 'comments', 'reply'], new Map()),
     netMessage: state.getIn(['ajaxStatus', 'message']),
     busy: state.getIn(['ajaxStatus', 'posting']),
 }), dispatch=>({

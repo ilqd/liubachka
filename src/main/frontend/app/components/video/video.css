@@ -8,18 +8,21 @@
 .video-block .video-title{
   font-weight: bolder;
   text-overflow: ellipsis;
-    overflow: hidden;
+  overflow: hidden;
+  max-height: 3em;
 }
 .video-block .video-author{
   font-size: smaller;
   font-style: italic;
   text-overflow: ellipsis;
-    overflow: hidden;
+  overflow: hidden;
+  max-height: 1em;
 }
 .video-block .video-play-container{
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;;
 }
 .video-block .video-play-container .video-play{
   position: absolute;
@@ -60,6 +63,7 @@
 .video-block:hover {
     transform: scale(1.01);
     transition: transform .2s;
+    cursor: pointer;
 }
 
 .video-block.upload-new {
@@ -150,4 +154,51 @@
   background: -webkit-linear-gradient(left, rgba(0,0,0,1) 0%,rgba(255,255,255,0.5) 50%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to right, rgba(0,0,0,1) 0%,rgba(255,255,255,0.5) 50%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
+}
+.video-details-name{
+  font-size: x-large;
+  font-weight: bold;
+}
+.video-details-creator-label,
+.video-details-description-label{
+  font-weight: bold;
+  padding-right: 5px;
+}
+.video-details-creator-name{
+  padding-right: 5px;
+}
+.video-details-creation-date{
+  font-style: italic;
+  color: gray;
+  font-size: small;
+}
+.video-delete-button{
+  font-size: large;
+  top: 0;
+  position: absolute;
+  padding: 6px;
+}
+.video-comment-count{
+  position: absolute;
+  z-index: 2;
+  top: 3px;
+  right: 7px;
+}
+.video-comment-count .video-comment-count-number{
+  color: black;
+  font-size: smaller;
+  background: white;
+  border-radius: 5px;
+  padding: 0 5px;
+  border: 1px solid black;
+}
+.comment-reply-button{
+  -moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+}
+.comment .comment {
+    padding-left: 20px;
 }

@@ -233,6 +233,7 @@ public class VideoServiceImpl implements VideoService {
             return metaList.stream().map(elem -> {
                 VideoMetaDto dto = mapper.map(elem, VideoMetaDto.class);
                 dto.setCreatorName(elem.getCreator().getFullName());
+                dto.setCommentCount(elem.getCommentsCount());
                 return dto;
             }).collect(Collectors.toList());
         }
@@ -245,7 +246,6 @@ public class VideoServiceImpl implements VideoService {
         if (!CollectionUtils.isEmpty(comments)) {
             return comments.stream().map(elem -> {
                 CommentDto dto = mapper.map(elem, CommentDto.class);
-                dto.setAuthorName(elem.getAuthor().getFullName());
                 return dto;
             }).collect(Collectors.toList());
         }
