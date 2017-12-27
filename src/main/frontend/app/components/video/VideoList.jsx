@@ -66,15 +66,21 @@ class VideoList extends React.PureComponent {
 
 
         this.initWheel();
-
-        return (<div className="video-page">
-          <Row className="video-carousel-row">
-            <Col xs={12}>
-              <Slider className="video-carousel" ref="slick" arrows swipeToSlide responsive={ [
+        const sliderSettings = {
+            infinite: true,
+            arrows: false,
+            swipeToSlide: true,
+            responsive: [
                  { breakpoint: 576, settings: { slidesToShow: 2 } },
                  { breakpoint: 768, settings: { slidesToShow: 3 } },
                  { breakpoint: 1024, settings: { slidesToShow: 5 } },
-                 { breakpoint: 1920, settings: { slidesToShow: 7 } } ]}>
+                 { breakpoint: 1920, settings: { slidesToShow: 7 } } ]
+        };
+        return (<div className="video-page">
+          <Row className="video-carousel-row">
+            <Col xs={12}>
+              <Slider className="video-carousel" ref="slick"  {...sliderSettings}
+                 >
               {list}
               </Slider >
               <div className="video-button-container">

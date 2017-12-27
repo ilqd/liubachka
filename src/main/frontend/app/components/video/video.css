@@ -202,3 +202,25 @@
 .comment .comment {
     padding-left: 20px;
 }
+.video-carousel .slick-list:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  right: -5px;
+  pointer-events: none;
+  background-image: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255, 0));
+  width: 5em;
+  height: 100%;
+}
+.video-carousel .slick-list:before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  left: -5px;
+  pointer-events: none;
+  background-image: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255, 0));
+  width: 5em;
+  height: 100%;
+}
