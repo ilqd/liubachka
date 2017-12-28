@@ -97,7 +97,7 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public VideoMeta upload(VideoMetaDto meta, MultipartFile file, OutputStream progressOutStream, HttpServletResponse response) {
         try {
-            VideoMeta video = new VideoMeta(meta);
+            VideoMeta video = mapper.map(meta, VideoMeta.class);
             User creator = userRepo.findById(UtilsSecurity.getUser().getId());
 
             video.setCreator(creator);

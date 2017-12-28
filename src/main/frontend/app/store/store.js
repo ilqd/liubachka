@@ -11,6 +11,8 @@ import {adminPageListReducer} from './adminPageList.store';
 import {adminPageEditReducer} from './adminPageEdit.store';
 import {adminUsersListReducer} from './adminUsersList.store';
 import {adminUserEditReducer} from './adminUserEdit.store';
+import {adminVideoCategoryListReducer} from './adminVideoCategoryList.store';
+import {adminVideoCategoryEditReducer} from './adminVideoCategoryEdit.store';
 import {pageListReducer} from './pageList.store.js';
 import {videoEditReducer} from './videoEdit.store';
 import {videoListReducer} from './videoList.store';
@@ -59,7 +61,11 @@ const superReducer = combineReducers({
         users: combineReducers({
             list: adminUsersListReducer,
             edit: adminUserEditReducer,
-        })
+        }),
+        videoCategory: combineReducers({
+            list: adminVideoCategoryListReducer,
+            edit: adminVideoCategoryEditReducer,
+        }),
     }),
     video: combineReducers({
         edit: videoEditReducer,

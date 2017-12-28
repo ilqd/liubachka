@@ -14,6 +14,8 @@ import UserList from './components/admin/userManagment/UserList';
 import UserEdit from './components/admin/userManagment/UserEdit';
 import VideoUpload from './components/video/YoutubeUploadPage';
 import VideoList from './components/video/VideoList';
+import VideoCategoryList from './components/admin/videoCategory/VideoCategoryList';
+import VideoCategoryEdit from './components/admin/videoCategory/VideoCategoryEdit';
 
 export default <Switch>
   <Route exact path="/login" component={LoginPage} />
@@ -28,9 +30,11 @@ export default <Switch>
   <Route exact path="/admin/userList" component={UserList} />
   <Route exact path="/video/upload" component={VideoUpload} />
   <Route exact path="/video/list" component={VideoList} />
+  <Route exact path="/admin/videoCategoryList" component={VideoCategoryList} />
   <Route path="/admin/userEdit/:editUserId?" component={UserEdit} />
   <Route path="/admin/editPage/:editPageId?" component={CreatePage} />
   <Route path="/admin/editTest/:editTestName?" component={CreateTest} />
+  <Route path="/admin/editVideoCategory/:id?" component={VideoCategoryEdit} />
   <Route path="/page/:url?" component={Page} />,
   <Route path="/" component={Main} />
 </Switch>;

@@ -36,7 +36,7 @@ public class AppController {
         return "forward:/index.html";
     }
 
-    @RequestMapping(value = {"/", "/login", "/page/**", "/video/**", "/skilltest/**"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/login", "/videoCategory/**", "/page/**", "/video/**", "/skilltest/**"}, method = RequestMethod.GET)
     public String index(HttpServletResponse response) {
         return "forward:/index.html";
     }

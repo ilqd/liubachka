@@ -277,11 +277,15 @@ html{
 .user-edit select[multiple]{
   height: 4em
 }
-.user-edit-button .btn .btn-link{
+.user-edit-button.btn.btn-link,
+.video-category-edit-button.btn.btn-link{
   padding: 0;
 }
 .btn-link:hover,
 .btn-link:active,
 .btn-link:focus{
   color: #37bdbf;
+ }
+ .video-category-table{
+   min-width: 100%;
  }

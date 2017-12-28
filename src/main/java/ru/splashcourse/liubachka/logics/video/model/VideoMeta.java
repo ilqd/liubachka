@@ -29,16 +29,6 @@ import ru.splashcourse.liubachka.logics.admin.usermanagment.User;
 @Getter
 public class VideoMeta extends ObjectWithIdImpl {
 
-    public VideoMeta() {
-        super();
-    }
-
-    public VideoMeta(VideoMetaDto dto) {
-        super();
-        this.name = dto.getName();
-        this.description = dto.getDescription();
-    }
-
     @ManyToOne(fetch = FetchType.EAGER)
     private User creator;
 
@@ -55,6 +45,9 @@ public class VideoMeta extends ObjectWithIdImpl {
     @OrderBy(value = "date DESC")
     @Fetch(FetchMode.SUBSELECT)
     private List<Comment> comments;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private VideoCategory category;
 
     private Boolean hidden = false;
 

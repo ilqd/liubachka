@@ -20,6 +20,7 @@ class Header extends React.Component {
             userDropdown =  (
           <NavDropdown title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown">
             {videoLink}
+            <IndexLinkContainer to="/admin/videoCategoryList"><NavItem >Категории видео</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/testList"><NavItem >Настройка тестов</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/testResults"><NavItem >Результаты тестов</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/pageList"><NavItem >Настройка страниц</NavItem></IndexLinkContainer>

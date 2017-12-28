@@ -31,4 +31,8 @@ public class VideoMetaDto {
 
     private Integer commentCount;
 
+    private Long category;
+
+    private String categoryName;
+
 }

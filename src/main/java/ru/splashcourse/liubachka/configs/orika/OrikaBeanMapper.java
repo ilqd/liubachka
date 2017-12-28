@@ -17,6 +17,8 @@ import java.util.Map;
 
 import ru.splashcourse.liubachka.logics.video.model.Comment;
 import ru.splashcourse.liubachka.logics.video.model.CommentDto;
+import ru.splashcourse.liubachka.logics.video.model.VideoMeta;
+import ru.splashcourse.liubachka.logics.video.model.VideoMetaDto;
 
 @Component
 public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationContextAware {
@@ -45,6 +47,8 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
         factory.registerMapper(new CommentDtoCollectionMapper(domainClassConverter));
         factory.registerMapper(new CommentToDtoCollectionMapper());
         factory.classMap(Comment.class, CommentDto.class).byDefault().fieldAToB("author.fullName", "authorName").mapNulls(false)
+                .mapNullsInReverse(false).register();
+        factory.classMap(VideoMeta.class, VideoMetaDto.class).byDefault().fieldAToB("category.name", "categoryName").mapNulls(false)
                 .mapNullsInReverse(false).register();
     }
 

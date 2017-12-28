@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col, Row, Glyphicon, Button} from 'react-bootstrap';
+import {Col, Row, Glyphicon, Button, FormControl} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {loadVideos, setHidden} from '@/store/videoList.store.js';
 import {LinkContainer} from 'react-router-bootstrap';
@@ -7,6 +7,7 @@ import {List} from 'immutable';
 import './video.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import {loadData as loadCategories} from '@/store/adminVideoCategoryList.store.js';
 
 import VideoBlock from './VideoBlock';
 import VideoPlayer from './VideoPlayer';
@@ -18,9 +19,11 @@ class VideoList extends React.PureComponent {
         this.openPlayer = this.openPlayer.bind(this);
         this.closePlayer = this.closePlayer.bind(this);
         this.showList = this.showList.bind(this);
-        this.state = {showPlayer: false, showList: false, savedYScroll: 0, data: this.filterData(props)};
+        this.selecetCategory = this.selecetCategory.bind(this);
+        this.state = {showPlayer: false, showList: false, savedYScroll: 0, data: this.filterData(props), category:undefined};
     }
     componentWillMount() {
+        this.props.loadCategories();
         this.props.loadVideos();
         this.setState({data: this.filterData(this.props)});
     }
@@ -31,6 +34,13 @@ class VideoList extends React.PureComponent {
         }
         if (this.props.data != props.data) {
             this.setState({data: this.filterData(props)});
+        }
+    }
+    selecetCategory(e) {
+        if (e && e.target && e.target.value) {
+            this.setState({category: e.target.value});
+        }else{
+            this.setState({category: undefined});
         }
     }
     filterData(props) {
@@ -57,6 +67,10 @@ class VideoList extends React.PureComponent {
                 <LinkContainer to={'/video/upload'}><Button bsStyle="link" className="video-button" title="Загрузить видео">
                   <Glyphicon glyph="cloud-upload"/>
                 </Button></LinkContainer>
+                <FormControl className="video-list-category" componentClass="select" onChange={this.selecetCategory}>
+                  <option value={undefined}/>
+                  {this.props.categories.map(e=><option key={e.get('id')} value={e.get('id')}>{e.get('name')}</option>)}
+                </FormControl>
                 <Button bsStyle="link" onClick={this.showList} className="video-button show-video-list" title={`${this.state.showList ? 'Спрятать список' : 'Показать список'}`}>
                   <Glyphicon glyph="list"/>
                 </Button>
@@ -64,7 +78,9 @@ class VideoList extends React.PureComponent {
             </Col>
           </Row>
           {this.state.showList && <Row className="video-row">
-              {this.state.data.map(e=><Col key={e.get('id')} xs={12} sm={4} md={3} lg={2} className="video-block">
+              {this.state.data
+              .filter(e=>this.state.category === undefined ? true : e.get('category') == this.state.category)
+              .map(e=><Col key={e.get('id')} xs={12} sm={4} md={3} lg={2} className="video-block">
                 <VideoBlock show={show} openPlayer={this.openPlayer} elem={e} listMode/>
                 </Col>)}
           </Row>  }
@@ -81,15 +97,21 @@ VideoList.propTypes = {
     setHidden: React.PropTypes.func,
     data: React.PropTypes.object,
     busy: React.PropTypes.bool,
+    categories: React.PropTypes.object,
+    loadCategories: React.PropTypes.func,
 };
 export default connect(state=>({
     data: state.getIn(['video', 'list'], new List()),
     busy: state.getIn(['ajaxStatus', 'posting']),
+    categories: state.getIn(['admin', 'videoCategory', 'list'], new List()),
 }), dispatch=>({
     loadVideos() {
         loadVideos(dispatch);
     },
     setHidden(id, value) {
         setHidden(dispatch, id, value);
+    },
+    loadCategories() {
+        loadCategories(dispatch);
     }
 }))(VideoList);

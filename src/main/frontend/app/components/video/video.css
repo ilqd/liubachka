@@ -101,12 +101,13 @@
   width: 100%
 }
 .video-page .show-video-list{
-  float: right;
   padding:0;
 }
-.video-page .video-button-container{
-  display: flex;
-  justify-content: start;
+.video-page .video-button-container>*{
+  display: inline;
+}
+.video-page .video-button-container .glyphicon{
+  line-height: inherit;
 }
 .video-button{
   padding: 0;
@@ -223,4 +224,9 @@
   background-image: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255, 0));
   width: 5em;
   height: 100%;
+}
+.video-list-category{
+  width: 150px;
+  max-width: 50%;
+  margin: 0 10px;
 }

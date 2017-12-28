@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Button, Glyphicon, Modal } from 'react-bootstrap';
+import {Row, Col, Button, Glyphicon, Modal, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import {FieldGroup} from '@/components/Util.js';
 import {connect} from 'react-redux';
 import {loadVideo, clearData, updateVideoField, saveVideo} from '@/store/videoEdit.store.js';
@@ -8,6 +8,8 @@ import {goBack} from '@/store/store';
 import Dropzone from 'react-dropzone';
 import './video.css';
 import ProgressBar from './ProgressBar';
+import {loadData as loadCategories} from '@/store/adminVideoCategoryList.store.js';
+import {List} from 'immutable';
 
 class YoutubeUpload extends React.Component {
     constructor(props) {
@@ -17,6 +19,9 @@ class YoutubeUpload extends React.Component {
         this.onDrop = this.onDrop.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.state = {files: []};
+    }
+    componentWillMount() {
+        this.props.loadCategories();
     }
     componentWillUnmount() {
         this.props.clearData();
@@ -66,7 +71,16 @@ class YoutubeUpload extends React.Component {
               label="Название"
             />
             </Col>
-            <Col xs={12} md={8}>
+            <Col xs={12} sm={2}>
+            <FormGroup controlId="formControlsSelect">
+              <ControlLabel>Категория</ControlLabel>
+              <FormControl componentClass="select" value={this.props.data.get('category')} onChange={this.setField.bind(this, 'category')}>
+                <option value={''}/>
+                {this.props.categories.map(e=><option key={e.get('id')} value={e.get('id')}>{e.get('name')}</option>)}
+              </FormControl>
+            </FormGroup>
+            </Col>
+            <Col xs={12} md={6}>
               <FieldGroup
                 value={this.props.data.get('description')}
                 onChange={this.setField.bind(this, 'description')}
@@ -118,11 +132,14 @@ YoutubeUpload.propTypes = {
     saveVideo: React.PropTypes.func,
     busy: React.PropTypes.bool,
     netMessage: React.PropTypes.string,
+    categories: React.PropTypes.object,
+    loadCategories: React.PropTypes.func,
 };
 export default connect(state=>({
     data: state.getIn(['video', 'edit']),
     busy: state.getIn(['ajaxStatus', 'posting']),
     netMessage: state.getIn(['ajaxStatus', 'message']),
+    categories: state.getIn(['admin', 'videoCategory', 'list'], new List()),
 }), dispatch=>({
     loadVideo(id) {
         loadVideo(dispatch, id);
@@ -138,5 +155,8 @@ export default connect(state=>({
     },
     clearMessage() {
         clearMessage(dispatch);
+    },
+    loadCategories() {
+        loadCategories(dispatch);
     }
 }))(YoutubeUpload);
