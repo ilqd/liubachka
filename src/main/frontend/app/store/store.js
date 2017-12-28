@@ -18,6 +18,7 @@ import {videoEditReducer} from './videoEdit.store';
 import {videoListReducer} from './videoList.store';
 import {videoCommentReducer} from './videoComment.store';
 import {videoUploadProgressReducer} from './videoUploadProgress.store';
+import {userListReducer} from './userList.store';
 import {ajaxStatusReducer} from './net.store.js';
 import { combineReducers } from 'redux-immutable';
 import createEngine from 'redux-storage-engine-localstorage';
@@ -73,6 +74,7 @@ const superReducer = combineReducers({
         uploadProgress: videoUploadProgressReducer,
         comments: videoCommentReducer,
     }),
+    users: userListReducer,
     ajaxStatus: ajaxStatusReducer,
     session: useraccountReducer,
 });

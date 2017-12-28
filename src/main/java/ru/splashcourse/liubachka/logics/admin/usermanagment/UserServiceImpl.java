@@ -88,4 +88,10 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    public List<UserFullNameAndIdProjection> findAllFullnames() {
+        // TODO Auto-generated method stub
+        return repo.findByFirstNameNotNull();
+    }
+
 }

@@ -33,5 +33,7 @@ public interface UserRepository extends CustomJpaRepository<User, Long> {
 
     List<UserProjection> findByUsernameNotNull();
 
-    User findById(long id);
+    List<UserFullNameAndIdProjection> findByFirstNameNotNull();
+
+    User findById(Long id);
 }

@@ -6,6 +6,8 @@ public interface UserService {
 
     List<UserProjection> findAll();
 
+    List<UserFullNameAndIdProjection> findAllFullnames();
+
     UserDto findById(Long id);
 
     void create(UserDto dto);

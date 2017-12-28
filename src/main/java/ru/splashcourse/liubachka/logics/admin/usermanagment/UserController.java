@@ -23,6 +23,12 @@ public class UserController {
         return service.findAll();
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/list")
+    @PreAuthorize("isAuthenticated()")
+    public List<UserFullNameAndIdProjection> findAllFullnames() {
+        return service.findAllFullnames();
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserDto findById(@PathVariable long id) {
