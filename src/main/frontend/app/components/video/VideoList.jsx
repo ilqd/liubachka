@@ -8,7 +8,6 @@ import './video.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import {loadData as loadCategories} from '@/store/adminVideoCategoryList.store.js';
-import {loadData as loadUsers} from '@/store/userList.store.js';
 
 import VideoBlock from './VideoBlock';
 import VideoPlayer from './VideoPlayer';
@@ -27,7 +26,6 @@ class VideoList extends React.PureComponent {
     componentWillMount() {
         this.props.loadCategories();
         this.props.loadVideos();
-        this.props.loadUsers();
         this.setState({data: this.filterData(this.props)});
     }
     componentWillReceiveProps(props) {
@@ -41,14 +39,14 @@ class VideoList extends React.PureComponent {
     }
     selectCategory(e) {
         if (e && e.target && e.target.value) {
-            this.setState({category: e.target.value});
+            this.setState({category: e.target.value, showList: true});
         }else{
             this.setState({category: undefined});
         }
     }
     selectUser(e) {
         if (e && e.target && e.target.value) {
-            this.setState({user: e.target.value});
+            this.setState({user: e.target.value, showList: true});
         }else{
             this.setState({user: undefined});
         }
@@ -81,12 +79,16 @@ class VideoList extends React.PureComponent {
                   <option value={undefined}/>
                   {this.props.categories.map(e=><option key={e.get('id')} value={e.get('id')}>{e.get('name')}</option>)}
                 </FormControl>
-                <FormControl className="video-list-category" componentClass="select" onChange={this.selectUser}>
-                  <option value={undefined}/>
-                  {this.props.users.map(e=><option key={e.get('id')} value={e.get('id')}>{e.get('fullname')}</option>)}
-                </FormControl>
+                <FormControl
+                  value={this.state.user}
+                  onChange={this.selectUser}
+                  id="creator"
+                  type="text"
+                  placeholder="Создатель"
+                  className="video-list-category"
+                />
                 <Button bsStyle="link" onClick={this.showList} className="video-button show-video-list" title={`${this.state.showList ? 'Спрятать список' : 'Показать список'}`}>
-                  <Glyphicon glyph="list"/>
+                  <Glyphicon glyph={`${!this.state.showList ? 'chevron-up' : 'chevron-down'}`}/>
                 </Button>
               </div>
             </Col>
@@ -94,7 +96,7 @@ class VideoList extends React.PureComponent {
           {this.state.showList && <Row className="video-row">
               {this.state.data
               .filter(e=>this.state.category === undefined ? true : e.get('category') == this.state.category)
-              .filter(e=>this.state.user === undefined ? true : e.get('creator') == this.state.user)
+              .filter(e=>!this.state.user ? true : e.get('creatorName', '').toLowerCase().includes(this.state.user.toLowerCase()))
               .map(e=><Col key={e.get('id')} xs={12} sm={4} md={3} lg={2} className="video-block">
                 <VideoBlock show={show} openPlayer={this.openPlayer} elem={e} listMode/>
                 </Col>)}
@@ -114,13 +116,11 @@ VideoList.propTypes = {
     busy: React.PropTypes.bool,
     categories: React.PropTypes.object,
     loadCategories: React.PropTypes.func,
-    loadUsers: React.PropTypes.func,
 };
 export default connect(state=>({
     data: state.getIn(['video', 'list'], new List()),
     busy: state.getIn(['ajaxStatus', 'posting']),
     categories: state.getIn(['admin', 'videoCategory', 'list'], new List()),
-    users: state.get('users', new List()),
 }), dispatch=>({
     loadVideos() {
         loadVideos(dispatch);
@@ -131,7 +131,4 @@ export default connect(state=>({
     loadCategories() {
         loadCategories(dispatch);
     },
-    loadUsers() {
-        loadUsers(dispatch);
-    }
 }))(VideoList);
