@@ -9,7 +9,7 @@ import PageList from './components/admin/pageCreator/PageList.jsx';
 import CreatePage from './components/admin/pageCreator/CreatePage.jsx';
 import LoginPage from './components/useraccount/Login.jsx';
 import Page from './components/page/Page';
-import CardCreator from './components/admin/stuff/CardCreator';
+import CardList from './components/admin/stuff/CardList';
 import UserList from './components/admin/userManagment/UserList';
 import UserEdit from './components/admin/userManagment/UserEdit';
 import VideoUpload from './components/video/YoutubeUploadPage';
@@ -26,7 +26,7 @@ export default <Switch>
   <Route exact path="/admin/testResults" component={ResultsList} />
   <Route exact path="/admin/pageList" component={PageList} />
   <Route exact path="/admin/createPage" component={CreatePage} />
-  <Route exact path="/admin/cardCreator" component={CardCreator} />
+  <Route exact path="/admin/cardCreator" component={CardList} />
   <Route exact path="/admin/userList" component={UserList} />
   <Route exact path="/video/upload" component={VideoUpload} />
   <Route exact path="/video/list" component={VideoList} />

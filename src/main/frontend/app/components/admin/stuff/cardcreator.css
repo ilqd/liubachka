@@ -5,9 +5,11 @@
   padding: 10px;
   font-weight: 600;
   page-break-inside:avoid;
+  float: left;
+  width: 200px;
+  margin: 5px;
 }
 .all-card-blocks{
-  width: 300px
 }
 .card-block .card-label{
   text-align: center;
@@ -31,4 +33,17 @@
 }
 .card-line div{
   margin: 0 15px
+}
+.card-folder{
+  cursor: pointer;
+  font-size: large;
+  color: white;
+  padding: 5px 2px 5px 10px;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  background: #00535f;
+}
+.card-folder .glyphicon{
+  font-size: small;
+  margin-right: 5px;
 }

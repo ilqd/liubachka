@@ -281,6 +281,9 @@ html{
 .video-category-edit-button.btn.btn-link{
   padding: 0;
 }
+.btn-link{
+  outline: none !important;
+}
 .btn-link:hover,
 .btn-link:active,
 .btn-link:focus{
