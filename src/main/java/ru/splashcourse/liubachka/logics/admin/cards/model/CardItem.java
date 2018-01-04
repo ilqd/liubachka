@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -30,6 +32,7 @@ public class CardItem extends ObjectWithIdImpl {
 
     private String separator;
 
+    @NotBlank
     private String name;
 
 }

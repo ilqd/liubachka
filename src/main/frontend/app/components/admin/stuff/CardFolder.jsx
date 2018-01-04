@@ -69,15 +69,18 @@ CardFolderClass .propTypes = {
 };
 const CardFolder = connect(()=>({}), (dispatch, props)=>({
     startFolderCreation() {
+        clearFolderData(dispatch);
         clearCardData(dispatch);
         updateFolderFieldMerge(dispatch, {editMode: true, parent: props.elem.get('id')});
     },
     startCardCreation() {
         clearFolderData(dispatch);
+        clearCardData(dispatch);
         updateCardFieldMerge(dispatch, {editMode: true, folder: props.elem.get('id')});
     },
     startCardEdit(id) {
         clearFolderData(dispatch);
+        clearCardData(dispatch);
         loadData(dispatch, id);
     }
 }))(CardFolderClass);

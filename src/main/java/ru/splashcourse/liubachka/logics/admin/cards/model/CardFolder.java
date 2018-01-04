@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ import ru.splashcourse.liubachka.ObjectWithIdImpl;
 @Getter
 public class CardFolder extends ObjectWithIdImpl {
 
+    @NotBlank
     private String name;
 
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

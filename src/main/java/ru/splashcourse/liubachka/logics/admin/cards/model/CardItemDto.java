@@ -1,5 +1,8 @@
 package ru.splashcourse.liubachka.logics.admin.cards.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +25,7 @@ public class CardItemDto {
     private Integer linesPerCard = 10;
 
     private Integer width = 200;
-
+    @JsonDeserialize(using = StringDeserializer.class)
     private String separator;
 
     private String name;

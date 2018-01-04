@@ -1,4 +1,4 @@
-import { Map, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
 import {commonLoadData} from './commonFunctions';
 import {SUCCESS_MESSAGE} from './net.store';
@@ -8,6 +8,7 @@ const defaultData = fromJS({
     text: 'I\'m  beign held  in basement  and  was forced  to do  this  text splitting  and  creating  cards  for  the activity  game  application  If  you  see  this  message  call  911  please',
     label: 'I\'m just a little harmless label, dont touch me please  :(',
     linesPerCard: 10,
+    name: '',
 });
 
 export const adminCardCreatorEditReducer = (state = defaultData, action) => {
@@ -18,7 +19,7 @@ export const adminCardCreatorEditReducer = (state = defaultData, action) => {
         case 'ADMIN_CARD_ITEM_FIELDS_CHANGED': return state.merge(fromJS(action.object));
         case 'LOGOUT':
         case 'ADMIN_CARD_ITEM_EDIT_CLEAR_DATA':
-            return Map();
+            return defaultData;
         default:
             return state;
     }

@@ -37,7 +37,7 @@ public class CardsServiceImpl implements CardsService {
 
     @Override
     public void updateFolder(CardFolderDto dto) {
-        CardFolder folder = folderRepo.getOne(dto.getId());
+        CardFolder folder = folderRepo.findOne(dto.getId()).get();
         mapper.map(dto, folder);
     }
 
@@ -55,7 +55,7 @@ public class CardsServiceImpl implements CardsService {
 
     @Override
     public void updateCard(CardItemDto dto) {
-        CardItem item = itemRepo.getOne(dto.getId());
+        CardItem item = itemRepo.findOne(dto.getId()).get();
         mapper.map(dto, item);
     }
 
