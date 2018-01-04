@@ -2,6 +2,7 @@
 import { Map, List, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
 import {SUCCESS_MESSAGE} from './net.store';
+import {commonLoadData} from './commonFunctions';
 
 export const adminPageEditReducer = (state = Map(), action) => {
     switch (action.type) {
@@ -24,14 +25,9 @@ export const adminPageEditReducer = (state = Map(), action) => {
 export const createNewPage = (dispatch) =>{
     dispatch({ type: 'CREATING_NEW_PAGE' });
 };
-export const loadPageToEdit = (dispatch, id) =>{
-    dispatch({ type: 'LOADING_PAGE_TO_EDIT' });
-    RestAPI.get(`/api/page/${id}`).then((data)=>
-      dispatch({ type: 'PAGE_TO_EDIT_LOADED', data}))
-    .catch((data)=>
-      dispatch({ type: 'PAGE_TO_EDIT_LOAD_FAILED', data})
-    );
-};
+export const loadPageToEdit = (dispatch, id) => commonLoadData(dispatch, `/api/page/${id}`,
+    'LOADING_PAGE_TO_EDIT', 'PAGE_TO_EDIT_LOADED', 'PAGE_TO_EDIT_LOAD_FAILED');
+
 export const changeField = (dispatch, field, value) =>{
     dispatch({ type: 'CHANGE_PAGE_FIELD', field, value });
 };

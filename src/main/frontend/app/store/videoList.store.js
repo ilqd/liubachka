@@ -1,5 +1,6 @@
 import { List, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
+import {commonLoadData} from './commonFunctions';
 
 function proccessVideoHidden(state, id, bool) {
     const idx = state.findIndex(e=>e.get('id') == id);
@@ -24,14 +25,9 @@ export const videoListReducer = (state = List(), action) => {
     }
 };
 
-export const loadVideos = (dispatch) =>{
-    dispatch({ type: 'VIDEO_LIST_LOADING' });
-    RestAPI.get('/api/video/list').then((data)=>
-        dispatch({ type: 'VIDEO_LIST_LOADED', data}))
-      .catch((data)=>
-        dispatch({ type: 'VIDEO_LIST_LOADING_FAILED', data})
-      );
-};
+export const loadVideos = (dispatch) =>  commonLoadData(dispatch, '/api/video/list',
+           'VIDEO_LIST_LOADING', 'VIDEO_LIST_LOADED', 'VIDEO_LIST_LOADING_FAILED');
+
 export const setHidden = (dispatch, id, value)=>{
     dispatch({ type: 'POSTING' });
     if (value) {

@@ -1,5 +1,5 @@
 import { List, fromJS } from 'immutable';
-import {RestAPI} from '@/net.js';
+import {commonLoadData} from './commonFunctions';
 
 export const userListReducer = (state = List(), action) => {
     switch (action.type) {
@@ -12,11 +12,5 @@ export const userListReducer = (state = List(), action) => {
     }
 };
 
-export const loadData = (dispatch) =>{
-    dispatch({ type: 'USERS_LOADING' });
-    RestAPI.get('/api/users/list').then((data)=>
-        dispatch({ type: 'USERS_LOADED', data}))
-      .catch((data)=>
-        dispatch({ type: 'USERS_LOADING_FAILED', data})
-      );
-};
+export const loadData = (dispatch) =>  commonLoadData(dispatch, '/api/users/list',
+                'USERS_LOADING', 'USERS_LOADED', 'USERS_LOADING_FAILED');

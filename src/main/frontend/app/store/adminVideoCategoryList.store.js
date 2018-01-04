@@ -1,5 +1,5 @@
 import { List, fromJS } from 'immutable';
-import {RestAPI} from '@/net.js';
+import {commonLoadData} from './commonFunctions';
 
 export const adminVideoCategoryListReducer = (state = List(), action) => {
     switch (action.type) {
@@ -12,11 +12,5 @@ export const adminVideoCategoryListReducer = (state = List(), action) => {
     }
 };
 
-export const loadData = (dispatch) =>{
-    dispatch({ type: 'VIDEO_CATEGORIES_LOADING' });
-    RestAPI.get('/api/videoCategory').then((data)=>
-        dispatch({ type: 'VIDEO_CATEGORIES_LOADED', data}))
-      .catch((data)=>
-        dispatch({ type: 'VIDEO_CATEGORIES_LOADING_FAILED', data})
-      );
-};
+export const loadData = (dispatch) =>  commonLoadData(dispatch, '/api/videoCategory',
+          'VIDEO_CATEGORIES_LOADING', 'VIDEO_CATEGORIES_LOADED', 'VIDEO_CATEGORIES_LOADING_FAILED');

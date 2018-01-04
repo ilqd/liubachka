@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
 import {SUCCESS_MESSAGE} from './net.store';
+import {commonLoadData} from './commonFunctions';
 
 const defaultState = Map({enabled: true});
 
@@ -18,14 +19,9 @@ export const adminVideoCategoryEditReducer = (state = defaultState, action) => {
 };
 export const clearData = (dispatch) => dispatch({type: 'ADMIN_CLEAR_VIDEO_CATEGORY'});
 
-export const loadData = (dispatch, id) =>{
-    dispatch({ type: 'ADMIN_VIDEO_CATEGORY_EDIT_LOADING' });
-    RestAPI.get(`/api/videoCategory/${id}`).then((data)=>
-        dispatch({ type: 'ADMIN_VIDEO_CATEGORY_EDIT_LOADED', data}))
-      .catch((data)=>
-        dispatch({ type: 'ADMIN_VIDEO_CATEGORY_EDIT_LOADING_FAILED', data})
-      );
-};
+export const loadData = (dispatch, id) => commonLoadData(dispatch, `/api/videoCategory/${id}`,
+         'ADMIN_VIDEO_CATEGORY_EDIT_LOADING', 'ADMIN_VIDEO_CATEGORY_EDIT_LOADED', 'ADMIN_VIDEO_CATEGORY_EDIT_LOADING_FAILED');
+
 export const save = (dispatch, data) =>{
     const method = data.get('id') || data.get('id') === 0 ? RestAPI.patch : RestAPI.post;
     dispatch({ type: 'ADMIN_SAVING_VIDEO_CATEGORY' });

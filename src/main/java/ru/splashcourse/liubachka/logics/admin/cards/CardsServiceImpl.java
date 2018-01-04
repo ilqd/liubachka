@@ -67,7 +67,7 @@ public class CardsServiceImpl implements CardsService {
     @Override
     public List<CardFolderDto> getAll() {
         List<CardFolderDto> result = new ArrayList<>();
-        mapper.mapAsCollection(folderRepo.findAll(), result, CardFolderDto.class);
+        mapper.mapAsCollection(folderRepo.findByParentIsNull(), result, CardFolderDto.class);
         ;
         return result;
     }

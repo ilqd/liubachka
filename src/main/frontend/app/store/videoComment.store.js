@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
 import {SUCCESS_MESSAGE} from './net.store';
+
 export const videoCommentReducer = (state = Map(), action) => {
     switch (action.type) {
         case 'COMMENTS_LIST_LOADED':

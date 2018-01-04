@@ -1,44 +1,63 @@
 import React from 'react';
-import {Row, Col} from 'react-bootstrap';
+import {Row, Col, Button, Glyphicon, Modal} from 'react-bootstrap';
 import {FieldGroup} from '../../Util.js';
 import './cardcreator.css';
-export default class CardCreator extends React.Component {
+import {connect} from 'react-redux';
+import {updateField, save, clearData} from '@/store/adminCardCreatorEdit.store.js';
+import {Map} from 'immutable';
+import {clearMessage, SUCCESS_MESSAGE} from '@/store/net.store.js';
+
+class CardCreator extends React.Component {
     constructor(props) {
         super(props);
-        this.setDelimeter = this.setDelimeter.bind(this);
-        this.setText = this.setText.bind(this);
         this.createData = this.createData.bind(this);
-        this.setLabel = this.setLabel.bind(this);
-        this.setLinesCount = this.setLinesCount.bind(this);
-        const delimeter = '  ';
-        const text = 'I\'m  beign held  in basement  and  was forced  to do  this  text splitting  and  creating  cards  for  the activity  game  application  If  you  see  this  message  call  911  please';
-        const label = 'I\'m just a little harmless label, dont touch me please  :(';
-        const linesCount = 10;
-        this.state = {delimeter, linesCount, label, text, data: this.createData(text, delimeter, label, linesCount)};
+        this.save = this.save.bind(this);
+        this.hideModal = this.hideModal.bind(this);
+        this.setField = this.setField.bind(this);
+        this.cancel = this.cancel.bind(this);
+        this.state = {data: []};
     }
-
-    setDelimeter(e) {
-        this.setState({delimeter: e.target.value, data: this.createData(undefined, e.target.value)});
+    componentWillMount() {
+        this.setState({data: this.createData()});
     }
-    setText(e) {
-        this.setState({text: e.target.value, data: this.createData(e.target.value)});
+    componentWillReceiveProps(props) {
+        this.setState({data: this.createData(props)});
     }
-    setLabel(e) {
-        this.setState({label: e.target.value, data: this.createData(undefined, undefined, e.target.value)});
+    hideModal() {
+        this.props.clearMessage();
+        if (this.props.netMessage == SUCCESS_MESSAGE) {
+            this.props.clearMessage();
+            this.props.clearData();
+        }
     }
-    setLinesCount(e) {
-        const linesCount = e.target.value || 1;
-        this.setState({linesCount, data: this.createData(undefined, undefined, undefined, linesCount)});
+    cancel() {
+        this.props.clearData();
     }
-    createData(text = this.state.text, delimeter = this.state.delimeter, label = this.state.label, linesCount = this.state.linesCount) {
+    save() {
+        this.props.save(this.props.data);
+    }
+    setField(field, value) {
+        if (!value || !value.target) {
+            this.props.updateField(field, '');
+        }
+        this.props.updateField(field, value && value.target && value.target.value);
+    }
+    createData(props = this.props) {
         const data = [];
+        if (!props) {
+            return data;
+        }
+        const text = props.data.get('text');
+        const separator = props.data.get('separator');
+        const linesPerCard = parseInt(props.data.get('linesPerCard'), 10 ) || 10;
+        const label = props.data.get('label');
         if (text) {
-            const splitted = text.split(delimeter);
+            const splitted = text.split(separator);
             let i;
             let j;
-            for (i = 0, j = splitted.length; i < j; i += parseInt(linesCount, 10)) {
-                const temparray = splitted.slice(i, i + parseInt(linesCount, 10));
-                const block = (<div className="card-block" key={`${i}_${linesCount}`}>
+            for (i = 0, j = splitted.length; i < j; i += linesPerCard) {
+                const temparray = splitted.slice(i, i + linesPerCard);
+                const block = (<div className="card-block" key={`${i}_${linesPerCard}`}>
               <Row>
               <Col xs={12}>
                 <div className="card-label">
@@ -63,27 +82,43 @@ export default class CardCreator extends React.Component {
     }
     render() {
         return(<div>
-      <style dangerouslySetInnerHTML={{__html: `
-      @media print {
-          body * {
-            visibility: hidden;
-          }
-          .all-card-blocks, .all-card-blocks * {
-            visibility: visible;
-          }
-          .all-card-blocks {
-            position: absolute;
-            left: 0;
-            top: 0;
-          }
-        }
-      `}}/>
+      <Modal show={this.props.netMessage} onHide={this.hideModal}>
+        <Modal.Body>
+          {this.props.netMessage}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={this.hideModal}>Оки доки</Button>
+        </Modal.Footer>
+      </Modal>
+      <Row>
+      <Col xs={12}>
+        <FieldGroup
+          value={this.props.data.get('name')}
+          onChange={this.setField.bind(this, 'name')}
+          id="name"
+          type="text"
+          placeholder="Название карточки"
+          label="Название карточки"
+        />
+      </Col>
+      </Row>
       <Row>
         <Col xs={12} md={4}>
           <FieldGroup
-            value={this.state.delimeter}
-            onChange={this.setDelimeter}
-            id="delimeter"
+            value={this.props.data.get('label')}
+            onChange={this.setField.bind(this, 'label')}
+            id="label"
+            componentClass="textarea"
+            placeholder="Заголовок карточек"
+            label="Заголовок карточек"
+            rows="3"
+          />
+        </Col>
+        <Col xs={12} md={4}>
+          <FieldGroup
+            value={this.props.data.get('separator')}
+            onChange={this.setField.bind(this, 'separator')}
+            id="separator"
             type="text"
             placeholder="Разделитель"
             label="Разделитель"
@@ -91,9 +126,9 @@ export default class CardCreator extends React.Component {
         </Col>
         <Col xs={12} md={4}>
           <FieldGroup
-            value={this.state.linesCount}
-            onChange={this.setLinesCount}
-            id="linecount"
+            value={this.props.data.get('linesPerCard')}
+            onChange={this.setField.bind(this, 'linesPerCard')}
+            id="linesPerCard"
             type="number"
             min="1"
             max="100"
@@ -103,24 +138,11 @@ export default class CardCreator extends React.Component {
         </Col>
       </Row>
       <Row>
-        <Col xs={12} md={4}>
-          <FieldGroup
-            value={this.state.label}
-            onChange={this.setLabel}
-            id="label"
-            componentClass="textarea"
-            placeholder="Заголовок карточек"
-            label="Заголовок карточек"
-            rows="3"
-          />
-        </Col>
-      </Row>
-      <Row>
         <Col xs={12}>
           <FieldGroup
-            value={this.state.text}
-            onChange={this.setText}
-            id="delimeter"
+            value={this.props.data.get('text')}
+            onChange={this.setField.bind(this, 'text')}
+            id="text"
             componentClass="textarea"
             placeholder="Текст"
             label="Текст"
@@ -134,6 +156,44 @@ export default class CardCreator extends React.Component {
       {this.state.data}
       </Col>
       </Row>
+      <Row>
+      <Col xs={12}>
+        <Button bsStyle="primary" style={{float: 'right'}} onClick={this.save} disabled={this.props.busy || !this.props.data.get('name')}>
+          <Glyphicon glyph="save"/>
+          Сохранить
+        </Button>
+        <Button style={{float: 'right', margin: '0 10px'}} onClick={this.cancel}>
+          Назад
+        </Button>
+     </Col>
+     </Row>
     </div>);
     }
 }
+CardCreator.propTypes = {
+    data: React.PropTypes.object,
+    updateField: React.PropTypes.func,
+    busy: React.PropTypes.bool,
+    netMessage: React.PropTypes.string,
+    clearMessage: React.PropTypes.func,
+    clearData: React.PropTypes.func,
+    save: React.PropTypes.func,
+};
+export default connect(state=>({
+    data: state.getIn(['admin', 'cards', 'edit'], new Map()),
+    busy: state.getIn(['ajaxStatus', 'posting']),
+    netMessage: state.getIn(['ajaxStatus', 'message']),
+}), dispatch=>({
+    updateField(field, value) {
+        updateField(dispatch, field, value);
+    },
+    save(data) {
+        save(dispatch, data);
+    },
+    clearMessage() {
+        clearMessage(dispatch);
+    },
+    clearData() {
+        clearData(dispatch);
+    }
+}))(CardCreator);

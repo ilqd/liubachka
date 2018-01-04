@@ -30,4 +30,6 @@ public class CardItem extends ObjectWithIdImpl {
 
     private String separator;
 
+    private String name;
+
 }

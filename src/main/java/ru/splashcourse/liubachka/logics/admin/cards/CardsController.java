@@ -3,6 +3,7 @@ package ru.splashcourse.liubachka.logics.admin.cards;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,13 +22,13 @@ public class CardsController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/folder")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void createFolder(CardFolderDto dto) {
+    public void createFolder(@RequestBody CardFolderDto dto) {
         service.createFolder(dto);
     }
 
     @RequestMapping(method = RequestMethod.PATCH, path = "/folder")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void updateFolder(CardFolderDto dto) {
+    public void updateFolder(@RequestBody CardFolderDto dto) {
         service.updateFolder(dto);
     }
 
@@ -39,13 +40,13 @@ public class CardsController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/item")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void createCard(CardItemDto dto) {
+    public void createCard(@RequestBody CardItemDto dto) {
         service.createCard(dto);
     }
 
     @RequestMapping(method = RequestMethod.PATCH, path = "/item")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void updateCard(CardItemDto dto) {
+    public void updateCard(@RequestBody CardItemDto dto) {
         service.updateCard(dto);
     }
 

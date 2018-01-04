@@ -25,4 +25,6 @@ public class CardItemDto {
 
     private String separator;
 
+    private String name;
+
 }

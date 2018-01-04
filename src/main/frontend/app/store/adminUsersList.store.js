@@ -1,5 +1,5 @@
 import { List, fromJS } from 'immutable';
-import {RestAPI} from '@/net.js';
+import {commonLoadData} from './commonFunctions';
 
 export const adminUsersListReducer = (state = List(), action) => {
     switch (action.type) {
@@ -12,11 +12,5 @@ export const adminUsersListReducer = (state = List(), action) => {
     }
 };
 
-export const loadUsers = (dispatch) =>{
-    dispatch({ type: 'ADMIN_USERS_LOADING' });
-    RestAPI.get('/api/users').then((data)=>
-        dispatch({ type: 'ADMIN_USERS_LOADED', data}))
-      .catch((data)=>
-        dispatch({ type: 'ADMIN_USERS_LOADING_FAILED', data})
-      );
-};
+export const loadUsers = (dispatch) =>  commonLoadData(dispatch, '/api/users',
+       'ADMIN_USERS_LOADING', 'ADMIN_USERS_LOADED', 'ADMIN_USERS_LOADING_FAILED');

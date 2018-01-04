@@ -1,6 +1,6 @@
 /* eslint new-cap: ["error", { "capIsNew": false }]*/
 import { List, fromJS } from 'immutable';
-import {RestAPI} from '@/net.js';
+import {commonLoadData} from './commonFunctions';
 
 export const pageListReducer = (state = new List(), action) => {
     switch (action.type) {
@@ -13,11 +13,5 @@ export const pageListReducer = (state = new List(), action) => {
     }
 };
 
-export const loadPages = (dispatch) =>{
-    dispatch({ type: 'LOADING_PAGES' });
-    RestAPI.get('/api/page/listPages').then((data)=>
-        dispatch({ type: 'PAGES_LOADED', data}))
-      .catch((data)=>
-        dispatch({ type: 'FAILED_LOADING_PAGES', data})
-      );
-};
+export const loadPages = (dispatch) =>  commonLoadData(dispatch, '/api/page/listPages',
+          'LOADING_PAGES', 'PAGES_LOADED', 'FAILED_LOADING_PAGES');

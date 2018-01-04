@@ -2,6 +2,7 @@
 import { Map, List, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
 import {SUCCESS_MESSAGE} from './net.store';
+import {commonLoadData} from './commonFunctions';
 
 export const skilltestCreatorReducer = (state = Map(), action) => {
     let answerPath = [];
@@ -35,7 +36,7 @@ export const skilltestCreatorReducer = (state = Map(), action) => {
         case 'CLEAR_TEST_CREATION_DATA':
             return new Map();
         case 'TEST_EDIT_LOADED':
-            return action.data;
+            return fromJS(action.data);
         default:
             return state;
     }
@@ -76,13 +77,10 @@ dispatch({ type: 'ALTER_ANSWER_FIELD', field: 'correct', qIdx, aIdx, value });
 
 export const loadTestToEdit = (dispatch, testName)=>{
     dispatch({type: 'CLEAR_TEST_CREATION_DATA'});
-    dispatch({ type: 'TEST_EDIT_LOADING'});
-    RestAPI.get(`/api/tests/last/${testName}`).then(
-    (data) => {
-        dispatch({ type: 'TEST_EDIT_LOADED', data: fromJS(data)});
-    }
-  );
+    commonLoadData(dispatch, `/api/tests/last/${testName}`,
+           'TEST_EDIT_LOADING', 'TEST_EDIT_LOADED', 'TEST_EDIT_LOADING_FAILED');
 };
+
 export const clearData = (dispatch) => dispatch({type: 'CLEAR_TEST_CREATION_DATA'});
 
 

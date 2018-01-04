@@ -1,6 +1,8 @@
 import { Map, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
 import {SUCCESS_MESSAGE} from './net.store';
+import {commonLoadData} from './commonFunctions';
+
 export const videoEditReducer = (state = Map(), action) => {
     switch (action.type) {
         case 'VIDEO_EDIT_LOADED':
@@ -16,14 +18,9 @@ export const videoEditReducer = (state = Map(), action) => {
 
 export const clearData = (dispatch) => dispatch({type: 'CLEAR_VIDEO_EDIT'});
 
-export const loadVideo = (dispatch, id) =>{
-    dispatch({ type: 'VIDEO_EDIT_LOADING' });
-    RestAPI.get(`/api/video/${id}`).then((data)=>
-        dispatch({ type: 'VIDEO_EDIT_LOADED', data}))
-      .catch((data)=>
-        dispatch({ type: 'VIDEO_EDIT_LOADING_FAILED', data})
-      );
-};
+export const loadVideo = (dispatch, id) =>  commonLoadData(dispatch, `/api/video/${id}`,
+            'VIDEO_EDIT_LOADING', 'VIDEO_EDIT_LOADED', 'VIDEO_EDIT_LOADING_FAILED');
+
 export const saveVideo = (dispatch, data) =>{
     const method = data.get('id') || data.get('id') === 0 ? RestAPI.put : RestAPI.postWithProgress;
     dispatch({ type: 'VIDEO_EDIT_SAVING' });

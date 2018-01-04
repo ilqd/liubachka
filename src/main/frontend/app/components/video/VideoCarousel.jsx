@@ -11,7 +11,7 @@ const sliderSettings = {
          { breakpoint: 576, settings: { slidesToShow: 2 } },
          { breakpoint: 768, settings: { slidesToShow: 3 } },
          { breakpoint: 1024, settings: { slidesToShow: 5 } },
-         { breakpoint: 1920, settings: { slidesToShow: 7 } } ]
+         { breakpoint: 100000, settings: { slidesToShow: 7 } } ]
 };
 
 export default class VideoCarousel extends React.PureComponent {
