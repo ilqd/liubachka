@@ -22,7 +22,7 @@ class CardFolderList extends React.Component {
     <div>
       <Row>
         <Col xs={12}>
-          {this.props.data.map(e=><CardFolder key={e.get('id')} elem={e}/>)}
+          {this.props.data.filter(e=>!e.get('hidden')).map(e=><CardFolder key={e.get('id')} elem={e}/>)}
           <div className="card-folder" onClick={this.props.startEdit}>
             <Glyphicon glyph="globe"/>Создать курс
           </div>

@@ -1,6 +1,5 @@
 import { Map, fromJS } from 'immutable';
 import {RestAPI} from '@/net.js';
-import {SUCCESS_MESSAGE} from './net.store';
 
 export const videoCommentReducer = (state = Map(), action) => {
     switch (action.type) {
@@ -54,7 +53,7 @@ export const addComment = (dispatch,  value) =>{
     dispatch({ type: 'POSTING' });
     RestAPI.post('/api/video/comments', value).then((response)=>{
         dispatch({ type: 'COMMENT_POSTED', response});
-        dispatch({ type: 'POSTED', message: SUCCESS_MESSAGE });
+        dispatch({ type: 'POSTED' });
     })
   .catch((response)=>{
       dispatch({ type: 'COMMENT_POST_FAILED', response});

@@ -5,10 +5,11 @@ import {SUCCESS_MESSAGE} from './net.store';
 
 const defaultData = fromJS({
     separator: '  ',
-    text: 'I\'m  beign held  in basement  and  was forced  to do  this  text splitting  and  creating  cards  for  the activity  game  application  If  you  see  this  message  call  911  please',
+    text: 'I\'m  beign held  in basement  and  was forced  to do  this  text splitting  and  card  creating  application  for  the activity  game  If  you  see  this  message  call  911  please',
     label: 'I\'m just a little harmless label, dont touch me please  :(',
     linesPerCard: 10,
     name: '',
+    width: 200,
 });
 
 export const adminCardCreatorEditReducer = (state = defaultData, action) => {

@@ -38,7 +38,9 @@ public class CardsServiceImpl implements CardsService {
     @Override
     public void updateFolder(CardFolderDto dto) {
         CardFolder folder = folderRepo.findOne(dto.getId()).get();
-        mapper.map(dto, folder);
+        folder.setName(dto.getName());
+        folder.setHidden(dto.getHidden());
+        folder.setFinalized(dto.getFinalized());
     }
 
     @Override

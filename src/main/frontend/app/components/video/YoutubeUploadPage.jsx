@@ -111,7 +111,7 @@ class YoutubeUpload extends React.Component {
               <ProgressBar/>
             </Col>
             <Col xs={12} sm={4}>
-            <Button bsStyle="primary" style={{float: 'right'}} onClick={this.save} disabled={this.props.busy || this.state.files.length < 1}>
+            <Button bsStyle="primary" style={{float: 'right'}} onClick={this.save} disabled={!this.props.data.get('name') || this.props.busy || this.state.files.length < 1}>
               <Glyphicon glyph="save"/>
                 Сохранить
             </Button>

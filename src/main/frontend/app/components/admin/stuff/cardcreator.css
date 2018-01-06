@@ -50,3 +50,20 @@
   float: right;
   line-height: 2em;
 }
+.delete-button,
+.finalize-button{
+  float: left;
+  padding: 0 5px;
+  margin: 0 !important;
+}
+.delete-checked{
+  background: red;
+  color: white;
+  border-radius: 5px;
+}
+.card-folder-list{
+  position: sticky;
+  top: 117px;
+  overflow-y: auto;
+  max-height: calc(100vh - 167px);
+}

@@ -24,4 +24,6 @@ public class CardFolderDto {
     private Long parent;
 
     private Boolean hidden = false;
+
+    private Boolean finalized = false;
 }

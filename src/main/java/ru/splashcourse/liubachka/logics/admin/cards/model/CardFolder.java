@@ -16,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import ru.splashcourse.liubachka.ObjectWithIdImpl;
 
@@ -31,14 +32,18 @@ public class CardFolder extends ObjectWithIdImpl {
 
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
+    @OrderBy("id ASC")
     private List<CardItem> cards;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
+    @OrderBy("id ASC")
     private List<CardFolder> children;
 
     @ManyToOne
     private CardFolder parent;
 
     private Boolean hidden = false;
+
+    private Boolean finalized = false;
 }

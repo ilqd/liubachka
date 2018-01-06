@@ -19,10 +19,12 @@ class CardFolderClass extends React.Component {
         this.setState({open: !this.state.open});
     }
     canCreateFolder(elem) {
-        return !elem.get('cards') || elem.get('cards').size == 0;
+        return !elem.get('finalized');
+        // return !elem.get('cards') || elem.get('cards').size == 0;
     }
     canCreateCard(elem) {
-        return !elem.get('children') || elem.get('children').size == 0;
+        return !elem.get('finalized');
+        // return !elem.get('children') || elem.get('children').size == 0;
     }
     createCard(e) {
         e.stopPropagation();
@@ -49,10 +51,10 @@ class CardFolderClass extends React.Component {
           <Glyphicon className="card-folder-edit" glyph="pencil" title="Редактировать" onClick={this.editFolder}/>
         </div>
         {this.state.open && this.props.elem.get('children') &&
-          this.props.elem.get('children').map(e=><CardFolder key={e.get('id')} elem={e}/>)
+          this.props.elem.get('children').filter(e=>!e.get('hidden')).map(e=><CardFolder key={e.get('id')} elem={e}/>)
         }
         {this.state.open && this.props.elem.get('cards') &&
-          this.props.elem.get('cards').map(e=><div className="card-folder" onClick={event=>this.editCard(event, e)}>
+          this.props.elem.get('cards').filter(e=>!e.get('hidden')).map(e=><div className="card-folder" onClick={event=>this.editCard(event, e)}>
             <Glyphicon glyph="list-alt"/>{e.get('name')}
           </div>)
         }

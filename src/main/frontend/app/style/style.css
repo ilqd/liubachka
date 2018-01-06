@@ -202,8 +202,18 @@ html{
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:focus{
-  background-color: #00535f;
-  background-position: 0 -15px;
+  background: #37bdbf;
+  border-color: #00535f !important;
+  outline-color: #00535f;
+}
+.btn-primary.disabled, .btn-primary.disabled.active, .btn-primary.disabled.focus,
+.btn-primary.disabled:active, .btn-primary.disabled:focus, .btn-primary.disabled:hover,
+.btn-primary[disabled], .btn-primary[disabled].active, .btn-primary[disabled].focus,
+.btn-primary[disabled]:active, .btn-primary[disabled]:focus, .btn-primary[disabled]:hover,
+ fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary.active, fieldset[disabled] .btn-primary.focus,
+ fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:hover {
+    background-color: #00535f;
+    background-image: none;
 }
 .border-bottom{
   border-bottom: 1px solid #37bdbf;
@@ -282,6 +292,7 @@ html{
   padding: 0;
 }
 .btn-link{
+  color: #018497;
   outline: none !important;
 }
 .btn-link:hover,

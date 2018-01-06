@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Button, Glyphicon, Modal} from 'react-bootstrap';
+import {Row, Col, Button, Glyphicon, Modal, Checkbox} from 'react-bootstrap';
 import {FieldGroup} from '../../Util.js';
 import './cardcreator.css';
 import {connect} from 'react-redux';
@@ -15,6 +15,7 @@ class CardCreator extends React.Component {
         this.hideModal = this.hideModal.bind(this);
         this.setField = this.setField.bind(this);
         this.cancel = this.cancel.bind(this);
+        this.setHidden = this.setHidden.bind(this);
         this.state = {data: []};
     }
     componentWillMount() {
@@ -36,6 +37,9 @@ class CardCreator extends React.Component {
     save() {
         this.props.save(this.props.data);
     }
+    setHidden() {
+        this.props.updateField('hidden', !this.props.data.get('hidden'));
+    }
     setField(field, value) {
         if (!value || !value.target) {
             this.props.updateField(field, '');
@@ -51,13 +55,15 @@ class CardCreator extends React.Component {
         const separator = props.data.get('separator');
         const linesPerCard = parseInt(props.data.get('linesPerCard'), 10 ) || 10;
         const label = props.data.get('label');
+        const width = props.data.get('width') || 200;
+        const style = {width: `${width}px`};
         if (text) {
             const splitted = text.split(separator);
             let i;
             let j;
             for (i = 0, j = splitted.length; i < j; i += linesPerCard) {
                 const temparray = splitted.slice(i, i + linesPerCard);
-                const block = (<div className="card-block" key={`${i}_${linesPerCard}`}>
+                const block = (<div style={style} className="card-block" key={`${i}_${linesPerCard}_${width}`}>
               <Row>
               <Col xs={12}>
                 <div className="card-label">
@@ -114,7 +120,7 @@ class CardCreator extends React.Component {
             rows="3"
           />
         </Col>
-        <Col xs={12} md={4}>
+        <Col xs={12} md={2}>
           <FieldGroup
             value={this.props.data.get('separator')}
             onChange={this.setField.bind(this, 'separator')}
@@ -124,7 +130,19 @@ class CardCreator extends React.Component {
             label="Разделитель"
           />
         </Col>
-        <Col xs={12} md={4}>
+        <Col xs={12} md={3}>
+          <FieldGroup
+            value={this.props.data.get('width') || 200}
+            onChange={this.setField.bind(this, 'width')}
+            id="width"
+            type="number"
+            min="1"
+            max="500"
+            placeholder="Ширина карточки"
+            label="Ширина карточки"
+          />
+        </Col>
+        <Col xs={12} md={3}>
           <FieldGroup
             value={this.props.data.get('linesPerCard')}
             onChange={this.setField.bind(this, 'linesPerCard')}
@@ -158,6 +176,12 @@ class CardCreator extends React.Component {
       </Row>
       <Row>
       <Col xs={12}>
+        <Checkbox
+          className={`delete-button ${this.props.data.get('hidden') ? 'delete-checked' : ''}`}
+          checked={this.props.data.get('hidden')}
+          onChange={this.setHidden}>
+           Удалить
+        </Checkbox>
         <Button bsStyle="primary" style={{float: 'right'}} onClick={this.save} disabled={this.props.busy || !this.props.data.get('name')}>
           <Glyphicon glyph="save"/>
           Сохранить

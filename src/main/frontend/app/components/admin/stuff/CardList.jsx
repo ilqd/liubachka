@@ -30,7 +30,7 @@ class CardList extends React.Component {
         }
       `}}/>
     <Row>
-    <Col xs={6} sm={5} md={3}>
+    <Col xs={6} sm={5} md={3} className="card-folder-list">
       <CardFolderList />
     </Col>
     <Col xs={6} sm={7} md={9} className="card-creator">

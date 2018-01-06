@@ -26,7 +26,8 @@ export const loadData = (dispatch, id) => commonLoadData(dispatch, `/api/cards/f
 export const save = (dispatch, data) =>{
     const method = data.get('id') || data.get('id') === 0 ? RestAPI.patch : RestAPI.post;
     dispatch({ type: 'ADMIN_SAVING_CARD_FOLDER' });
-    method('/api/cards/folder', data).then((response)=>{
+    const newData = data.remove('children').remove('cards');
+    method('/api/cards/folder', newData).then((response)=>{
         dispatch({ type: 'ADMIN_CARD_FOLDER_SAVED', response});
         dispatch({ type: 'POSTED', message: SUCCESS_MESSAGE});
     })
