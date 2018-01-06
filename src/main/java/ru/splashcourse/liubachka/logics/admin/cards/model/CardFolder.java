@@ -39,4 +39,6 @@ public class CardFolder extends ObjectWithIdImpl {
 
     @ManyToOne
     private CardFolder parent;
+
+    private Boolean hidden = false;
 }

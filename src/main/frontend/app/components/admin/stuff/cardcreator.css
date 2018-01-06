@@ -46,3 +46,7 @@
   font-size: small;
   margin-right: 5px;
 }
+.card-folder-edit{
+  float: right;
+  line-height: 2em;
+}

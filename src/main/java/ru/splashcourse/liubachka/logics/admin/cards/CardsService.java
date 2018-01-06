@@ -13,15 +13,20 @@ public interface CardsService {
 
     void deleteFolder(Long id);
 
+    void restoreFolder(Long id);
+
     void createCard(CardItemDto dto);
 
     void updateCard(CardItemDto dto);
 
     void deleteCard(Long id);
 
+    void restoreCard(Long id);
+
     List<CardFolderDto> getAll();
 
     CardFolderDto getFolder(Long id);
 
     CardItemDto getCard(Long id);
+
 }

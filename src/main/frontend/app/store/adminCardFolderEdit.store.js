@@ -3,12 +3,12 @@ import {RestAPI} from '@/net.js';
 import {SUCCESS_MESSAGE} from './net.store';
 import {commonLoadData} from './commonFunctions';
 
-const defaultState = Map({enabled: true});
+const defaultState = Map();
 
 export const adminCardFolderEditReducer = (state = defaultState, action) => {
     switch (action.type) {
         case 'ADMIN_CARD_FOLDER_EDIT_LOADED':
-            return fromJS(action.data);
+            return fromJS(action.data).set('editMode', true);
         case 'ADMIN_CARD_FOLDER_FIELD_CHANGED': return state.set(action.field, action.value);
         case 'ADMIN_CARD_FOLDER_FIELDS_CHANGED': return state.merge(fromJS(action.object));
         case 'LOGOUT':
@@ -25,8 +25,15 @@ export const loadData = (dispatch, id) => commonLoadData(dispatch, `/api/cards/f
 
 export const save = (dispatch, data) =>{
     const method = data.get('id') || data.get('id') === 0 ? RestAPI.patch : RestAPI.post;
+    let newData =  data;
+    if (newData.get('children') && newData.get('children').size) {
+        newData = newData.set('children', newData.get('children').map(elem=>elem.get('id')));
+    }
+    if (newData.get('cards') && newData.get('cards').size) {
+        newData = newData.set('cards', newData.get('cards').map(elem=>elem.get('id')));
+    }
     dispatch({ type: 'ADMIN_SAVING_CARD_FOLDER' });
-    method('/api/cards/folder', data).then((response)=>{
+    method('/api/cards/folder', newData).then((response)=>{
         dispatch({ type: 'ADMIN_CARD_FOLDER_SAVED', response});
         dispatch({ type: 'POSTED', message: SUCCESS_MESSAGE});
     })

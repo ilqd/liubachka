@@ -2,8 +2,8 @@ import React from 'react';
 import {Glyphicon} from 'react-bootstrap';
 import './cardcreator.css';
 import {connect} from 'react-redux';
-import {updateFieldMerge as updateFolderFieldMerge, clearData as clearFolderData} from '@/store/adminCardFolderEdit.store.js';
-import {updateFieldMerge as updateCardFieldMerge, clearData as clearCardData, loadData} from '@/store/adminCardCreatorEdit.store.js';
+import {updateFieldMerge as updateFolderFieldMerge, clearData as clearFolderData, loadData as loadFolderData} from '@/store/adminCardFolderEdit.store.js';
+import {updateFieldMerge as updateCardFieldMerge, clearData as clearCardData, loadData as loadCardData} from '@/store/adminCardCreatorEdit.store.js';
 
 class CardFolderClass extends React.Component {
     constructor(props) {
@@ -11,6 +11,7 @@ class CardFolderClass extends React.Component {
         this.open = this.open.bind(this);
         this.createFolder = this.createFolder.bind(this);
         this.createCard = this.createCard.bind(this);
+        this.editFolder = this.editFolder.bind(this);
         this.state = {open: false};
     }
     open(e) {
@@ -35,10 +36,18 @@ class CardFolderClass extends React.Component {
         event.stopPropagation();
         this.props.startCardEdit(elem.get('id'));
     }
+    editFolder(event) {
+        event.stopPropagation();
+        this.props.startFolderEdit(this.props.elem.get('id'));
+    }
     render() {
         return(
       <div className={`card-folder ${this.state.open ? 'card-folder-open' : ''}`} onClick={this.open}>
-        <Glyphicon glyph={`${this.state.open ? 'folder-open' : 'folder-close'}`}/>{this.props.elem.get('name')}
+        <div>
+          <Glyphicon glyph={`${this.state.open ? 'folder-open' : 'folder-close'}`}/>
+          <span>{this.props.elem.get('name')}</span>
+          <Glyphicon className="card-folder-edit" glyph="pencil" title="Редактировать" onClick={this.editFolder}/>
+        </div>
         {this.state.open && this.props.elem.get('children') &&
           this.props.elem.get('children').map(e=><CardFolder key={e.get('id')} elem={e}/>)
         }
@@ -66,12 +75,18 @@ CardFolderClass .propTypes = {
     startFolderCreation: React.PropTypes.func,
     startCardCreation: React.PropTypes.func,
     startCardEdit: React.PropTypes.func,
+    startFolderEdit: React.PropTypes.func,
 };
 const CardFolder = connect(()=>({}), (dispatch, props)=>({
     startFolderCreation() {
         clearFolderData(dispatch);
         clearCardData(dispatch);
         updateFolderFieldMerge(dispatch, {editMode: true, parent: props.elem.get('id')});
+    },
+    startFolderEdit(id) {
+        clearFolderData(dispatch);
+        clearCardData(dispatch);
+        loadFolderData(dispatch, id);
     },
     startCardCreation() {
         clearFolderData(dispatch);
@@ -81,7 +96,7 @@ const CardFolder = connect(()=>({}), (dispatch, props)=>({
     startCardEdit(id) {
         clearFolderData(dispatch);
         clearCardData(dispatch);
-        loadData(dispatch, id);
+        loadCardData(dispatch, id);
     }
 }))(CardFolderClass);
 

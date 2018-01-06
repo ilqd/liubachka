@@ -43,7 +43,7 @@ public class CardsServiceImpl implements CardsService {
 
     @Override
     public void deleteFolder(Long id) {
-        folderRepo.delete(id);
+        folderRepo.getOne(id).setHidden(true);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class CardsServiceImpl implements CardsService {
 
     @Override
     public void deleteCard(Long id) {
-        itemRepo.delete(id);
+        itemRepo.getOne(id).setHidden(true);
     }
 
     @Override
@@ -80,5 +80,16 @@ public class CardsServiceImpl implements CardsService {
     @Override
     public CardItemDto getCard(Long id) {
         return mapper.map(itemRepo.getOne(id), CardItemDto.class);
+    }
+
+    @Override
+    public void restoreFolder(Long id) {
+        folderRepo.getOne(id).setHidden(false);
+        ;
+    }
+
+    @Override
+    public void restoreCard(Long id) {
+        itemRepo.getOne(id).setHidden(false);
     }
 }

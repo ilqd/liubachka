@@ -35,4 +35,6 @@ public class CardItem extends ObjectWithIdImpl {
     @NotBlank
     private String name;
 
+    private Boolean hidden = false;
+
 }

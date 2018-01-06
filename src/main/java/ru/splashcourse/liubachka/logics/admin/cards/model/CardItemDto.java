@@ -30,4 +30,6 @@ public class CardItemDto {
 
     private String name;
 
+    private Boolean hidden = false;
+
 }

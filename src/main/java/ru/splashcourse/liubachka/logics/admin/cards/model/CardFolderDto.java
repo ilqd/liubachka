@@ -22,4 +22,6 @@ public class CardFolderDto {
     private List<CardFolderDto> children;
 
     private Long parent;
+
+    private Boolean hidden = false;
 }

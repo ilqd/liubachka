@@ -69,12 +69,10 @@ const commonRequestFunction = (url, data, requestType, userContentType, showProg
              resolve(responseData);
          }
      }).fail((response) => {
-         const error = response.responseText && response.responseText != ''
-       ? JSON.parse(response.responseText)
-       : response;
+         const message = response.responseText || '';
          const status = response.status;
          reject(
-         { ...error, status }
+         { message, status }
        );
      });
  });

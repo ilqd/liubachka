@@ -38,6 +38,12 @@ public class CardsController {
         service.deleteFolder(id);
     }
 
+    @RequestMapping(method = RequestMethod.PATCH, path = "/folder/restore/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void restoreFolder(@PathVariable Long id) {
+        service.restoreFolder(id);
+    }
+
     @RequestMapping(method = RequestMethod.POST, path = "/item")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void createCard(@RequestBody CardItemDto dto) {
@@ -54,6 +60,12 @@ public class CardsController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCard(@PathVariable Long id) {
         service.deleteCard(id);
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, path = "/item/restore/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void restoreCard(@PathVariable Long id) {
+        service.restoreCard(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/folder")
