@@ -203,8 +203,12 @@ html{
 .btn-primary:active,
 .btn-primary:focus{
   background: #37bdbf;
+}
+.btn-default:focus,
+.btn-primary:focus,
+.btn:focus {
   border-color: #00535f !important;
-  outline-color: #00535f;
+  outline-color: #00535f !important;
 }
 .btn-primary.disabled, .btn-primary.disabled.active, .btn-primary.disabled.focus,
 .btn-primary.disabled:active, .btn-primary.disabled:focus, .btn-primary.disabled:hover,

@@ -35,12 +35,12 @@
 }
 .card-folder{
   cursor: pointer;
-  font-size: large;
   color: white;
   padding: 5px 2px 5px 10px;
   word-wrap: break-word;
   text-overflow: ellipsis;
   background: #00535f;
+  line-height: 1.5em;
 }
 .card-folder .glyphicon{
   font-size: small;
@@ -48,7 +48,7 @@
 }
 .card-folder-edit{
   float: right;
-  line-height: 2em;
+  line-height: 1.5em;
 }
 .delete-button,
 .finalize-button{
