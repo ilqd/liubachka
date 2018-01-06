@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.WebUtils;
@@ -20,4 +21,8 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
         return new ResponseEntity<Object>(ex.getMessage(), headers, status);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<Object> handleException(Exception ex) {
+        return new ResponseEntity<Object>(ex.getMessage(), null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
