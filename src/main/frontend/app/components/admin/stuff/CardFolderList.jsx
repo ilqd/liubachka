@@ -5,8 +5,8 @@ import CardFolder from './CardFolder';
 import './cardcreator.css';
 import {loadData} from '@/store/adminCardCreatorList.store.js';
 import {List} from 'immutable';
-import {updateField} from '@/store/adminCardFolderEdit.store.js';
-
+import {updateField, clearData as clearFolderData} from '@/store/adminCardFolderEdit.store.js';
+import {clearData as clearCardData} from '@/store/adminCardCreatorEdit.store.js';
 class CardFolderList extends React.Component {
     componentWillMount() {
         this.props.loadData();
@@ -48,6 +48,8 @@ dispatch=>({
         loadData(dispatch);
     },
     startEdit() {
+        clearFolderData(dispatch);
+        clearCardData(dispatch);
         updateField(dispatch, 'editMode', true);
     }
 }))(CardFolderList);

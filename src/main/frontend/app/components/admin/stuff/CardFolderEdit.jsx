@@ -65,7 +65,7 @@ class CardFolderEditClass extends React.Component {
           <Row>
             <Col xs={12}>
               <FieldGroup
-                value={this.props.data.get('name')}
+                value={this.props.data.get('name') || ''}
                 onChange={this.setField.bind(this, 'name')}
                 id="name"
                 type="text"
