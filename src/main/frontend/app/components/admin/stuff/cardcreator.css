@@ -8,6 +8,7 @@
   float: left;
   width: 200px;
   margin: 5px;
+  max-width: 100%;
 }
 
 .card-block .card-label{
@@ -66,4 +67,9 @@
   top: 117px;
   overflow-y: auto;
   max-height: calc(100vh - 167px);
+}
+.card-save-button,
+.card-cancel-button{
+  float: right;
+  margin-left: 10px;
 }

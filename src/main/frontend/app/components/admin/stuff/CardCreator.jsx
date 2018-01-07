@@ -115,8 +115,8 @@ class CardCreator extends React.Component {
             onChange={this.setField.bind(this, 'label')}
             id="label"
             componentClass="textarea"
-            placeholder="Заголовок карточек"
-            label="Заголовок карточек"
+            placeholder="Заголовок карточки"
+            label="Заголовок карточки"
             rows="3"
           />
         </Col>
@@ -182,11 +182,11 @@ class CardCreator extends React.Component {
           onChange={this.setHidden}>
            Удалить
         </Checkbox>
-        <Button bsStyle="primary" style={{float: 'right'}} onClick={this.save} disabled={this.props.busy || !this.props.data.get('name')}>
+        <Button bsStyle="primary" className="card-save-button" onClick={this.save} disabled={this.props.busy || !this.props.data.get('name')}>
           <Glyphicon glyph="save"/>
           Сохранить
         </Button>
-        <Button style={{float: 'right', margin: '0 10px'}} onClick={this.cancel}>
+        <Button className="card-cancel-button" onClick={this.cancel}>
           Назад
         </Button>
      </Col>

@@ -44,8 +44,8 @@ class CardFolderClass extends React.Component {
     }
     render() {
         return(
-      <div className={`card-folder ${this.state.open ? 'card-folder-open' : ''}`} onClick={this.open}>
-        <div>
+      <div className={`card-folder ${this.state.open ? 'card-folder-open' : ''}`}>
+        <div onClick={this.open}>
           <Glyphicon glyph={`${this.state.open ? 'folder-open' : 'folder-close'}`}/>
           <span>{this.props.elem.get('name')}</span>
           <Glyphicon className="card-folder-edit" glyph="pencil" title="Редактировать" onClick={this.editFolder}/>

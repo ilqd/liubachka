@@ -86,11 +86,11 @@ class CardFolderEditClass extends React.Component {
                 onChange={this.setHidden}>
                  Удалить
               </Checkbox>
-              <Button bsStyle="primary" style={{float: 'right'}} onClick={this.save} disabled={this.props.busy || !this.props.data.get('name')}>
+              <Button bsStyle="primary" className="card-cancel-button" onClick={this.save} disabled={this.props.busy || !this.props.data.get('name')}>
                 <Glyphicon glyph="save"/>
                 Сохранить
               </Button>
-              <Button style={{float: 'right', margin: '0 10px'}} onClick={this.cancel}>
+              <Button className="card-save-button" onClick={this.cancel}>
                 Назад
               </Button>
            </Col>
