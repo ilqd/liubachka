@@ -65,7 +65,7 @@ class LoginPageClass extends React.Component {
         <Row>
           <Col xs={12} md={4} mdOffset={4}>
               {this.props.errors ?
-                <Alert bsStyle="default" className="has-error" style={{ padding: 0 }}>
+                <Alert bsStyle="default" className="has-error login-alert" style={{ padding: 0 }}>
                   <div className="help-block" style={{ fontSize: 'medium' }}>
                     {this.props.errors}
                   </div>

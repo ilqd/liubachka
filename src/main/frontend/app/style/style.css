@@ -307,3 +307,7 @@ html{
  .video-category-table{
    min-width: 100%;
  }
+ .login-alert.has-error{
+   box-shadow: none;
+   text-align: center;   
+ }

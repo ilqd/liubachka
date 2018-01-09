@@ -27,7 +27,12 @@ export const tryToLogin = (dispatch, username, pass) => {
         history.replace('/');
     },
       (response) => {
-          dispatch({ type: 'LOGIN_FAILED', error: response.login_error });
+          let message = response && response.message ? JSON.parse(response.message).login_error : 'Неизвестная ошибка';
+          if (message == 'Bad credentials') {
+              message = 'Неправильное имя пользователя или пароль';
+          }
+          dispatch({ type: 'LOGIN_FAILED',
+          error: message});
       }
     );
 };
