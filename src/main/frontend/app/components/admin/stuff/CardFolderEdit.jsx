@@ -69,23 +69,17 @@ class CardFolderEditClass extends React.Component {
                 onChange={this.setField.bind(this, 'name')}
                 id="name"
                 type="text"
-                label="Название"
+                label={`${this.props.data.get('id') === undefined ? 'Создать новую папку' : 'Редактировать папку'}`}
               />
             </Col>
             <Col xs={12}>
-              <Checkbox
-                className="finalize-button"
-                title="Запретить создание карточек и папок в этой папке"
-                checked={this.props.data.get('finalized')}
-                onChange={this.setFinalized}>
-                 Завершить
-              </Checkbox>
-              <Checkbox
+              {this.props.data.get('id') !== undefined && <Checkbox
                 className={`delete-button ${this.props.data.get('hidden') ? 'delete-checked' : ''}`}
                 checked={this.props.data.get('hidden')}
                 onChange={this.setHidden}>
                  Удалить
               </Checkbox>
+              }
               <Button bsStyle="primary" className="card-cancel-button" onClick={this.save} disabled={this.props.busy || !this.props.data.get('name')}>
                 <Glyphicon glyph="save"/>
                 Сохранить

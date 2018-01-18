@@ -47,9 +47,13 @@
   font-size: small;
   margin-right: 5px;
 }
-.card-folder-edit{
+.card-folder-button{
   float: right;
   line-height: 1.5em;
+  opacity: 0.5;
+}
+.card-folder-button:hover{
+  opacity: 1;
 }
 .delete-button,
 .finalize-button{

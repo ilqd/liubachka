@@ -48,7 +48,13 @@ class CardFolderClass extends React.Component {
         <div onClick={this.open}>
           <Glyphicon glyph={`${this.state.open ? 'folder-open' : 'folder-close'}`}/>
           <span>{this.props.elem.get('name')}</span>
-          <Glyphicon className="card-folder-edit" glyph="pencil" title="Редактировать" onClick={this.editFolder}/>
+          <Glyphicon className="card-folder-button card-folder-edit" glyph="pencil" title="Редактировать" onClick={this.editFolder}/>
+          {this.canCreateFolder(this.props.elem) &&
+            <Glyphicon className="card-folder-button card-folder-new-folder" glyph="inbox" title="Создать папку" onClick={this.createFolder}/>
+          }
+          {this.canCreateCard(this.props.elem) &&
+            <Glyphicon className="card-folder-button card-folder-new-card" glyph="plus" title="Создать карточку" onClick={this.createCard}/>
+          }
         </div>
         {this.state.open && this.props.elem.get('children') &&
           this.props.elem.get('children').filter(e=>!e.get('hidden')).map(e=><CardFolder key={e.get('id')} elem={e}/>)
@@ -57,16 +63,6 @@ class CardFolderClass extends React.Component {
           this.props.elem.get('cards').filter(e=>!e.get('hidden')).map(e=><div className="card-folder" onClick={event=>this.editCard(event, e)}>
             <Glyphicon glyph="list-alt"/>{e.get('name')}
           </div>)
-        }
-        {this.state.open && this.canCreateFolder(this.props.elem) &&
-          <div className="card-folder" onClick={this.createFolder}>
-                <Glyphicon glyph="inbox"/>Создать папку
-          </div>
-        }
-        {this.state.open && this.canCreateCard(this.props.elem) &&
-          <div className="card-folder" onClick={this.createCard}>
-              <Glyphicon glyph="plus"/>Создать карточку
-          </div>
         }
       </div>
     );
