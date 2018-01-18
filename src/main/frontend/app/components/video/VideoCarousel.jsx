@@ -28,8 +28,8 @@ export default class VideoCarousel extends React.PureComponent {
         const elem = $('.video-carousel');
         const that = this;
         if (elem.length > 0) {
-            elem.bind('mousewheel', e=> {
-                if (e.originalEvent.wheelDelta / 120 > 0) { // up
+            elem.bind('wheel', e=> {
+                if (e.originalEvent.deltaY / 120 > 0) { // up
                     that.refs.slick.slickPrev();
                     e.preventDefault();
                 }else{// down
