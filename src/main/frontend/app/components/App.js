@@ -16,7 +16,7 @@ class App extends React.Component {
           <div>
               <Grid>
                   <Header/>
-                  <div style={{marginTop: 117, padding: 0}}>
+                  <div style={{marginTop: 117, padding: 0, marginBottom: 40}}>
                   { Routes }
                   </div>
               </Grid>

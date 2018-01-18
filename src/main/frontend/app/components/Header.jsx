@@ -35,10 +35,12 @@ class Header extends React.Component {
         return (
       <Navbar fixedTop style={{width: '100vw', maxWidth: '100%'}} collapseOnSelect >
         <Navbar className="title-bar row">
-          <Navbar.Brand style={{ display: 'flex', paddingRight: 1}}>
-            <img src={logo} style={{height: '2em'}}/>
-            <div className="brand-text">SPLASH<br/>COURSE</div>
-          </Navbar.Brand>
+          <IndexLinkContainer to="/">
+            <Navbar.Brand className="header-brand">
+                <img src={logo} style={{height: '2em'}}/>
+                <div className="brand-text">SPLASH<br/>COURSE</div>
+            </Navbar.Brand>
+          </IndexLinkContainer>
           <Navbar.Brand className="pull-right" style={{margin: 0, paddingLeft: 1, marginLeft: 'auto'}}>
             <div>Наши телефоны</div>
             <div>﻿+7 919 775 97 63</div>
