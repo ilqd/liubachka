@@ -13,7 +13,7 @@ public class UserGroupDto {
 
     private Long id;
 
-    private List<UserDto> users;
+    private List<Long> users;
 
     private String name;
 

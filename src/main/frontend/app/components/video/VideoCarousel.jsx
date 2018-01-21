@@ -30,10 +30,10 @@ export default class VideoCarousel extends React.PureComponent {
         if (elem.length > 0) {
             elem.bind('wheel', e=> {
                 if (e.originalEvent.deltaY / 120 > 0) { // up
-                    that.refs.slick.slickPrev();
+                    that.refs.slick.slickNext();
                     e.preventDefault();
                 }else{// down
-                    that.refs.slick.slickNext();
+                    that.refs.slick.slickPrev();
                     e.preventDefault();
                 }
             });

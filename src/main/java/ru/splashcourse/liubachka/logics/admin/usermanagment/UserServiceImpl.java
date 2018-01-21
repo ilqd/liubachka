@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserGroupDto findGroupById(Long id) {
-        return mapper.map(groupRepo.findOne(id), UserGroupDto.class);
+        return mapper.map(groupRepo.findOne(id).get(), UserGroupDto.class);
     }
 
     @Override
@@ -90,8 +90,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserFullNameAndIdProjection> findAllFullnames() {
-        // TODO Auto-generated method stub
         return repo.findByFirstNameNotNull();
+    }
+
+    @Override
+    public void deleteGroup(long id) {
+        groupRepo.delete(id);
     }
 
 }

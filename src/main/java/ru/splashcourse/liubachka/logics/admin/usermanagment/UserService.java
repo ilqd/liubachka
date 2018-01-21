@@ -22,4 +22,6 @@ public interface UserService {
 
     void updateGroup(UserGroupDto dto);
 
+    void deleteGroup(long id);
+
 }

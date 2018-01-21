@@ -16,6 +16,8 @@ import VideoUpload from './components/video/YoutubeUploadPage';
 import VideoList from './components/video/VideoList';
 import VideoCategoryList from './components/admin/videoCategory/VideoCategoryList';
 import VideoCategoryEdit from './components/admin/videoCategory/VideoCategoryEdit';
+import StudentGroupsList from './components/admin/scheduler/StudentGroupsList';
+import StudentGroupsEdit from './components/admin/scheduler/StudentGroupsEdit';
 
 export default <Switch>
   <Route exact path="/login" component={LoginPage} />
@@ -31,10 +33,12 @@ export default <Switch>
   <Route exact path="/video/upload" component={VideoUpload} />
   <Route exact path="/video/list" component={VideoList} />
   <Route exact path="/admin/videoCategoryList" component={VideoCategoryList} />
+  <Route exact path="/admin/studentGroups" component={StudentGroupsList} />
   <Route path="/admin/userEdit/:editUserId?" component={UserEdit} />
   <Route path="/admin/editPage/:editPageId?" component={CreatePage} />
   <Route path="/admin/editTest/:editTestName?" component={CreateTest} />
   <Route path="/admin/editVideoCategory/:id?" component={VideoCategoryEdit} />
-  <Route path="/page/:url?" component={Page} />,
+  <Route path="/admin/editStudentGroups/:id?" component={StudentGroupsEdit} />
+  <Route path="/page/:url?" component={Page} />
   <Route path="/" component={Main} />
 </Switch>;

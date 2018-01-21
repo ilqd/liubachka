@@ -35,7 +35,13 @@ public class UserGroupController {
         service.createGroup(dto);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void delete(@PathVariable long id) {
+        service.deleteGroup(id);
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void update(@RequestBody UserGroupDto dto) {
         service.updateGroup(dto);

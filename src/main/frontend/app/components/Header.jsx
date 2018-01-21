@@ -14,22 +14,23 @@ class Header extends React.Component {
         this.props.logout();
     }
     render() {
-        let userDropdown = undefined;
-        const videoLink =  <IndexLinkContainer to="/video/list"><NavItem >Видео</NavItem></IndexLinkContainer>;
+        let userDropdown;
+        let adminDropdown;
         if (this.props.roles && this.props.roles.includes('ROLE_ADMIN')) {
-            userDropdown =  (
-          <NavDropdown title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown">
-            {videoLink}
+            adminDropdown =  (
+          <NavDropdown title={<Glyphicon glyph="cog"/>} id="nav-admin-dropdown">
             <IndexLinkContainer to="/admin/videoCategoryList"><NavItem >Категории видео</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/testList"><NavItem >Настройка тестов</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/testResults"><NavItem >Результаты тестов</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/pageList"><NavItem >Настройка страниц</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/cardCreator"><NavItem >Карточки для activity</NavItem></IndexLinkContainer>
             <IndexLinkContainer to="/admin/userList"><NavItem >Пользователи</NavItem></IndexLinkContainer>
+            <IndexLinkContainer to="/admin/studentGroups"><NavItem >Учебные группы</NavItem></IndexLinkContainer>
         </NavDropdown>);
-        }else if (this.props.roles && !this.props.roles.includes('ROLE_ADMIN')) {
+        }
+        if (this.props.roles) {
             userDropdown = (<NavDropdown title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown">
-            {videoLink}
+            <IndexLinkContainer to="/video/list"><NavItem >Видео</NavItem></IndexLinkContainer>
             </NavDropdown>);
         }
         return (
@@ -55,6 +56,7 @@ class Header extends React.Component {
           <NavItem >Семинары</NavItem>
           <NavItem >Разговорный клуб</NavItem>
           <NavItem >Контакты</NavItem>
+          {adminDropdown}
           {userDropdown}
           {this.props.userId === undefined ?
           <IndexLinkContainer to="/login">
