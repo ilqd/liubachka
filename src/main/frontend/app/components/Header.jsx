@@ -31,6 +31,7 @@ class Header extends React.Component {
         if (this.props.roles) {
             userDropdown = (<NavDropdown title={`${this.props.firstName || ''} ${this.props.lastName || ''}`} id="nav-dropdown">
             <IndexLinkContainer to="/video/list"><NavItem >Видео</NavItem></IndexLinkContainer>
+            <IndexLinkContainer to="/scheduler"><NavItem >Расписание</NavItem></IndexLinkContainer>
             </NavDropdown>);
         }
         return (

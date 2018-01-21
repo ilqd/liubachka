@@ -23,8 +23,6 @@ public class ScheduleItemDto {
 
     private Boolean recurring;
 
-    private Date reccuringTime;
-
     private Set<DayOfWeek> recurringDays;
 
     private String description;

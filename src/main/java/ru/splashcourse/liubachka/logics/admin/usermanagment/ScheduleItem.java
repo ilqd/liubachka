@@ -38,9 +38,6 @@ public class ScheduleItem extends ObjectWithIdImpl {
 
     private Boolean recurring;
 
-    @Temporal(TemporalType.TIME)
-    private Date reccuringTime;
-
     @ElementCollection
     private Set<DayOfWeek> recurringDays;
 

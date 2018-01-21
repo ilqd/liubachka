@@ -18,7 +18,7 @@ import VideoCategoryList from './components/admin/videoCategory/VideoCategoryLis
 import VideoCategoryEdit from './components/admin/videoCategory/VideoCategoryEdit';
 import StudentGroupsList from './components/admin/scheduler/StudentGroupsList';
 import StudentGroupsEdit from './components/admin/scheduler/StudentGroupsEdit';
-
+import Scheduler from './components/admin/scheduler/Scheduler';
 export default <Switch>
   <Route exact path="/login" component={LoginPage} />
   <Route exact path="/loginRedirect" component={Main} />
@@ -34,6 +34,7 @@ export default <Switch>
   <Route exact path="/video/list" component={VideoList} />
   <Route exact path="/admin/videoCategoryList" component={VideoCategoryList} />
   <Route exact path="/admin/studentGroups" component={StudentGroupsList} />
+  <Route exact path="/scheduler" component={Scheduler} />
   <Route path="/admin/userEdit/:editUserId?" component={UserEdit} />
   <Route path="/admin/editPage/:editPageId?" component={CreatePage} />
   <Route path="/admin/editTest/:editTestName?" component={CreateTest} />
