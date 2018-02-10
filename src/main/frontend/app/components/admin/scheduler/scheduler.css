@@ -1,3 +1,10 @@
+.scheduler{
+  padding: 10px 0;
+}
+.scheduler .rbc-toolbar button,
+.scheduler .rbc-event{
+  border-radius: 0;
+}
 .scheduler .rbc-month-view{
-      min-height: 500px;
+    min-height: calc(100vh - 200px);
 }

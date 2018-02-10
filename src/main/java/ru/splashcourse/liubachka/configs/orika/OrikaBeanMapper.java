@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import ru.splashcourse.liubachka.logics.admin.usermanagment.ScheduleItem;
+import ru.splashcourse.liubachka.logics.admin.usermanagment.ScheduleItemDto;
 import ru.splashcourse.liubachka.logics.video.model.Comment;
 import ru.splashcourse.liubachka.logics.video.model.CommentDto;
 import ru.splashcourse.liubachka.logics.video.model.VideoMeta;
@@ -50,6 +52,9 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
                 .mapNullsInReverse(false).register();
         factory.classMap(VideoMeta.class, VideoMetaDto.class).byDefault().fieldAToB("category.name", "categoryName").mapNulls(false)
                 .mapNullsInReverse(false).register();
+        factory.classMap(ScheduleItem.class, ScheduleItemDto.class).byDefault().fieldAToB("teacher", "teacherDto").mapNulls(false)
+                .mapNullsInReverse(false).fieldAToB("userGroup", "userGroupDto").mapNulls(false).mapNullsInReverse(false)
+                .fieldAToB("student", "studentDto").mapNulls(false).mapNullsInReverse(false).register();
     }
 
     @Override

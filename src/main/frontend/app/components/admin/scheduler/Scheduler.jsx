@@ -39,7 +39,7 @@ export default class SchedulerClass extends React.PureComponent {
         this.onNavigate = this.onNavigate.bind(this);
         this.onView = this.onNavigate.bind(this);
         this.prepareData = this.prepareData.bind(this);
-        this.state = {data:[]};
+        this.state = {data:[], teacherMode:true};
     }
     componentWillMount() {
         this.prepareData(stub, new Date());
@@ -53,7 +53,7 @@ export default class SchedulerClass extends React.PureComponent {
             id: e.get('id'),
             start: startDate || e.get('date'),
             end: moment(startDate || e.get('date')).add(e.get('durationMinutes'), 'm').toDate(),
-            title: `${e.get('teacher')}: ${e.get('name')}`,
+            title: `${this.state.teacherMode ? e.get('name') : e.get('teacher')} - ${e.get('description')}`,
             desc: e.get('description')
         };
     }
@@ -102,7 +102,7 @@ const stub =  fromJS([
         date: new Date(2018, 0, 20, 18, 0, 0),
         durationMinutes:120,
         teacher:'Люба',
-        description:'Урок 1',
+        description:'Учим алфавит',
         recurring: true,
         recurringDays:['THURSDAY']
     }, {
@@ -112,7 +112,7 @@ const stub =  fromJS([
         date: new Date(2018, 0, 20, 15, 0, 0),
         durationMinutes:90,
         teacher:'Люба',
-        description:'Урок 1',
+        description:'Какой-то там урок',
         recurring: true,
         recurringDays:['THURSDAY']
     }, {
@@ -122,7 +122,17 @@ const stub =  fromJS([
         date: new Date(2018, 0, 20, 12, 0, 0),
         durationMinutes:60,
         teacher:'Люба',
-        description:'Урок 1',
+        description:'Описание урока',
+        recurring: true,
+        recurringDays:['THURSDAY']
+    }, {
+        id: 0,
+        name: 'Кухня',
+        allDay: true,
+        date: new Date(2018, 0, 20, 13, 0, 0),
+        durationMinutes:120,
+        teacher:'Люба',
+        description:'Eat yummies like there is no tommorow',
         recurring: true,
         recurringDays:['THURSDAY']
     }, {
@@ -132,7 +142,7 @@ const stub =  fromJS([
         date: new Date(2018, 0, 20, 16, 0, 0),
         durationMinutes:90,
         teacher:'Люба',
-        description:'Урок 1',
+        description:'Не забыть дать домашку!',
         recurring: true,
         recurringDays:['TUESDAY']
     }, {
@@ -142,17 +152,27 @@ const stub =  fromJS([
         date: new Date(2018, 0, 20, 11, 0, 0),
         durationMinutes:90,
         teacher:'Люба',
-        description:'Урок 1',
+        description:'Не опоздать!',
+        recurring: true,
+        recurringDays:['TUESDAY']
+    }, {
+        id: 0,
+        name: 'Кухня',
+        allDay: true,
+        date: new Date(2018, 0, 20, 12, 30, 0),
+        durationMinutes:120,
+        teacher:'Люба',
+        description:'Eat yummies like there is no tommorow',
         recurring: true,
         recurringDays:['TUESDAY']
     }, {
         id: 0,
         name: 'Не Илья :(',
         allDay: true,
-        date: new Date(2018, 0, 20, 14, 0, 0),
+        date: new Date(2018, 0, 20, 14, 30, 0),
         durationMinutes:90,
         teacher:'Люба',
-        description:'Урок 1',
+        description:'Проверить домашку!',
         recurring: true,
         recurringDays:['TUESDAY']
     },

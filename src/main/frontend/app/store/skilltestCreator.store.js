@@ -10,7 +10,7 @@ export const skilltestCreatorReducer = (state = Map(), action) => {
         case 'ADD_NEW_QUESTION':
             return state.set('questions',
             state.get('questions', new List()).push(
-              new Map().set('answerType', action.qType).set('answers', new List())
+              new Map().set('answerType', action.qType).set('answers', new List()).set('createdTime', new Date().getTime())
             ));
         case 'REMOVE_QUESTION':
             return state.set('questions', state.get('questions').delete(action.qIdx));

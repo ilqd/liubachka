@@ -72,7 +72,7 @@ class CreateTestClass extends React.Component {
             />
           </Col>
         </Row>
-        {this.props.test.get('questions', new List()).map((q, idx)=><CreateQuestion question={q} qIdx={idx} key={q.get('id') || idx}/>)}
+        {this.props.test.get('questions', new List()).map((q, idx)=><CreateQuestion question={q} qIdx={idx} key={q.get('id') || q.get('createdTime') || idx}/>)}
         <Row style={{marginTop: 5}}>
           <Col xs={12} md={6}>
             <FormControl componentClass="select" placeholder="Тип вопроса" onChange={this.selectQType} value={this.state.qType}>

@@ -1,5 +1,15 @@
 package ru.splashcourse.liubachka.logics.skilltest.questions.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.util.CollectionUtils;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,15 +18,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.util.CollectionUtils;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import ru.splashcourse.liubachka.ObjectWithIdImpl;
 
 @Entity
@@ -34,7 +35,8 @@ public class SkillTest extends ObjectWithIdImpl {
 
     private Long version;
 
-    @OneToMany(mappedBy = "skillTest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "skillTest", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+        CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     private List<Question> questions;
 

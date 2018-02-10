@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.time.DayOfWeek;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -27,10 +28,16 @@ public class ScheduleItemDto {
 
     private String description;
 
-    private User user;
+    private List<Long> student;
 
-    private UserGroup userGroup;
+    private List<UserDto> studentDto;
 
-    private UserDto teacher;
+    private Long userGroup;
+
+    private UserGroup userGroupDto;
+
+    private Long teacher;
+
+    private UserDto teacherDto;
 
 }
